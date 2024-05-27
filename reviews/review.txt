@@ -1,0 +1,2 @@
+đạo hàm L -> chuyển qua big O notation O(d/dx L_1) và O(d / dx L_main)
+=> xét rate của đạo hàm

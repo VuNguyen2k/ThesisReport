@@ -1,0 +1,209 @@
+\appendix
+\chapter{Công thức dao động của hệ lò xo}
+\label{proof::spring_formula}
+
+	Trong phần này, chúng tôi sẽ chứng minh lại công thức dao động của hệ cơ học lò xo được nếu trong công thức \formularef{intro::harmonic_formula_2}.
+	
+		\begin{equation}
+			\begin{aligned}
+				& m(x)'' = -K x.
+			\end{aligned}
+		\label{appendix::spring_sys_0}
+		\end{equation}
+
+	Trước hết, chúng tôi tính nghiệm tổng quát của phương trình thuần nhất của phương trình trên thông qua việc biến đổi sang dạng $x'' + \alpha x' + \beta x = 0$.
+	
+		\begin{align*}
+			m(x)'' & = -K x\\
+			\Rightarrow  x'' + \frac{K}{m} \times x & = 0. \numberedeq
+			\label{appendix::spring_sys_1}
+		\end{align*}
+
+	Từ biểu thức trên, chúng tôi suy ra được biểu thức chính quy của phương trình \formularef{appendix::spring_sys_1}.
+	
+		\begin{equation}
+			\begin{aligned}
+				\alpha^2 + \frac{K}{m} = 0
+			\end{aligned}
+			\label{appendix::spring_sys_2}
+		\end{equation}
+
+	Việc giải phương trình đặc trưng trên trả về cho chúng tôi 2 nghiệm là $\alpha = \pm \sqrt{\frac{K}{m}}i$. Từ công thức được đưa ra nghiệm tổng quát của phương trình này có dạng phức, do đó nghiệm của phương trình này có dạng
+	
+		\begin{align*}
+			x & = e^{0t} \times (c_1 \cos(\omega t) + c_2 \sin(\omega t))\\
+			& = c_1 \cos(\omega t) + c_2 \sin(\omega t), \numberedeq
+			\label{appendix::spring_sys_3}
+		\end{align*}
+
+	\noindent với $\omega = \sqrt{\frac{K}{m}}$. Từ dữ liệu ban đầu của bài toán, chúng tôi có giá trị của $x = x_0$ tại thời điểm $t = 0$ và $v = \frac{d}{dt}x(t) = 0$ cũng tại thời điểm $t = 0$. Lần lượt thay vào biểu thức của x, chúng tôi thu được
+	
+		\begin{equation}
+			c_1 = x_0,
+		\end{equation}
+	
+		\begin{equation}
+			c_2 = 0,
+		\end{equation}
+	
+	\noindent chúng tôi thay các kết quả $c_1$ và $c_2$ thu được từ biểu thức trên vào công thức (\ref{appendix::spring_sys_3}), và thu lại được điều cần phải chứng minh
+	
+		\begin{equation}
+			\begin{aligned}
+				x = x_0 \cos\bigg(\sqrt{\frac{K}{m}}t\bigg)
+			\end{aligned}
+		\label{appendix::spring_sys_final}
+		\end{equation}
+
+\chapter{Fourier great formula}
+\label{proof::euler_formula}
+
+	Trong phần này, chúng tôi sẽ chứng minh đẳng thức của Fourier
+	
+		\begin{equation}
+			e^{i\theta} = \tricomplex{\theta}{\theta}.
+		\end{equation}
+	
+	Trong phần chứng minh này, chúng tôi sử dụng công thức khai triển mở rộng của Taylor, khai triển Maclaurin. Khai triển Taylor của một hàm $f(x)$ được định nghĩa như sau:
+	
+		\begin{align*}
+			f(x)	& = \sum_{n = 0}^{\infty}{\frac{f^{(n)}(x_0) \times (x - x_0)^n}{n!}}\\
+			& = \sum_{n = 0}^{\infty}{\frac{f^{(n)}(0) \times x}{n!}}, \numberedeq
+			\label{appendix::fourier_1}
+		\end{align*}
+	
+	\noindent với $f^{(x)}$ là đạo hàm bậc n của $f(x)$ theo $x$ tại vị trí $x = x_0$ và với khai triển Maclaurin thì $x_0 = 0$. Áp dụng công thức trên vào tính toán xấp xỉ của $e^{i\theta}$ trong công thức của Fourier
+	
+		\begin{equation}
+			\begin{aligned}
+				e^{i\theta}	& = \sum_{n = 0}^{\infty}{\frac{(e^{i\theta})^{(n)} \times x^n}{n!}},
+			\end{aligned}
+		\label{appendix::fourier_2}
+		\end{equation}
+
+	\noindent lại có
+	
+		\begin{equation}
+			\begin{aligned}
+				(e^{ax})'		& = ae^{ax}\\
+				(e^{ax})''		& = a^2e^{ax}\\
+				\dots \\
+				(e^{ax})^{(n)}	& = a^ne^{ax}
+			\end{aligned}
+		\label{appendix::fourier_3}
+		\end{equation}
+
+	Đem thay công thức \formularef{appendix::fourier_3} vào công thức \formularef{appendix::fourier_2}, thu được
+	
+		\begin{align*}
+			e^{i\theta}	& = \sum_{n = 0}^{\infty}{\frac{(e^{i\theta})^{(n)}(0) \times \theta^n}{n!}}\\
+			& = \sum_{p = 0}^{\infty}{\frac{i^{2p} \times \theta^{2p}}{(2p)!}}
+			+ \sum_{q = 0}^{\infty}{i^{2q + 1}\frac{\theta^{2q + 1}}{(2q + 1)!}}	\\
+			& = \sum_{p = 0}^{\infty}{\frac{(-1)^p \times \theta^{2p}}{(2p)!}}
+			+ i\sum_{q = 0}^{\infty}{\frac{(-1)^{q} \times \theta^{2q + 1}}{(2q + 1)!}}, \numberedeq
+			\label{appendix::fourier_4}
+		\end{align*}
+
+	\noindent lại có khai triển của Maclaurin của cosine và sine được tính nhau sau
+	
+		\begin{align*}
+			\cos(x)	& = \sum_{n = 0}^{\infty}{\frac{\cos^{(n)}(0) \times x}{n!}}\\
+			& = \sum_{n = 0}^{\infty}{\frac{(-1)^n \times x^{2n}}{(2n)!}}, \numberedeq
+			\label{appendix::fourier_5}
+		\end{align*}
+	
+		\begin{align*}
+			\sin(x)	& = \sum_{n = 0}^{\infty}{\frac{\sin^{(n)}(0) \times x}{n!}}\\
+			& = \sum_{n = 0}^{\infty}{\frac{(-1)^n \times x^{2n + 1}}{(2n + 1)!}}. \numberedeq
+			\label{appendix::fourier_6}
+		\end{align*}
+
+	Thay công thức \formularef{appendix::fourier_5} và \formularef{appendix::fourier_6} vào công thức \formularef{appendix::fourier_4}, thu được công thức của Fourier
+	
+		\begin{align*}
+			e^{i\theta} & = \sum_{p = 0}^{\infty}{\frac{(-1)^p \times \theta^{2p}}{(2p)!}}
+			+ i\sum_{q = 0}^{\infty}{\frac{(-1)^{q} \times \theta^{2q + 1}}{(2q + 1)!}}\\
+			& = \tricomplex{\theta}{\theta}. \numberedeq
+			\label{appendix::fourier_final}
+		\end{align*}
+
+
+% Sine and cosine orthogonality i.e. integral of cos(w1t) x cos(w2t) dt = 0 for all w1 != w2
+%\section{Tính vuông góc của hàm lượng giác}
+%\label{proof::tri_ortho}
+
+%	Trong phần này, chúng tôi chứng minh mệnh đề liên quan tới sự vuông góc của các hàm sine và cosine được sử dụng trong lý thuyết của Fourier
+	
+%		\begin{equation}
+%			\begin{aligned}
+%				\forall\omega_1,\omega_2 \in \mathbb{Z}_{\omega_1 \neq \omega_2}:S = \int_{-\infty}^{\infty}{\cos(\omega_1t)\cos(\omega_2t)dt} = 0
+%			\end{aligned}
+%		\label{appendix::tri_ortho_1}
+%		\end{equation}
+
+%	Chúng tôi sẽ tính toán trực tiếp từ tích phân trên, trong nguyên bản tích phân này được lấy trên toàn độ miền của $\mathbb{R}$ hay cụ thể với mọi t thuộc vào $(-\infty, +\infty)$ nhưng do tính chu kì của các hàm lượng giác, chúng tôi chỉ xét $t \in [-\pi, \pi]$. Do đó biểu thức sau cùng mà chúng tôi sẽ chứng minh dưới đây sẽ có dạng
+	
+%		\begin{equation}
+%			\begin{aligned}
+%				S = \int_{-\pi}^{\pi}{\cos(\omega_1t)\cos(\omega_2t)dt} = 0
+%			\end{aligned}
+%			\label{appendix::tri_ortho_2}
+%		\end{equation}
+
+%	Để chứng minh giá trị của biểu thức $S$, chúng tôi khai triển tích phân riêng phần lần 1 trên biểu thức (\ref{appendix::tri_ortho_2}).
+	
+%		\begin{equation}
+%			\begin{aligned}
+%				S 	& = \int_{-\pi}^{\pi}{\cos(\omega_1t)\cos(\omega_2t)dt}\\
+%					& = \cos(\omega_1t)\times\frac{\sin(\omega_2t)}{\omega_2} \bigg\rvert_{-\pi}^{\pi}
+%						+\frac{\omega_1}{\omega_2} \times \int_{-\pi}^{\pi}{\sin(\omega_1)\sin(\omega_2)dt}
+%			\end{aligned}
+%			\label{appendix::tri_ortho_3}
+%		\end{equation}
+
+%	Tiếp tục khai triển tích phân riêng phần cho tích phân còn lại ở vế phải của biểu thức (\ref{appendix::tri_ortho_3}). Chúng tôi thu được
+	
+%		\begin{equation}
+%			\begin{aligned}
+%				\int_{-\pi}^{\pi}{\sin(\omega_1)\sin(\omega_2)dt}
+%					& = -\sin(\omega_1t) \times \frac{\cos(\omega_2t)}{\omega_2} \bigg\rvert_{-\pi}^{\pi}
+%					  + \frac{\omega_1}{\omega_2}\times S
+%			\end{aligned}
+%			\label{appendix::tri_ortho_4}
+%		\end{equation}
+
+%	Lúc này công thức đã quay lại tích phân của $S$ ban đầu. Thay biểu thức (\ref{appendix::tri_ortho_4}) vào (\ref{appendix::tri_ortho_3}) và biểu thức (\ref{appendix::tri_ortho_3}) vào biểu thức (\ref{appendix::tri_ortho_2}), thu được
+	
+%		\begin{equation}
+%			\begin{aligned}
+%				S & = \frac{\omega_2\cos(\omega_1t)\sin(\omega_2t) - \omega_1\sin(\omega_1t)\cos(\omega_2t)}{\omega_2^2 - \omega_1^2} \bigg\rvert_{-\pi}^{\pi}
+%			\end{aligned}
+%			\label{appendix::tri_ortho_5}
+%		\end{equation}
+
+%	Dễ thấy, khi đánh giá biểu thức trên, các giá trị $\sin(\omega_1t)$ và $\sin(\omega_2t)$ lần lượt bằng 0 tại các điểm $x=-\pi$ và $x=\pi$ do vậy, $\forall \omega_1, \omega_2 \in \mathbb{R}_{\omega_1 \neq \omega_2}: S = 0$ và chỉ 1 trường hợp duy nhất giá trị ở biểu thức $S$ khác $0$, và đó chính là trường hợp tạo ra khả năng phân tích tần số của biến đổi Fourier - sự cộng hưởng sóng. Như vậy chúng tôi đã chứng minh lại tính vuông góc của các hàm lượng giác.
+	
+%	Vậy nếu chúng tôi giả định $\omega_1 = \omega_2 = \omega$, biểu thức $S$ sẽ tương đương với
+	
+%		\begin{equation}
+%			\begin{aligned}
+%				S	& = \int_{-\pi}^{\pi}{\cos(\omega_1t)\cos(\omega_2t)dt}
+%					& = \int_{-\pi}^{\pi}{\cos^2(\omega t)dt}
+%			\end{aligned}
+%			\label{appendix::tri_ortho_6}
+%		\end{equation}
+	
+%	Biến đổi lượng giác qua $cos^2(x)$ chúng tôi thu được biểu thức mới của $S$
+	
+%		\begin{equation}
+%			\begin{aligned}
+%				S	& = \int_{-\pi}^{\pi}{\cos^2(\omega t)dt}\\
+%					& = \int_{-\pi}^{\pi}{\frac{1 + \cos(2\omega t)}{2}dt}\\
+%					& = \frac{t}{2}\bigg\rvert_{-\pi}^{\pi} + \frac{\sin(2\omega t)}{4} \bigg\rvert_{-\pi}^{\pi}\\
+%					& = \pi
+%			\end{aligned}
+%			\label{appendix::tri_ortho_7}
+%		\end{equation}
+	
+%	Như vậy chúng tôi đã chứng minh được $S = \pi \neq 0$ nếu như sự công hưởng xảy ra hay nói cách khác $\omega_1 = \omega_2$.
+	

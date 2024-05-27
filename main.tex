@@ -1,0 +1,553 @@
+\documentclass[a4paper, oneside, 13pt]{book}
+%\usepackage{vntex}
+\usepackage[english,vietnamese]{babel}
+\usepackage[utf8]{inputenc}
+
+%\usepackage[utf8]{inputenc}
+%\usepackage[francais]{babel}
+\usepackage{a4wide,amssymb,epsfig,latexsym,multicol,array,hhline,fancyhdr}
+
+\usepackage{lscape}
+\usepackage{lipsum}
+\usepackage{listings}
+\usepackage[table]{xcolor}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{sectsty}
+\usepackage{setspace}
+
+\setstretch{1.5}
+
+\usepackage{amsmath}
+\usepackage{lastpage}
+\usepackage[lined,boxed,commentsnumbered]{algorithm2e}
+\usepackage{enumerate}
+\usepackage{color}
+\usepackage{graphicx}							% Standard graphics package
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage[font=large, labelfont=bf]{caption}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{rotating}
+\usepackage{graphics}
+\usepackage[a4paper, left =3cm, right=2cm, top=2cm, bottom=2cm, headsep=1.25cm, footskip=1.25cm, includeheadfoot, twoside]{geometry}
+\usepackage{setspace}
+\usepackage{epsfig}
+\usepackage{tikz}
+\usetikzlibrary{arrows,snakes,backgrounds}
+\usetikzlibrary{calc}
+\usepackage{hyperref}
+\hypersetup{urlcolor=blue,linkcolor=black,citecolor=black,colorlinks=true}
+%\usepackage{pstcol} 								% PSTricks with the standard color package
+\usepackage{tocbibind}
+
+
+\newcommand{\setupfont}[1]{\fontsize{#1}{#1}\selectfont}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\newcommand{\norm}[1]{\lVert #1 \rVert}
+\newcommand{\bignorm}[1]{\bigg \lVert #1 \bigg \rVert}
+
+\newcommand{\recomplex}[1]{#1}
+\newcommand{\imcomplex}[1]{#1i}
+\newcommand{\complex}[2]{#1 + i#2}
+\newcommand{\polarcomplex}[2]{#1e^{#2i}}
+\newcommand{\tricomplex}[2]{\cos(#1) + i\sin(#2)}
+
+\newcommand{\cartesiancoord}{Oft}
+\newcommand{\complexcoord}{O \Re \Im}
+
+\newcommand{\ifc}{\text{nếu }}
+\newcommand{\otherwise}{\text{các trường hợp khác}}
+
+\newcommand{\scalemath}[2]{\scalebox{#1}{\mbox{\ensuremath{\displaystyle #2}}}}
+
+\newcommand{\definition}[1]{\textbf{\textit{#1}}}
+
+%\newcommand{\figref}[1]{\textbf{Hình~\ref{#1}}}
+%\newcommand{\tableref}[1]{\textbf{Bảng~\ref{#1}}}
+\newcommand{\formularef}[1]{(\ref{#1})}
+\newcommand{\enumentry}[1]{\textit{#1}}
+\newcommand{\name}[1]{\text{#1}}
+%\newcommand{\labelref}[2]{\textbf{#1 \ref{#2}}}
+
+\newcommand{\figref}[1]{Hình~\ref{#1}}
+\newcommand{\tableref}[1]{Bảng~\ref{#1}}
+\newcommand{\labelref}[2]{#1~\ref{#2}}
+
+%\newcommand{\chapterref}[1]{\textbf{Chương \ref{#1}}}
+%\newcommand{\sectionref}[1]{\textbf{Mục \ref{#1}}}
+%\newcommand{\subsectionref}[1]{\textbf{Tiểu mục \ref{#1}}}
+%\newcommand{\appendixref}[1]{\textbf{Phụ lục \ref{#1}}}
+
+\newcommand{\chapterref}[1]{Chương~\ref{#1}}
+\newcommand{\sectionref}[1]{Mục~\ref{#1}}
+\newcommand{\subsectionref}[1]{Tiểu mục~\ref{#1}}
+\newcommand{\appendixref}[1]{Phụ lục~\ref{#1}}
+
+\newcommand{\urlsrc}[1]{(nguồn~\url{#1})}
+\newcommand{\citesrc}[1]{(nguồn~\cite{#1})}
+
+\newcommand{\srccaption}[2]{\caption[#1]{#1 #2}}
+
+\newcommand{\numberedeq}{\addtocounter{equation}{1}\tag{\theequation}}
+\newcommand{\bigO}{\name{O}}
+
+\newcommand{\Waveform}{\text{Waveform}}
+\newcommand{\Spectrum}{\text{Spectrum}}
+\newcommand{\Spectrogram}{\text{Spectrogram}}
+
+\newcommand{\waveform}{\text{waveform}}
+\newcommand{\spectrum}{\text{spectrum}}
+\newcommand{\spectrogram}{\text{spectrogram}}
+
+\newcommand{\subsub}[1]{\noindent \textbf{#1}.}
+
+\newcommand{\theorem}{Theorem}
+
+%\let\cleardoublepage=\clearpage
+
+%\usepackage{fancyhdr}
+%\setlength{\headheight}{40pt}
+%\pagestyle{fancy}
+%\fancyhead{} % clear all header fields
+%\fancyhead[L]{
+% \begin{tabular}{rl}
+%    \begin{picture}(25,15)(0,0)
+%    \put(0,-8){\includegraphics[width=8mm, height=8mm]{hcmut.png}}
+%    %\put(0,-8){\epsfig{width=10mm,figure=hcmut.eps}}
+%   \end{picture}&
+%	%\includegraphics[width=8mm, height=8mm]{hcmut.png} & %
+%	\begin{tabular}{l}
+%		\textbf{\bf \ttfamily Trường Đại Học Bách Khoa Tp.Hồ Chí Minh}\\
+%		\textbf{\bf \ttfamily Khoa Khoa Học và Kỹ Thuật Máy Tính}
+%	\end{tabular} 	
+% \end{tabular}
+%}
+%\fancyhead[R]{
+%	\begin{tabular}{l}
+%		\tiny \bf \\
+%		\tiny \bf 
+%	\end{tabular}  }
+%\fancyfoot{} % clear all footer fields
+%\fancyfoot[L]{\scriptsize \ttfamily Đề cương luận văn - Niên khóa 2021-2022}
+%\fancyfoot[R]{\scriptsize \ttfamily Trang {\thepage}/\pageref{LastPage}}
+%\renewcommand{\headrulewidth}{0.3pt}
+%\renewcommand{\footrulewidth}{0.3pt}
+
+\usepackage{fancyhdr}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\fancypagestyle{fancy}{
+	\fancyhf{}
+	\renewcommand{\headrulewidth}{0.4pt}
+	\renewcommand{\footrulewidth}{0pt}
+	\fancyhead[OR]{\bfseries \nouppercase{\rightmark}}
+	\fancyhead[EL]{\bfseries \nouppercase{\leftmark}}
+	\fancyfoot[OR, EL]{\thepage}
+}
+
+\fancypagestyle{plain}{
+	\fancyhf{}
+	\renewcommand{\headrulewidth}{0pt}
+	\renewcommand{\footrulewidth}{0pt}
+	\fancyfoot[OR, EL]{\thepage}
+}
+\fancypagestyle{addpagenumbersforpdfimports}{
+	\fancyhead{}
+	\renewcommand{\headrulewidth}{0pt}
+	\fancyfoot{}
+	\fancyfoot[R]{\thepage}
+}
+
+
+%%%
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{3}
+\makeatletter
+\newcounter {subsubsubsection}[subsubsection]
+\renewcommand\thesubsubsubsection{\thesubsubsection .\@alph\c@subsubsubsection}
+\newcommand\subsubsubsection{\@startsection{subsubsubsection}{4}{\z@}%
+                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
+                                     {1.5ex \@plus .2ex}%
+                                     {\normalfont\normalsize\bfseries}}
+\newcommand*\l@subsubsubsection{\@dottedtocline{3}{10.0em}{4.1em}}
+\newcommand*{\subsubsubsectionmark}[1]{}
+\makeatother
+
+\subsectionfont{\fontsize{13}{15}\selectfont}
+\subsubsectionfont{\fontsize{13}{15}\selectfont}
+
+
+\begin{document}
+	
+	\tolerance=1
+	\emergencystretch=\maxdimen
+	\hyphenpenalty=10000
+	\hbadness=10000
+	
+	\setlength{\abovedisplayskip}{-2.5mm}
+	\setlength{\belowdisplayskip}{0pt}
+	\setlength{\abovedisplayshortskip}{-2.5mm}
+	%\setlength{\belowdisplayshortskip}{-0.5pt}
+
+\begin{titlepage}
+	\pagenumbering{roman}
+	
+	\begin{tikzpicture}[remember picture, overlay]
+		\draw[line width = 4pt] ($(current page.north west) + (1in+5,-1in + 30)$) rectangle ($(current page.south east) + (-1in + 30,1in - 20) $);
+		\draw[line width = 1pt] ($(current page.north west) + (1in,-1in + 35)$) rectangle ($(current page.south east) + (-1in + 35,1in - 25) $);
+	\end{tikzpicture}
+	
+	\begin{center}
+		\setupfont{13pt}
+	ĐẠI HỌC QUỐC GIA THÀNH PHỐ HỒ CHÍ MINH \\
+	TRƯỜNG ĐẠI HỌC BÁCH KHOA \\
+	KHOA KHOA HỌC - KỸ THUẬT MÁY TÍNH 
+	\end{center}
+
+\vspace{1cm}
+
+\begin{center}
+	\begin{tabular}{c}
+		\multicolumn{1}{l}{\textbf{{\Large LUẬN VĂN TỐT NGHIỆP ĐẠI HỌC}}}
+	\end{tabular}
+\end{center}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=50mm]{hcmut.png}
+\end{center}
+\end{figure}
+
+
+\begin{center}
+\begin{tabular}{c}
+\textbf{{\Huge Giảm nhiễu tiếng ồn}}\\
+\textbf{{\Huge bằng học sâu}}
+\end{tabular}
+\end{center}
+
+\vspace{0.2cm}
+
+\begin{center}
+	\setupfont{14pt}
+	\begin{tabular}{rl}
+		\textbf{Ngành:} & Khoa học máy tính
+	\end{tabular}
+\end{center}
+
+\vspace{1.5cm}
+
+\begin{table}[h]
+	\setupfont{13pt}
+\begin{tabular}{rll}
+\hspace{5 cm}	& \textbf{HỘI ĐỒNG:} 	& Khoa học máy tính 2 \\
+				& \textbf{GVHD:} 		& TS. Nguyễn An Khương\\
+				&						& TS. Nguyễn Tiến Thịnh\\
+				&						& KS. Nguyễn Tấn Đức\\
+				&						& KS. Nguyễn Hữu Hồng Huy\\
+				& \textbf{GVPB:}		& ThS. Mai Xuân Toàn \vspace{2mm}\\
+				&&\multicolumn{1}{c}{\bf---o0o---}\vspace{2mm}\\
+				& \textbf{SVTH:} 		& Nguyễn Long Vũ (1814816)
+\end{tabular}
+\end{table}
+
+\begin{center}
+{\setupfont{12pt} Thành phố Hồ Chí Minh, 6/2022}
+\end{center}
+\end{titlepage}
+
+%\thispagestyle{empty}
+\setupfont{13pt}
+\pagestyle{plain}
+
+\cleardoublepage
+
+\setlength{\parskip}{2.5mm}
+\thispagestyle{plain}
+	\begin{center}
+		\section*{Lời cam đoan}
+		\addcontentsline{toc}{chapter}{Lời cam đoan}
+	\end{center}
+	
+	Tôi xin cam đoan đây là công trình nghiên cứu của riêng tôi dưới sự hướng dẫn của TS. Nguyễn An Khương, TS. Nguyễn Tiến Thịnh, KS. Nguyễn Tấn Đức, KS. Nguyễn Hữu Hồng Huy. Nội dung nghiên cứu và các kết quả đều là trung thực và chưa từng được công bố trước đây. Các số liệu được sử dụng cho quá trình phân tích, nhận xét được chính tôi thu thập từ nhiều nguồn khác nhau và sẽ được ghi rõ trong phần tài liệu tham khảo. Ngoài ra, tôi cũng có sử dụng một số nhận xét, đánh giá và số liệu của các tác giả khác, cơ quan tổ chức khác. Tất cả đều có trích dẫn và chú thích nguồn gốc. Nếu phát hiện có bất kì sự gian lận nào, tôi xin hoàn toàn chịu trách nhiệm về nội dung luận văn tốt nghiệp của mình. Trường đại học Bách Khoa thành phố Hồ Chí Minh không liên quan đến những vi phạm tác quyền, bản quyền do tôi gây ra trong quá trình thực hiện.
+	
+	\vspace{1cm}
+	
+	\begin{center}
+		\begin{tabular}{c c c}
+			KÝ TÊN: \rule{4cm}{0.15mm} &\hspace{4cm}& NGÀY: \rule{4cm}{0.15mm}
+		\end{tabular}
+	\end{center}
+\setlength{\parskip}{0mm}
+
+\newpage
+\setlength{\parskip}{2.5mm}
+\thispagestyle{plain}
+	\begin{center}
+		\section*{Lời cảm ơn}
+		\addcontentsline{toc}{chapter}{Lời cảm ơn}
+	\end{center}
+	
+	Trong suốt thời gian học tập và rèn luyện tại Trường Đại học Bách Khoa Thành phố Hồ Chí Minh đến nay, tôi đã nhận được rất nhiều sự quan tâm, giúp đỡ của quý thầy cô và bạn bè. Với lòng biết ơn sâu sắc và chân thành nhất, tôi xin gửi đến quý thầy cô ở Khoa Khoa Học và Kỹ Thuật Máy Tính - Trường Đại học Bách Khoa Thành phố Hồ Chí Minh, đã cùng với tri thức và tâm huyết của mình để truyền đạt vốn kiến thức quý báu cho tôi trong suốt thời gian học tập tại trường. Đặc biệt tôi xin gửi lời cảm ơn chân thành đến thầy Nguyễn An Khương. Người thầy đã tận tâm hướng dẫn, theo dõi và hỗ trợ tôi trong suốt quá trình thực hiện luận văn tốt nghiệp. Ngoài những lời khuyên và kiến thức về chuyên môn, học thuật đầy kinh nghiệm của thầy, trong quá trình làm việc cùng thầy một thời gian dài tôi còn học được những đức tính tốt, những kỹ năng cần thiết để trở một người làm khoa học thật thụ như khả năng tư duy phản biện, tư duy sáng tạo, sự cần cù, sự trung thực và sự cẩn thận chính xác.
+	
+	Bên cạnh đó, tôi xin gửi cám ơn đến thầy Nguyễn Tiến Thịnh, anh Nguyễn Tấn Đức và anh Nguyễn Hữu Hồng Huy đã cùng tham gia hướng dẫn, hỗ trợ tôi thực hiện luận văn tốt nghiệp đề tài ``Giảm nhiễu bằng học sâu'' suốt thời gian vừa qua. Những kinh nghiệm, kiến thức về đại số, xử lý dữ liệu, những điều cơ bản nhất về trí tuệ nhân tạo và học máy mà tôi có được từ các thầy và các anh trong quá trình nghiên cứu này đã giúp tôi trang bị cho mình những điều cần thiết để hoàn thành luận văn này. Tôi cũng xin gửi lời cảm ơn của mình tới anh Nguyễn Hải Triều Anh và anh Cao Văn Nghĩa vì những lời góp ý sâu sắc các anh dành cho tôi.
+	
+	Sau cùng, tôi muốn dành những tình cảm sâu sắc trân trọng nhất gửi đến ba mẹ tôi, những người đã hi sinh rất nhiều vì tôi, lo lắng mọi thứ cho tương lai của tôi, tạo cho tôi mọi cơ hội học tập ở những môi trường tốt nhất. Ba mẹ luôn là nguồn động lực to lớn thôi thúc tôi vượt qua những rào cản của bản thân mà tiến về phía trước. Con cám ơn ba mẹ rất nhiều.
+
+\setlength{\parskip}{0mm}
+
+\newpage
+\setlength{\parskip}{2.5mm}
+\thispagestyle{plain}
+	\begin{center}
+		\section*{Tóm tắt đề tài}
+		\addcontentsline{toc}{chapter}{Tóm tắt đề tài}
+	\end{center}
+	
+	%Trong thời kì dịch bệnh diễn biến phức tạp, các hoạt động giao tiếp trực tuyến trở nên phiển biến. Nhưng không phải ai cũng có đầy đủ những yêu cầu cần thiết để có thể hoạt động một cách hiệu quả. Một trong những tác nhân chính đó là tiếng ồn. 
+	
+	Từ lâu, các hoạt động trực tuyến đã trở nên phổ biến, đặc biệt là trong tình hình dịch bệnh hiện nay. Nhưng hiệu quả của các hoạt động trực tuyến rất dễ bị ảnh hưởng bởi tiếng ồn từ môi trường xung quanh người hoạt động. Để hạn chế điều này, mọi người thường sử dụng các sản phẩm phần mềm được thương mại hóa và các tai nghe lọc nhiễu đắt tiền. Nhưng không phải ai cũng có thể tiếp cận được những sản phẩm này. Do đó, trong đề tài này, chúng tôi đặt ra vấn đề giải quyết tiếng ồn lẫn bên trong âm thanh, loại bỏ chúng trong khi vẫn phải đảm bảo chất lượng giọng nói đầu ra. Bằng cách sử dụng học sâu, chúng tôi mong muốn có thể loại bỏ được phần nào những khó khăn trong hoạt động nghe nhìn trực tuyến của mọi người.
+	
+	Để có thể lọc được nhiễu ra khỏi giọng nói, chúng tôi tiến hành tham khảo một số mô hình đạt giải cao trong cuộc thi Deep Noise Suppression (DNS) \cite{dns} của Microsoft. Dựa trên các đặc điểm của mô hình và dữ liệu mà chúng tôi quan sát được, chúng tôi đề xuất ra hàm tăng cường mất mát và mô hình trong luận văn của mình. Mô hình này sau đó được huấn luyện trên hàm mất mát tăng cường của chúng tôi và sau đó được sử dụng vào ứng dụng. Chúng tôi so sánh kết quả độ đo của mô hình với các mô hình khác, so sánh sự ổn định của mô hình với các ngôn ngữ khác nhau và cả các ứng dụng đã được đi vào sử dụng cả mã nguồn mở và thương mại. Mô hình này sau đó  được sử dụng vào ứng dụng của chúng tôi và đáp ứng được kì vọng về độ trễ cũng như chất lượng của giọng nói đầu ra.
+	
+	Với các công trình nghiên cứu và ứng dụng được thực hiện trong luận văn này, chúng tôi mong muốn góp một phần công sức của mình vào việc cải thiện chất lượng học tập, vui chơi trực tuyến của mọi người.
+
+\setlength{\parskip}{0mm}
+\cleardoublepage
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\cleardoublepage
+
+
+\pagenumbering{arabic}
+\pagestyle{fancy}
+\setlength{\parskip}{2.5mm}
+\include{parts/intro/intro}
+		
+\include{parts/foundations/math/math}
+\include{parts/foundations/sound/sound}
+\include{parts/foundations/ml/ml}
+%\include{parts/foundations/internals/internals}
+
+
+\include{parts/relatedworks/relatedworks}
+\include{parts/design/design}
+\include{parts/results/results}
+
+
+\include{parts/final/final}
+\setlength{\parskip}{0mm}
+
+\cleardoublepage
+
+\begin{thebibliography}{80}
+	% Papers
+	
+	\bibitem{fullsubnet}
+	Hao, X., Su, X., Horaud, R., \& Li, X. (2021, June). FullSubNet: A Full-Band and Sub-Band Fusion Model for Real-Time Single-Channel Speech Enhancement. In ICASSP 2021-2021 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP) (pp. 6633-6637). IEEE.
+	
+	\bibitem{dccrn}
+	Hu, Y., Liu, Y., Lv, S., Xing, M., Zhang, S., Fu, Y., Wu, J., Zhang, B., Xie, L. (2020) DCCRN: Deep Complex Convolution Recurrent Network for Phase-Aware Speech Enhancement. Proc. Interspeech 2020, 2472-2476, doi: 10.21437/Interspeech.2020-2537
+	
+	\bibitem{dtln}
+	Westhausen, N.L., Meyer, B.T. (2020) Dual-Signal Transformation LSTM Network for Real-Time Noise Suppression. Proc. Interspeech 2020, 2477-2481, doi: 10.21437/Interspeech.2020-2631.
+	
+	
+	
+	\bibitem{subbandmodel}
+	Li, X., \& Horaud, R. (2020, October). Online Monaural Speech Enhancement Using Delayed Subband LSTM. In Interspeech 2020 (pp. 2462-2466).
+	
+	
+	% Books
+	
+	\bibitem{mdft}
+	Smith, Julius O. (2003). Mathematics of the Discrete Fourier Transform (DFT) with Audio Applications, Second Edition, W3K Publishing, http://books.w3k.org/, ISBN 978-0-9745607-4-8.
+	
+	
+	% FFT
+	\bibitem{fft_cooley}
+	Cooley, J. W., \& Tukey, J. W. (1965). An algorithm for the machine calculation of complex Fourier series. Mathematics of computation, 19(90), 297-301.
+	
+	\bibitem{fft_for_fun}
+	Gentleman, W. M., \& Sande, G. (1966, November). Fast Fourier transforms: for fun and profit. In Proceedings of the November 7-10, 1966, fall joint computer conference (pp. 563-578).
+	
+	\bibitem{fft_brigham}
+	Brigham, E. O., \& Morrow, R. E. (1967). The fast Fourier transform. IEEE spectrum, 4(12), 63-70.
+	
+	\bibitem{historical_fft}
+	Cooley, J. W., Lewis, P. A., \& Welch, P. D. (1967). Historical notes on the fast Fourier transform. Proceedings of the IEEE, 55(10), 1675-1677.
+	
+	\bibitem{ws_fft}
+	Cochran, W. T., Cooley, J. W., Favin, D. L., Helms, H. D., Kaenel, R. A., Lang, W. W., ... \& Welch, P. D. (1967). What is the fast Fourier transform?. Proceedings of the IEEE, 55(10), 1664-1674.
+	
+	\bibitem{fft_bergland}
+	Bergland, G. D. (1968). Numerical analysis: A fast Fourier transform algorithm for real-valued series. Communications of the ACM, 11(10), 703-710.
+	
+	\bibitem{fft_rader_brenner}
+	Rader, C., \& Brenner, N. (1976). A new principle for fast Fourier transformation. IEEE Transactions on Acoustics, Speech, and Signal Processing, 24(3), 264-266.
+	
+	\bibitem{fft_springer_nuss}
+	Nussbaumer, H. J. (1981). The fast Fourier transform. In Fast Fourier Transform and Convolution Algorithms (pp. 80-111). Springer, Berlin, Heidelberg.
+	
+	
+	% Datasets
+	
+	\bibitem{dns}
+	Reddy, C. K., Gopal, V., Cutler, R., Beyrami, E., Cheng, R., Dubey, H., ... \& Gehrke, J. (2020). The INTERSPEECH 2020 Deep Noise Suppression Challenge: Datasets, Subjective Testing Framework, and Challenge Results.
+	
+	\bibitem{chime}
+	Barker, J., Watanabe, S., Vincent, E., \& Trmal, J. (2018). The Fifth'CHiME'Speech Separation and Recognition Challenge: Dataset, Task and Baselines. Proc. Interspeech 2018, 1561-1565.
+	
+	\bibitem{demand}
+	Thiemann, J., Ito, N., \& Vincent, E. (2013, June). The Diverse Environments Multi-channel Acoustic Noise Database (DEMAND): A database of multichannel environmental noise recordings. In Proceedings of Meetings on Acoustics ICA2013 (Vol. 19, No. 1, p. 035081). Acoustical Society of America.
+	
+	\bibitem{edata}
+	Valentini-Botinhao, C. (2017). Noisy speech database for training speech enhancement algorithms and tts models.
+	
+	\bibitem{vivos}
+	Luong, H. T., \& Vu, H. Q. (2016, December). A non-expert Kaldi recipe for Vietnamese speech recognition system. In Proceedings of the Third International Workshop on Worldwide Language Service Infrastructure and Second Workshop on Open Infrastructures and Analysis Frameworks for Human Language Technologies (WLSI/OIAF4HLT2016) (pp. 51-55).
+	
+	
+	
+	% Metrics
+	
+	\bibitem{mos}
+	Streijl, R. C., Winkler, S., \& Hands, D. S. (2016). Mean opinion score (MOS) revisited: methods and applications, limitations and alternatives. Multimedia Systems, 22(2), 213-227.
+	
+	\bibitem{stoi}
+	Taal, C. H., Hendriks, R. C., Heusdens, R., \& Jensen, J. (2010, March). A short-time objective intelligibility measure for time-frequency weighted noisy speech. In 2010 IEEE international conference on acoustics, speech and signal processing (pp. 4214-4217). IEEE.
+	\bibitem{pesq}
+	Rix, A. W., Beerends, J. G., Hollier, M. P., \& Hekstra, A. P. (2001, May). Perceptual evaluation of speech quality (PESQ)-a new method for speech quality assessment of telephone networks and codecs. In 2001 IEEE international conference on acoustics, speech, and signal processing. Proceedings (Cat. No. 01CH37221) (Vol. 2, pp. 749-752). IEEE.
+	
+	
+	\bibitem{speech_enhancement}
+	Loizou, P. C. (2007). Chapter 11 ``Objective Quality and Intelligibility Measures'' . In Speech Enhancement: Theory and Practice, Second Edition. CRC press.
+	
+	
+	\bibitem{dnsmos}
+	Reddy, C. K., Gopal, V., \& Cutler, R. (2021, June). Dnsmos: A non-intrusive perceptual objective speech quality metric to evaluate noise suppressors. In ICASSP 2021-2021 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP) (pp. 6493-6497). IEEE.
+	
+	\bibitem{dnsmos_p835}
+	Reddy, C. K., Gopal, V., \& Cutler, R. (2022, May). DNSMOS P. 835: A non-intrusive perceptual objective speech quality metric to evaluate noise suppressors. In ICASSP 2022-2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP) (pp. 886-890). IEEE.
+	
+	\bibitem{itu_p808}
+	ITU-T Recommendation P.808, Subjective evaluation of speech quality with a crowdsourcing approach. International Telecommunication Union, Geneva, 2021.
+	
+	\bibitem{itu_p835}
+	ITU-T Recommendation P.835, Subjective test methodology for evaluating speech communication systems that include noise suppression algorithm. International Telecommunication Union, Geneva, 2003.
+	
+	\bibitem{speechassessment}
+	Loizou, P. C. (2011). Speech quality assessment. In Multimedia analysis, processing and communications (pp. 623-654). Springer, Berlin, Heidelberg.
+	
+	
+	% Loss
+	
+	\bibitem{sisdr}
+	Le Roux, J., Wisdom, S., Erdogan, H., \& Hershey, J. R. (2019, May). SDR–half-baked or well done?. In ICASSP 2019-2019 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP) (pp. 626-630). IEEE.
+	
+	
+	% Driver dev
+	
+	\bibitem{wavert}
+	Berreth, F. (2010). Low latency real-time audio streaming. U.S. Patent No. 7,706,901. Washington, DC: U.S. Patent and Trademark Office.
+	
+	\bibitem{dev_driver_wdf}
+	Orwick, P., \& Smith, G. (2007). Developing Drivers with the Windows Driver Foundation. Microsoft Press.
+	
+	\bibitem{win_internals}
+	Andrea Allievi, Alex Ionescu, David A. Solomon, Kate Chase, Mark E. Russinovich. (2021). Windows Internals 7th Edition. Microsoft Press.
+	
+	% perceptual freq
+	\bibitem{mel_freq}
+	Smyth, T. (2020). Music 175: Psychoacoustics Spring 2020. Music Journal, 3(2), 45-52.
+	
+	\bibitem{itu_p862.1}
+	ITU-T Recommendation P.862.1, Mapping function for transforming P.862 raw result scores to MOS-LQO. International Telecommunication Union, Geneva, 2003.
+	
+	\bibitem{itu_p862.2}
+	ITU-T Recommendation P.862.2, Wideband extension to Recommendation P.862 for the assessment of wideband telephone networks and speech codecs. International Telecommunication Union, Geneva, 2007.
+	
+	
+	\bibitem{ansi_s1.11}
+	American National Standard Institute. (2004). ANSI S1.11: American National Standard Specification for Octave-Band and Fractional-Octave-Band Analog and Digital Filters. Acoustical Society of America (ASA).
+	
+	% loudness
+	
+	\bibitem{psychoacoustics}
+	Zwicker, E., \& Fastl, H. (2013). Psychoacoustics: Facts and models (Vol. 22). Springer Science \& Business Media.
+	
+	\bibitem{scale_sone}
+	Stevens, S. S. (1936). A scale for the measurement of a psychological magnitude: loudness. Psychological Review, 43(5), 405.
+	
+	\bibitem{measurement_loudness}
+	Stevens, S. S. (1955). The measurement of loudness. The Journal of the Acoustical Society of America, 27(5), 815-829.
+	
+	\bibitem{loudness_complex}
+	Stevens, S. S. (1956). Calculation of the loudness of complex noise. The Journal of the Acoustical Society of America, 28(5), 807-832.
+	
+	\bibitem{func_near_threshold}
+	Marks, L. E., \& Stevens, J. C. (1968). The form of the psychophysical function near threshold. Perception \& Psychophysics, 4(5), 315-318.
+	
+	\bibitem{func_masking_noise}
+	Lochner, J. P. A., \& Burger, J. F. (1961). Form of the loudness function in the presence of masking noise. The Journal of the Acoustical Society of America, 33(12), 1705-1707.
+	
+	\bibitem{loudness_model}
+	Zwicker, E., \& Scharf, B. (1965). A model of loudness summation. Psychological review, 72(1), 3.
+	
+	\bibitem{iso_532}
+	ISO-532-1. (2017). Acoustics - Method for calculating loudness - Zwicker's method. International Standard. 
+	
+	% STFT
+	
+	\bibitem{stft_allen}
+	Allen, J. (1977). Short term spectral analysis, synthesis, and modification by discrete Fourier transform. IEEE Transactions on Acoustics, Speech, and Signal Processing, 25(3), 235-238.
+	
+	\bibitem{stft_allen_rabiner}
+	Allen, J. B., \& Rabiner, L. R. (1977). A unified approach to short-time Fourier analysis and synthesis. Proceedings of the IEEE, 65(11), 1558-1564.
+	
+	% LSTM
+	
+	\bibitem{lstm}
+	Hochreiter, S., \& Schmidhuber, J. (1997). Long short-term memory. Neural computation, 9(8), 1735-1780.
+	
+	\bibitem{forget_gate}
+	Gers, F. A., Schmidhuber, J., \& Cummins, F. (2000). Learning to forget: Continual prediction with LSTM. Neural computation, 12(10), 2451-2471.
+	
+	
+	% nature of Fourier
+	
+	\bibitem{approximate_trigonometric}
+	Powell, M. J. D. (1981). Chapter 13 ``Approximation to periodic functions''. In Approximation theory and methods. Cambridge university press.
+	
+	\bibitem{mat_120B_notes}
+	Low, E. \& Winther, R. (2001). Fourier Analysis. Notes for Mat 120B, University of Oslo.
+	
+	
+	% windowing
+	
+	\bibitem{understand_fft}
+	National Instruments. Instrument Fundamentals: Understanding FFTs and Windowing. In Instrument Fundamentals Series, National Instruments, https://www.ni.com/.
+	
+	
+\end{thebibliography}
+
+
+%\bibliographystyle{acm}
+%\bibliography{refs}
+
+\setlength{\parskip}{2.5mm}
+
+%\include{parts/appendix/proof}
+\include{parts/appendix/fourier}
+
+\setlength{\parskip}{0mm}
+
+\end{document}
+

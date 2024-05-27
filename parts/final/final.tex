@@ -1,0 +1,17 @@
+\newcommand{\finimg}[1]{parts/final/img/#1}
+\setupfont{13pt}
+
+\chapter{Tổng kết}\label{chapter::final}
+
+\section{Kết quả đạt được}
+	
+	Trong luận văn này, ngoài việc hiện thực được ứng dụng sử dụng mô hình lọc nhiễu bằng học sâu, chúng tôi cũng đã đề xuất một hàm tăng cường mất mất, phân tích các đặc điểm của hàm tăng cường mất mát và phân tích một số đặc điểm về đạo hàm của chúng (\sectionref{section::relatedworks::propose}), đồng thời chúng tôi cũng sử dụng chính hàm mất mát đã được tăng cường để huấn luyện mô hình được chúng tôi đề xuất và đạt được các kết quả khá khả quan (\tableref{re::compare_models}).
+	
+	Các bộ dữ liệu được chúng tôi tái tạo và giả lập cho các môi trường phức tạp lẫn nhiều loại tiếng ồn và cho nhiều loại ngôn ngữ khác nhau. Điều này cho thấy hiệu quả mà hàm tăng cường mất mát mà chúng tôi đề xuất khá lớn. Với hạn chế về mặt dữ liệu sạch lẫn số lượng nhiễu và cả hạ tầng sử dụng để huấn luyện mô hình, mô hình chúng tôi với một số metrics vẫn vượt qua cả những mô hình đạt các thứ hạng cao trong các cuộc thi lớn (\tableref{re::compare_models}). Không chỉ vậy, việc ứng dụng mô hình vào lọc nhiễu thời gian thực cũng được chúng tôi chú trọng và kết quả là chúng tôi cũng đã hiện thực một ứng dụng có khả năng lọc nhiễu trên cả file lẫn lọc trong thời gian thực (\sectionref{section::results::app}). Một số yêu cầu được chúng tôi đặt ra vượt cả kì vọng ban đầu (\tableref{re::compare_models_prebuilt} và \tableref{re::svc_latency_detail}).
+	
+	
+\section{Hạn chế và hướng phát triển}
+
+	Tuy vậy, các hướng tiếp cận của chúng tôi còn một số điểm hạn chế. Với loại nhiễu được giới hạn lại và không quá nhiều (\chapterref{chapter::intro}), chúng tôi dễ dàng thấy được nhiều điều bất cập khi ứng dụng mô hình vào thực tế. Tuy có kết quả khá ổn định trên tập đa ngôn ngữ, nhưng kết quả vẫn có thể được cải thiện (\tableref{re::compare_models_multilingual}). Hiện tại chỉ huấn luyện mô hình với tiếng Anh vẫn đang là hạn chế của chúng tôi. Do chỉ tập trung vào các âm tiết mang thông tin quan trọng bên trong giọng nói, chúng tôi bỏ qua các yếu tố về chất giọng, âm điệu, ngữ nghĩa của câu từ. Điều này đôi lúc làm cho mô hình bị nhầm lẫn, giữ lại các âm nhiễu tương tự giọng nói mà đáng lẽ phải được loại bỏ đi. Không những vậy, việc loại bỏ các âm cấu tạo nên ngữ điệu cũng làm cho giọng nói của người nói trong môi trường nhiễu mạnh bị vang và trầm xuống rất nhiều. Mục tiêu kế tiếp của chúng tôi chính là khắc phục những điểm trên, cải tiến mô hình và mở rộng dữ liệu huấn luyện của mình.
+	
+	Không những vậy, việc ``continual learning'' cho mô hình cũng cần được chúng tôi chú trọng. Như đã có trình bày ở cuối \sectionref{section::design::realtime}, mô hình không chỉ cần thỏa mãn tính thời gian thực mà còn phải liên tục linh hoạt thích nghi với môi trường xung quanh người dùng. Do đó, ngoài mục tiêu khắc phụ hạn chế và cải thiện mô hình, chúng tôi đặt ra mục tiêu làm cho mô hình này có khả năng thích nghi đối với môi trường xung quanh người dùng.

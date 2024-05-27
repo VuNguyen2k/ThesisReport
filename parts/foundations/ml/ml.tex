@@ -1,0 +1,210 @@
+\newcommand{\mlimg}[1]{parts/foundations/ml/img/#1}
+\setupfont{13pt}
+
+\chapter{Học sâu}\label{chapter::ml}
+	
+	Trong phần này, chúng tôi sẽ đề cập tới một số mạng học sâu mà chúng tôi sẽ sử dụng trong các thí nghiệm. Dữ liệu phụ thuộc thời gian, điển hình là giọng nói, là một dạng dữ liệu mà thông tin hàm chứa bên trong nó thay đổi theo thời gian. Có thể liên quan về các thông tin như biên độ, tần số, đôi khi cũng có thể là các yếu tố như ngữ nghĩa, các thông tin hiện tại thường sẽ có sự phụ thuộc nào đó vào các dữ liệu trước đó. Lấy một ví dụ trong giọng nói, rõ ràng tại một thời điểm, con người không thể nào truyền tải hết toàn bộ thông tin mình muốn nói sang cho người nghe được, và ở phía của người nghe, các sự nhấn, thay đổi âm giọng trong quá trình truyền đạt của người nói, người nghe phải nhớ được một số thông tin từ những sự việc đó kết hợp nó với thông tin mới vừa nhận được ở hiện tại và tiếp đó cho tới khi người nói hoàn tất quá trình truyền đạt thì người nghe mới có được một thông tin trọn vẹn. Và đó chính là lý do \textbf{mạng hồi quy (recurrent neural network)} sẽ được sử dụng như xương sống cho các mô hình được dùng trong luận văn này.
+
+\section{Mạng hồi quy}
+	
+	Trong học máy cổ điển, một mạng neural bình thường sẽ bao gồm hai bộ phận chính là \textit{neural} và \textit{sự liên kết giữa các neural}. Bằng cách thay đổi các sự liên kết này, mạng neural đang cố gắng lưu trữ thông tin đang được học lại bên trong mạng bằng những trọng số của nó. Một neural nhân tạo có cấu tạo như \figref{ml::neural_cell}. Gọi $W_t$ là trọng số của neural này tại thời điểm $t$, $b_t$ là bias và $f(x)$ là hàm kích hoạt. Kết quả đầu ra của một neural được tính toán bằng công thức
+	
+		\begin{equation}
+			h_t = f\bigg(W_t x_t + b_t\bigg),
+		\end{equation}
+	
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width=120mm]{\mlimg{nn_cell_1.png}}
+			\caption{Mô hình của một neural (toán học) mô phỏng lại cấu tạo của neural (sinh học) bên trong não bộ con người}
+		\label{ml::neural_cell}
+		\end{figure}
+		
+	\noindent với $h_t$ là giá trị đầu ra của neural ứng với đầu vào $x_t$ thời điểm $t$. Khi mà các sự liên kết trong neural tiến theo một chiều và tất cả những neural ở phía trước đều liên kết với neural ở sau, nó được gọi là một lớp fully connected (FC).
+	
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width=70mm]{\mlimg{fc.png}}
+			\caption{Lớp FC với 7 đầu vào và 5 đầu ra}
+		\end{figure}
+	
+	Nhưng nếu một mạng chỉ toàn bao gồm các lớp FC như thế này, thì việc học ra được sự phụ thuộc về thời gian của dữ liệu gần như là không thể, bởi vì dữ liệu trong một mạng FC (mạng chỉ chứa mỗi FC) dữ liệu chỉ có một chiều đi duy nhất là từ đầu vào ra thẳng đầu ra và nó hoàn toàn không xét tới sự phụ thuộc về mặt thời gian của dữ liệu. Để giải quyết vấn đề này, ta xét một khái niệm mới là \definition{mạng hồi quy (recurrent neural network - RNN)}. Mạng hồi quy là một neural network nhưng ở đây, sự liên kết giữa các neural có một sự khác biệt. Sự khác biệt này được thể hiện thông qua \figref{ml::rnn_nn_diff}.
+	
+		\begin{figure}[h]
+			\centering
+			\begin{subfigure}{0.5\textwidth}
+				\centering
+				\includegraphics[width=25mm]{\mlimg{nn_illus.png}}
+				\caption{Sơ đồ khối của mạng FC}
+			\end{subfigure}%
+			\begin{subfigure}{0.5\textwidth}
+				\centering
+				\includegraphics[width=25mm]{\mlimg{rnn_illus.png}}
+				\caption{Sơ đồ khối của mạng RNN}
+			\end{subfigure}
+			\caption{Sơ đồ khối của hai mạng neural}
+		\label{ml::rnn_nn_diff}
+		\end{figure}
+	
+	Ở mạng RNN, sự phụ thuộc về mặt thời gian vào đầu ra đối với dữ liệu trước làm cho mô hình có chứa loại mạng này có khả năng học ra được những sự phụ thuộc về thời gian của dữ liệu. Sự lặp lại theo thời gian này có thể được thể hiểu rõ hơn bằng cách duỗi network này ra như \figref{ml::rnn_unfold}.
+	
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width=120mm]{\mlimg{rnn.jpg}}
+			\caption{Quá trình duỗi mạng RNN theo thời gian}
+		\label{ml::rnn_unfold}
+		\end{figure}
+	
+	\figref{ml::rnn_unfold} thể hiện luồng chạy của mô hình RNN được mở rộng theo thời gian với $x_t$ là đầu vào tại thời điểm $t$ của mạng, $o_t$ là đầu ra tại thời điểm $t$ của mạng, $s_t$ chính là các thông tin được tổng hợp từ đầu tới thời điểm $t$ hiện tại, các thông tin này sẽ tiếp tục được truyền cho các bước kế tiếp dùng để dự đoán ra đầu ra $o$ của mô hình. Về mặt toán học, kết quả xuất ra tại một neural trong một RNN được tính như sau cho mọi $t > 0$, \figref{ml::rnn_cell} là biểu đồ khối thể hiện luồng dữ liệu thực thi trên một neural của RNN.
+	
+		\begin{align*}
+			h_t = f(U_t x_t + W_t h_{t-1} + b_t). \numberedeq
+			\label{ml::rnn_formula}
+		\end{align*}
+	
+	Trong trường hợp $t = 0$, $h_0$ lúc này mang giá trị là $0$. Ở công thức \formularef{ml::rnn_formula}, $U_t$ và $W_t$ là những trọng số ứng với đầu vào $x_t$ và trạng thái cũ $h_{t - 1}$, $f$ là hàm kích hoạt của neural RNN này (thông thường các neural trong RNN sử dụng hàm $\tanh$ như hàm kích hoạt), một số loại hàm kích hoạt thường dùng được liệt kê ở \tableref{ml::activations}.
+	
+		\begin{table}[h]
+			\setupfont{13pt}
+			\centering
+			\begin{tabular}{l c}
+				\hline
+				\multicolumn{1}{c}{\textbf{Hàm kích hoạt}} & \multicolumn{1}{c}{\textbf{Đồ thị} $Oxy$} \\
+				\hline
+				\begin{tabular}{l}
+					Sigmoid $f(x) = \sigma(x) = \frac{1}{1 + e^{-x}}$
+				\end{tabular} & 
+				\begin{tabular}{c}
+					\includegraphics[width=40mm]{\mlimg{sigmoid.png}}
+				\end{tabular}\\
+				\begin{tabular}{l}
+					Tanh $f(x) = \tanh(x) = 2\sigma(x) - 1$
+				\end{tabular} & 
+				\begin{tabular}{c}
+					\includegraphics[width=40mm]{\mlimg{tanh.png}}
+				\end{tabular}\\
+				\begin{tabular}{l}
+					ReLU $f(x) = \begin{cases}
+						0, & \ifc{} x < 0, \\
+						x, & \ifc{} x \ge 0 \\
+					\end{cases}$
+				\end{tabular} & 
+				\begin{tabular}{c}
+					\includegraphics[width=40mm]{\mlimg{relu.png}}
+				\end{tabular}\\	
+				\hline		
+			\end{tabular}
+		\caption{Các hàm mất mát thường được sử dụng trong mô hình hồi quy}
+		\label{ml::activations}
+		\end{table}
+	
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width=120mm]{\mlimg{RNN.PNG}}
+			\caption{Cấu tạo của một neural trong RNN, để đảm bảo tính tương đồng với LSTM, chúng tôi sử dụng gạch chân $c$ cho các trọng số trong RNN} %\urlsrc{https://pianalytix.com/long-short-term-memory-networks-lstms/}
+			\label{ml::rnn_cell}
+		\end{figure}
+	
+	Để có thể huấn luyện mô hình RNN, ta thực hiện phép lấy đạo hàm như sau
+	
+		\begin{equation}
+			\frac{d}{d h_{t - 1}} h_t = (1 - h_t^2) W_t.
+		\end{equation}
+	
+	Tiếp tục lấy đạo hàm hàm $h_t$ theo $h_{t - q}$
+	
+		\begin{equation}
+			\frac{d}{d h_{t - q}} h_t = (1 - h_{t - q}^2) W_{t - q} \prod_{i=t - q + 1}^{t} (1 - h_i^2) W_i,
+		\end{equation}
+	
+	\noindent vì $(1 - h_t^2)$ luôn nằm trong khoảng $[0, 1]$, do vậy giá trị của đạo hàm trên sẽ càng ngày càng nhỏ, và khi lan truyền đạo hàm này xuống các trọng số, giá trị đạo hàm ở các thời gian với khoảng cách $q$ lớn sẽ gần như về $0$ và không còn đóng góp gì vào gradient chung của trọng số nữa. Đây là tình trạng \textbf{vanishing gradient} của RNN.
+	
+\section{Long short term memory}
+	
+	Để khắc phục tình trạng ``vanishing gradient'' được nêu ở trên, \definition{Long-Short Term Memory (tạm dịch là mạng nhớ, LSTM)} \cite{lstm} sử dụng một cơ chế truyền lỗi hằng bên trong phần nhớ (memory cell) của mô hình. Cơ chế này được gọi là \definition{Constant Error Carousel (CEC)}. Cũng xuất phát từ việc lấy đạo hàm với từ đầu ra của mô hình tại $t$ và $t - q$, có
+	
+		\begin{equation}
+			\frac{d}{d h_{t - q}} h_t = \frac{d}{d c_t} h_t \bigg( \prod_{i=t - q + 2}^{t} \frac{d}{d c_{i - 1}} c_i \bigg) \frac{d}{d h_{t - q}} c_{t - q + 1},
+		\end{equation}
+	
+	\noindent để có thể khắc phục được tình trạng ``vanishing gradient'', chúng tôi cần
+	
+		\begin{equation}
+			\frac{d}{d c_{i - 1}} c_i = 1.0.
+		\end{equation}
+	
+	Điều này dẫn tới kết quả
+	
+		\begin{equation}
+			c_{i} = c_{i - 1} + C,
+		\end{equation}
+	
+	\noindent và trong \cite{lstm}, họ chọn $C$ tương ứng với kết quả đầu vào của mô hình. 
+	
+		\begin{equation}
+			C = \tilde{c}_t = \tanh(U_c x_t + W_c h_{t - 1} + b_c).
+		\end{equation}
+	
+	Như vậy, mô hình RNN được cải tiến để có thể chống lại phần nào tình trạng ``vanishing gradient''. Giá trị $c_i$ lúc này được gọi là phần nhớ của mô hình RNN cải tiến này (tiền đề của LSTM). \figref{ml::rnn_with_memory} cho thấy cấu trúc mô hình RNN với phần nhớ.
+	
+		\begin{figure}[h]
+			\centering
+			\includegraphics[width=80mm]{\mlimg{RNN_memory.PNG}}
+			\caption{Cấu tạo của RNN có phần nhớ} %\urlsrc{https://pianalytix.com/long-short-term-memory-networks-lstms/}
+			\label{ml::rnn_with_memory}
+		\end{figure}
+	
+	Để tiếp tục xây dựng mô hình LSTM đời đầu, các tác giả của \cite{lstm} nhận thấy với các dạng dữ liệu có chứa nhiễu, đặc biệt là các nhiễu xuất hiện nhiễu giữa các điểm dữ liệu, RNN sẽ bị tình trạng \textbf{xung đột trọng số (weight conflict)}. Tình trạng này xảy ra trong quá trình đạo hàm theo thời gian, nhiễu với giá trị mất mát lớn và gần với $W$, $U$ hơn là các điểm dữ liệu sạch, các gradient sai này sẽ loại bỏ tác dụng của các gradient từ các thời điểm xa hơn và làm cho mô hình trở nên khó học hơn (\textit{``This conflict makes learning difficult''} \cite{lstm}).
+	
+	Để khắc phục tình trạng này, các bộ phân loại tại đầu vào và đầu ra của mô hình RNN với phần nhớ được đề xuất. Các bộ phân loại này được gọi là các phần cổng (gate units). Mô hình RNN kết hợp với phần nhớ và các phần cổng này tạo thành mô hình LSTM khởi đầu được đề xuất trong \cite{lstm}. Mô hình này được thể hiện trong \figref{ml::std_lstm}.
+	
+	LSTM khởi đầu này được viết dưới dạng các công thức như sau
+	
+		\begin{align*}
+			i_t			& =  \sigma(U_i x_t + W_i h_{t - 1} + b_i),\\
+			o_t			& =  \sigma(U_o x_t + W_o h_{t - 1} + b_o),\\
+			\tilde{c}_t & =  \tanh (U_c x_t + W_c h_{t - 1} + b_c),\\
+			c_t			& =  c_{t - 1} + i_t \tilde{c}_t,\\
+			h_t			& =  o_t \tanh(c_t).
+			\label{ml::std_lstm_formula}
+		\end{align*}
+	
+	Các thông tin từ đầu vào $\tilde{c}_t$ sau khi được chọn bởi cổng $i_t$ để loại bỏ ra các thành phần nhiễu sẽ được tổng hợp tuyến tính với $c_{t - 1}$ để tạo thành thông tin mới $c_t$ và sau đó tính toán ra được đầu ra $h_t$. Nhưng một vấn đề dễ thấy ở đây, tỉ lệ tăng của $c_t$ theo $c_{t - 1}$ là $1$, do để khắc phục tình trạng ``vanishing gradient'' như đã nêu ở trên, nhưng điều này khiến cho $c_t$ tăng lên không giới hạn với những chuỗi đầu vào tương đối dài ($t$ lớn).
+	
+	Được nghiên cứu trong \cite{forget_gate}, LSTM tiêu chuẩn có $c_t$ tăng tuyến tính theo thời gian, do đó khi $t$ đạt tới một mức mà $c_t$ đủ lớn, $\tanh(c_t)$ lúc này xấp xỉ $1$ và khiến cho đạo hàm từ $h_t$ về $c_t$ (có giá trị $1 - \tanh^2(c_t)$) chỉ còn xấp xỉ $0$ do đó không cho phép gradient từ những thời điểm $t$ này quay về cập nhật lại cho trọng số nữa. Để khắc phục tình trạng này, \cite{forget_gate} đề xuất một cổng quên được đặt ở đạo hàm $\frac{d}{d c_{i - 1}} c_i$. Vậy công thức đạo hàm của phần nhớ (memory cell) lúc này là
+	
+		\begin{equation}
+			\frac{d}{d c_{i - 1}} c_i = f_i,
+		\end{equation}
+	
+	\noindent với các thành phần lúc này được định nghĩa như sau
+	
+		\begin{align*}
+			f_t			& =  \sigma(U_f x_t + W_f h_{t - 1} + b_f),\\
+			i_t			& =  \sigma(U_i x_t + W_i h_{t - 1} + b_i),\\
+			o_t			& =  \sigma(U_o x_t + W_o h_{t - 1} + b_o),\\
+			\tilde{c}_t & =  \tanh (U_c x_t + W_c h_{t - 1} + b_c),\\
+			c_t			& =  f_t c_{t - 1} + i_t \tilde{c}_t,\\
+			h_t			& =  o_t \tanh(c_t).
+			\label{ml::ext_lstm_formula}
+		\end{align*}
+	
+	Đây cũng chính là công thức của LSTM thường được sử dụng hiện nay trong công nghiệp và sẽ chính là mô hình chính sẽ được sinh viên thực hiện sử dụng trong luận văn này. \figref{ml::ext_lstm} thể hiện sơ đồ của mô hình LSTM mở rộng.
+	
+		\begin{figure}[h]
+			\centering
+			\begin{subfigure}{.5\textwidth}
+				\centering
+				\includegraphics[width=70mm]{\mlimg{std_lstm.PNG}}
+				\caption{Cấu tạo của LSTM khởi đầu \citesrc{lstm}}
+				\label{ml::std_lstm}
+			\end{subfigure}%
+			\begin{subfigure}{.5\textwidth}
+				\centering
+				\includegraphics[width=70mm]{\mlimg{ext_lstm.PNG}}
+				\caption{Cấu tạo của LSTM mở rộng \citesrc{forget_gate}}
+				\label{ml::ext_lstm}
+			\end{subfigure}
+		
+		\caption{Mô hình LSTM tiêu chuẩn và mở rộng}
+		\end{figure}

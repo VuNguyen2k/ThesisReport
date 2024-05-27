@@ -1,0 +1,64 @@
+\babel@toc {vietnamese}{}
+\contentsline {chapter}{Lời cam đoan}{iii}{section*.3}%
+\contentsline {chapter}{Lời cảm ơn}{iv}{section*.4}%
+\contentsline {chapter}{Tóm tắt đề tài}{v}{section*.5}%
+\contentsline {chapter}{M\d {u}c l\d {u}c}{vii}{chapter*.6}%
+\contentsline {chapter}{Danh s\'ach h\`inh v\~e}{xi}{chapter*.7}%
+\contentsline {chapter}{Danh s\'ach b\h {a}ng}{xvii}{chapter*.8}%
+\contentsline {chapter}{\numberline {1}Giới thiệu}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Âm thanh}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Đặt vấn đề}{4}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Mục tiêu và nhiệm vụ đề tài}{7}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Kết quả mong đợi}{8}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Ý nghĩa của đề tài}{9}{section.1.5}%
+\contentsline {section}{\numberline {1.6}Cấu trúc luận văn}{9}{section.1.6}%
+\contentsline {chapter}{\numberline {2}Xử lý tín hiệu số}{11}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Phép biến đổi Fourier thời gian ngắn}{11}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Định nghĩa}{11}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}Hàm cửa sổ}{13}{subsection.2.1.2}%
+\contentsline {subsection}{\numberline {2.1.3}Phương pháp Overlap Add}{15}{subsection.2.1.3}%
+\contentsline {section}{\numberline {2.2}Biến đổi Fourier rời rạc}{22}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Định nghĩa}{22}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}Biến đổi Fourier nhanh}{23}{subsection.2.2.2}%
+\contentsline {chapter}{\numberline {3}Âm học}{31}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Âm thanh}{31}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Sự hình thành sóng âm}{31}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Các biểu diễn của âm thanh}{33}{subsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.1.3}Dãy khoảng tám và dãy khoảng tám lẻ}{36}{subsection.3.1.3}%
+\contentsline {subsection}{\numberline {3.1.4}Tần số cảm nhận}{37}{subsection.3.1.4}%
+\contentsline {subsection}{\numberline {3.1.5}Thang đo độ to của âm thanh}{39}{subsection.3.1.5}%
+\contentsline {section}{\numberline {3.2}Đánh giá chất lượng âm thanh}{45}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Các nhân tố ảnh hưởng tới chất lượng âm thanh}{45}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Thang đo Mean Opinion Score}{46}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Short-time Objective InteLigibility Measurement}{48}{subsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.2.4}Perceptual Evaluation of Speech Quality}{50}{subsection.3.2.4}%
+\contentsline {subsection}{\numberline {3.2.5}A Non-Intrusive Perceptual Objective Speech Quality Metric}{54}{subsection.3.2.5}%
+\contentsline {chapter}{\numberline {4}Học sâu}{57}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Mạng hồi quy}{57}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Long short term memory}{61}{section.4.2}%
+\contentsline {chapter}{\numberline {5}Các công trình nghiên cứu liên quan}{65}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Cách tiếp cận cổ điển}{65}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Tiếp cận theo bằng học sâu}{67}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Mask số thực trên miền tần số thời gian}{69}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Mask số phức trên miền tần số thời gian}{72}{subsection.5.2.2}%
+\contentsline {section}{\numberline {5.3}Đề xuất hàm mất mát và mô hình}{75}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Hàm mất mát đề xuất}{76}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}Mô hình đề xuất}{85}{subsection.5.3.2}%
+\contentsline {chapter}{\numberline {6}Phân tích thiết kế hệ thống}{95}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Yêu cầu hệ thống}{95}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Hệ thống lọc nhiễu tĩnh}{97}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Hệ thống lọc nhiễu động}{103}{section.6.3}%
+\contentsline {chapter}{\numberline {7}Thực nghiệm và kết quả}{115}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Chuẩn bị dữ liệu}{115}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Một số kết quả của mô hình lọc nhiễu}{121}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Một số kết quả của ứng dụng lọc nhiễu}{133}{section.7.3}%
+\contentsline {chapter}{\numberline {8}Tổng kết}{135}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Kết quả đạt được}{135}{section.8.1}%
+\contentsline {section}{\numberline {8.2}Hạn chế và hướng phát triển}{136}{section.8.2}%
+\contentsline {chapter}{T\`ai li\d \ecircumflex u tham kh\h {a}o}{137}{chapter*.196}%
+\contentsline {chapter}{\numberline {A}Biến đổi Fourier}{143}{appendix.A}%
+\contentsline {section}{\numberline {A.1}Phép biến đổi Fourier}{143}{section.A.1}%
+\contentsline {subsection}{\numberline {A.1.1}Định nghĩa và ví dụ}{143}{subsection.A.1.1}%
+\contentsline {subsection}{\numberline {A.1.2}Bản chất của biến đổi Fourier}{145}{subsection.A.1.2}%
+\contentsline {subsection}{\numberline {A.1.3}Phép biến đổi Fourier ngược}{150}{subsection.A.1.3}%
+\contentsline {section}{\numberline {A.2}Biến đổi Fourier rời rạc}{151}{section.A.2}%

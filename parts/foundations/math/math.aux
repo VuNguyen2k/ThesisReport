@@ -1,0 +1,128 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\@writefile{toc}{\contentsline {chapter}{\numberline {2}Xử lý tín hiệu số}{11}{chapter.2}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{loa}{\addvspace {10\p@ }}
+\newlabel{chapter::signal_processing}{{2}{11}{Xử lý tín hiệu số}{chapter.2}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.1}Phép biến đổi Fourier thời gian ngắn}{11}{section.2.1}\protected@file@percent }
+\newlabel{section::signal_processing::stft}{{2.1}{11}{Phép biến đổi Fourier thời gian ngắn}{section.2.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.1}Định nghĩa}{11}{subsection.2.1.1}\protected@file@percent }
+\newlabel{subsection::signal_processing::stft::def}{{2.1.1}{11}{Định nghĩa}{subsection.2.1.1}{}}
+\newlabel{stft::formula}{{2.1}{11}{Định nghĩa}{equation.2.1.1}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.1}{\ignorespaces Tác dụng của cửa sổ trong biến đổi Fourier thời gian ngắn\relax }}{12}{figure.caption.16}\protected@file@percent }
+\newlabel{stft::w_transform}{{2.1}{12}{Tác dụng của cửa sổ trong biến đổi Fourier thời gian ngắn\relax }{figure.caption.16}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.2}{\ignorespaces Quá trình của sổ hóa tín hiệu thời gian ngắn trong biến đổi Fourier thời gian ngắn\relax }}{12}{figure.caption.17}\protected@file@percent }
+\newlabel{stft::windowing}{{2.2}{12}{Quá trình của sổ hóa tín hiệu thời gian ngắn trong biến đổi Fourier thời gian ngắn\relax }{figure.caption.17}{}}
+\newlabel{stft::sample_hop128}{{2.3b}{13}{$(512, 512)$\relax }{figure.caption.18}{}}
+\newlabel{sub@stft::sample_hop128}{{b}{13}{$(512, 512)$\relax }{figure.caption.18}{}}
+\newlabel{stft::sample_hop512}{{2.3c}{13}{$(512, 128)$\relax }{figure.caption.18}{}}
+\newlabel{sub@stft::sample_hop512}{{c}{13}{$(512, 128)$\relax }{figure.caption.18}{}}
+\newlabel{stft::sample_w=256_hop512}{{2.3d}{13}{$(256, 512)$\relax }{figure.caption.18}{}}
+\newlabel{sub@stft::sample_w=256_hop512}{{d}{13}{$(256, 512)$\relax }{figure.caption.18}{}}
+\newlabel{stft::sample_w=256_hop128}{{2.3e}{13}{$(256, 128)$\relax }{figure.caption.18}{}}
+\newlabel{sub@stft::sample_w=256_hop128}{{e}{13}{$(256, 128)$\relax }{figure.caption.18}{}}
+\newlabel{stft::sample_w=128_hop128}{{2.3f}{13}{$(128, 128)$\relax }{figure.caption.18}{}}
+\newlabel{sub@stft::sample_w=128_hop128}{{f}{13}{$(128, 128)$\relax }{figure.caption.18}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.3}{\ignorespaces \text  {Spectrogram}{} biểu diễn với chiều dài cửa sổ $T$ và khoảng cách giữa các tín hiệu $\tau $, được kí hiệu trong hình là $(T, \tau )$\relax }}{13}{figure.caption.18}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.2}Hàm cửa sổ}{13}{subsection.2.1.2}\protected@file@percent }
+\newlabel{subsection::signal_processing::stft::win_func}{{2.1.2}{13}{Hàm cửa sổ}{subsection.2.1.2}{}}
+\citation{understand_fft}
+\citation{understand_fft}
+\newlabel{stft::window_formula}{{{2.2}}{14}{Hàm cửa sổ}{AMS.20}{}}
+\citation{stft_allen}
+\citation{stft_allen_rabiner}
+\@writefile{lot}{\contentsline {table}{\numberline {2.1}{\ignorespaces Bảng đề xuất cửa sổ sử dụng trong một số trường hợp}}{15}{table.caption.23}\protected@file@percent }
+\newlabel{stft::window_suggestion}{{2.1}{15}{Bảng đề xuất cửa sổ sử dụng trong một số trường hợp}{table.caption.23}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.4}{\ignorespaces Đồ thị ba loại cửa sổ Hann, tam giác và đều\relax }}{15}{figure.caption.24}\protected@file@percent }
+\newlabel{stft::windows}{{2.4}{15}{Đồ thị ba loại cửa sổ Hann, tam giác và đều\relax }{figure.caption.24}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.3}Phương pháp Overlap Add}{15}{subsection.2.1.3}\protected@file@percent }
+\newlabel{subsection::signal_processing::stft::ola}{{2.1.3}{15}{Phương pháp Overlap Add}{subsection.2.1.3}{}}
+\citation{stft_allen}
+\citation{stft_allen_rabiner}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.5}{\ignorespaces \text  {spectrogram}{} của dữ liệu được cửa sổ hóa bởi ba loại cửa sổ Hann, tam giác và đều, tác dụng của cửa sổ lên \text  {spectrogram}{} được thể hiện ở vùng khoanh đỏ.\relax }}{16}{figure.caption.25}\protected@file@percent }
+\newlabel{stft::window_effect_result}{{2.5}{16}{\spectrogram {} của dữ liệu được cửa sổ hóa bởi ba loại cửa sổ Hann, tam giác và đều, tác dụng của cửa sổ lên \spectrogram {} được thể hiện ở vùng khoanh đỏ.\relax }{figure.caption.25}{}}
+\newlabel{ola::non_modified_spectrogram_f}{{2.4}{16}{Phương pháp Overlap Add}{equation.2.1.4}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2.2}{\ignorespaces Bảng định nghĩa các hàm cửa sổ\relax }}{17}{table.caption.28}\protected@file@percent }
+\newlabel{ola::window_def_table}{{2.2}{17}{Bảng định nghĩa các hàm cửa sổ\relax }{table.caption.28}{}}
+\newlabel{ola:non_modified_spectrogram_main_formula}{{{2.5}}{17}{Phương pháp Overlap Add}{AMS.27}{}}
+\newlabel{ola::modified_spectrogram_prob}{{2.6}{19}{Phương pháp Overlap Add}{equation.2.1.6}{}}
+\newlabel{ola::modified_spectrogram_f'}{{{2.8}}{19}{Phương pháp Overlap Add}{AMS.30}{}}
+\newlabel{ola::modified_spectrogram_windows_integral}{{2.9}{20}{Phương pháp Overlap Add}{equation.2.1.9}{}}
+\newlabel{ola::modified_spectrogram_general_windows_integral}{{2.10}{20}{Phương pháp Overlap Add}{equation.2.1.10}{}}
+\newlabel{ola::modified_spectrogram_multiply_w}{{2.13}{20}{Phương pháp Overlap Add}{equation.2.1.13}{}}
+\citation{fft_cooley}
+\citation{fft_rader_brenner}
+\citation{fft_springer_nuss}
+\citation{fft_bergland}
+\citation{mdft}
+\@writefile{toc}{\contentsline {section}{\numberline {2.2}Biến đổi Fourier rời rạc}{22}{section.2.2}\protected@file@percent }
+\newlabel{section::signal_processing::dft}{{2.2}{22}{Biến đổi Fourier rời rạc}{section.2.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.1}Định nghĩa}{22}{subsection.2.2.1}\protected@file@percent }
+\newlabel{subsection::signal_processing::dft::def}{{2.2.1}{22}{Định nghĩa}{subsection.2.2.1}{}}
+\newlabel{dft::dftformula}{{2.16}{22}{Định nghĩa}{equation.2.2.16}{}}
+\citation{fft_cooley}
+\citation{fft_cooley}
+\citation{fft_for_fun}
+\citation{ws_fft}
+\citation{historical_fft}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.2}Biến đổi Fourier nhanh}{23}{subsection.2.2.2}\protected@file@percent }
+\newlabel{subsection::signal_processing::dft::fft}{{2.2.2}{23}{Biến đổi Fourier nhanh}{subsection.2.2.2}{}}
+\citation{ws_fft}
+\citation{ws_fft}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.6}{\ignorespaces Sơ đồ ý tưởng đệ quy của biến đổi Fourier nhanh (chia theo thời gian)}}{25}{figure.caption.45}\protected@file@percent }
+\newlabel{fft::algorithm}{{2.6}{25}{Sơ đồ ý tưởng đệ quy của biến đổi Fourier nhanh (chia theo thời gian)}{figure.caption.45}{}}
+\newlabel{fft::recursive_k_formula}{{2.23}{25}{Biến đổi Fourier nhanh}{equation.2.2.23}{}}
+\citation{fft_cooley}
+\citation{fft_brigham}
+\citation{fft_brigham}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.7}{\ignorespaces Nguyên nhân của hiện tượng đảo bit trong biến đổi Fourier nhanh cơ số 2 (chia theo thời gian), với các bit được sắp xếp dần thể hiện qua các số được khoanh trong ô màu đỏ}}{26}{figure.caption.46}\protected@file@percent }
+\newlabel{fft::butterfly}{{2.7}{26}{Nguyên nhân của hiện tượng đảo bit trong biến đổi Fourier nhanh cơ số 2 (chia theo thời gian), với các bit được sắp xếp dần thể hiện qua các số được khoanh trong ô màu đỏ}{figure.caption.46}{}}
+\newlabel{fft::freq_X_even_formula}{{{2.25}}{27}{Biến đổi Fourier nhanh}{AMS.50}{}}
+\citation{ws_fft}
+\citation{ws_fft}
+\newlabel{fft::freq_X_odd_formula}{{{2.26}}{28}{Biến đổi Fourier nhanh}{AMS.52}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2.8}{\ignorespaces Sơ đồ ý tưởng đệ quy của biến đổi Fourier nhanh (chia theo tần số)}}{28}{figure.caption.53}\protected@file@percent }
+\newlabel{fft::dcf_algorithm}{{2.8}{28}{Sơ đồ ý tưởng đệ quy của biến đổi Fourier nhanh (chia theo tần số)}{figure.caption.53}{}}
+\citation{fft_rader_brenner}
+\newlabel{fft::rader_brenner_original_formula}{{{2.27}}{29}{Biến đổi Fourier nhanh}{AMS.55}{}}
+\newlabel{fft::rader_brenner_c_formula}{{{2.28}}{29}{Biến đổi Fourier nhanh}{AMS.57}{}}
+\newlabel{fft::rader_brenner_d_c_formula}{{2.29}{30}{Biến đổi Fourier nhanh}{equation.2.2.29}{}}
+\newlabel{fft::rader_brenner_final}{{{2.30}}{30}{Biến đổi Fourier nhanh}{AMS.59}{}}
+\@setckpt{parts/foundations/math/math}{
+\setcounter{page}{31}
+\setcounter{equation}{30}
+\setcounter{enumi}{3}
+\setcounter{enumii}{0}
+\setcounter{enumiii}{0}
+\setcounter{enumiv}{0}
+\setcounter{footnote}{0}
+\setcounter{mpfootnote}{0}
+\setcounter{part}{0}
+\setcounter{chapter}{2}
+\setcounter{section}{2}
+\setcounter{subsection}{2}
+\setcounter{subsubsection}{0}
+\setcounter{paragraph}{0}
+\setcounter{subparagraph}{0}
+\setcounter{figure}{8}
+\setcounter{table}{2}
+\setcounter{lstnumber}{1}
+\setcounter{caption@flags}{0}
+\setcounter{continuedfloat}{0}
+\setcounter{subfigure}{0}
+\setcounter{subtable}{0}
+\setcounter{float@type}{8}
+\setcounter{parentequation}{0}
+\setcounter{AlgoLine}{0}
+\setcounter{algocfline}{0}
+\setcounter{algocfproc}{0}
+\setcounter{algocf}{0}
+\setcounter{r@tfl@t}{0}
+\setcounter{Item}{9}
+\setcounter{Hfootnote}{2}
+\setcounter{bookmark@seq@number}{21}
+\setcounter{subsubsubsection}{0}
+\setcounter{lstlisting}{0}
+\setcounter{section@level}{2}
+}

@@ -1,0 +1,229 @@
+\begin{thebibliography}{10}
+
+\bibitem{dns}
+C.~K. Reddy, V.~Gopal, R.~Cutler, E.~Beyrami, R.~Cheng, H.~Dubey,
+  S.~Matusevych, R.~Aichner, A.~Aazami, S.~Braun, {\em et~al.}, ``The
+  interspeech 2020 deep noise suppression challenge: Datasets, subjective
+  testing framework, and challenge results,'' 2020.
+
+\bibitem{demand}
+J.~Thiemann, N.~Ito, and E.~Vincent, ``The diverse environments multi-channel
+  acoustic noise database (demand): A database of multichannel environmental
+  noise recordings,'' in {\em Proceedings of Meetings on Acoustics ICA2013},
+  vol.~19, pp.~35--81, Acoustical Society of America, 2013.
+
+\bibitem{chime}
+J.~Barker, S.~Watanabe, E.~Vincent, and J.~Trmal, ``The fifth'chime'speech
+  separation and recognition challenge: dataset, task and baselines,'' 2018.
+
+\bibitem{understand_fft}
+N.~Instruments, ``Instrument fundamentals: Understanding ffts and windowing.''
+
+\bibitem{stft_allen}
+J.~Allen, ``Short term spectral analysis, synthesis, and modification by
+  discrete fourier transform,'' {\em IEEE Transactions on Acoustics, Speech,
+  and Signal Processing}, vol.~25, no.~3, pp.~235--238, 1977.
+
+\bibitem{stft_allen_rabiner}
+J.~B. Allen and L.~R. Rabiner, ``A unified approach to short-time fourier
+  analysis and synthesis,'' {\em Proceedings of the IEEE}, vol.~65, no.~11,
+  pp.~1558--1564, 1977.
+
+\bibitem{fft_cooley}
+J.~W. Cooley and J.~W. Tukey, ``An algorithm for the machine calculation of
+  complex fourier series,'' {\em Mathematics of computation}, vol.~19, no.~90,
+  pp.~297--301, 1965.
+
+\bibitem{fft_rader_brenner}
+C.~Rader and N.~Brenner, ``A new principle for fast fourier transformation,''
+  {\em IEEE Transactions on Acoustics, Speech, and Signal Processing}, vol.~24,
+  no.~3, pp.~264--266, 1976.
+
+\bibitem{fft_springer_nuss}
+H.~J. Nussbaumer, ``The fast fourier transform,'' in {\em Fast Fourier
+  Transform and Convolution Algorithms}, pp.~80--111, Springer, 1981.
+
+\bibitem{fft_bergland}
+G.~D. Bergland, ``Numerical analysis: A fast fourier transform algorithm for
+  real-valued series,'' {\em Communications of the ACM}, vol.~11, no.~10,
+  pp.~703--710, 1968.
+
+\bibitem{mdft}
+J.~O. Smith, {\em Mathematics of the Discrete Fourier Transform (DFT)}.
+\newblock
+  \htmladdnormallink{http://www.w3k.org/books/}{http://www.w3k.org/books/}: W3K
+  Publishing, 2007.
+
+\bibitem{fft_for_fun}
+W.~M. Gentleman and G.~Sande, ``Fast fourier transforms: for fun and profit,''
+  in {\em Proceedings of the November 7-10, 1966, fall joint computer
+  conference}, pp.~563--578, 1966.
+
+\bibitem{ws_fft}
+W.~T. Cochran, J.~W. Cooley, D.~L. Favin, H.~D. Helms, R.~A. Kaenel, W.~W.
+  Lang, G.~C. Maling, D.~E. Nelson, C.~M. Rader, and P.~D. Welch, ``What is the
+  fast fourier transform?,'' {\em Proceedings of the IEEE}, vol.~55, no.~10,
+  pp.~1664--1674, 1967.
+
+\bibitem{historical_fft}
+J.~W. Cooley, P.~A. Lewis, and P.~D. Welch, ``Historical notes on the fast
+  fourier transform,'' {\em Proceedings of the IEEE}, vol.~55, no.~10,
+  pp.~1675--1677, 1967.
+
+\bibitem{fft_brigham}
+E.~O. Brigham and R.~Morrow, ``The fast fourier transform,'' {\em IEEE
+  spectrum}, vol.~4, no.~12, pp.~63--70, 1967.
+
+\bibitem{ansi_s1.11}
+``Ansi s1.11: American national standard specification for octave-band and
+  fractional-octave-band analog and digital filters,'' 2004.
+
+\bibitem{mel_freq}
+T.~Smyth, ``Music 175: Psychoacoustics spring 2020,'' {\em Music Journal},
+  vol.~3, no.~2, pp.~45--52, 2020.
+
+\bibitem{psychoacoustics}
+E.~Zwicker and H.~Fastl, {\em Psychoacoustics: Facts and models}, vol.~22.
+\newblock Springer Science \& Business Media, 2013.
+
+\bibitem{measurement_loudness}
+S.~S. Stevens, ``The measurement of loudness,'' {\em The Journal of the
+  Acoustical Society of America}, vol.~27, no.~5, pp.~815--829, 1955.
+
+\bibitem{loudness_model}
+E.~Zwicker and B.~Scharf, ``A model of loudness summation.,'' {\em
+  Psychological review}, vol.~72, no.~1, p.~3, 1965.
+
+\bibitem{loudness_complex}
+S.~Stevens, ``Calculation of the loudness of complex noise,'' {\em The Journal
+  of the Acoustical Society of America}, vol.~28, no.~5, pp.~807--832, 1956.
+
+\bibitem{func_near_threshold}
+L.~E. Marks and J.~C. Stevens, ``The form of the psychophysical function near
+  threshold,'' {\em Perception \& Psychophysics}, vol.~4, no.~5, pp.~315--318,
+  1968.
+
+\bibitem{scale_sone}
+S.~S. Stevens, ``A scale for the measurement of a psychological magnitude:
+  loudness.,'' {\em Psychological Review}, vol.~43, no.~5, p.~405, 1936.
+
+\bibitem{iso_532}
+``Iso 532-a: Acoustics - method for calculating loudness - zwicker's method,''
+  2017.
+
+\bibitem{mos}
+R.~C. Streijl, S.~Winkler, and D.~S. Hands, ``Mean opinion score (mos)
+  revisited: methods and applications, limitations and alternatives,'' {\em
+  Multimedia Systems}, vol.~22, no.~2, pp.~213--227, 2016.
+
+\bibitem{stoi}
+C.~H. Taal, R.~C. Hendriks, R.~Heusdens, and J.~Jensen, ``A short-time
+  objective intelligibility measure for time-frequency weighted noisy speech,''
+  in {\em 2010 IEEE international conference on acoustics, speech and signal
+  processing}, pp.~4214--4217, IEEE, 2010.
+
+\bibitem{pesq}
+A.~W. Rix, J.~G. Beerends, M.~P. Hollier, and A.~P. Hekstra, ``Perceptual
+  evaluation of speech quality (pesq)-a new method for speech quality
+  assessment of telephone networks and codecs,'' in {\em 2001 IEEE
+  international conference on acoustics, speech, and signal processing.
+  Proceedings (Cat. No. 01CH37221)}, vol.~2, pp.~749--752, IEEE, 2001.
+
+\bibitem{dnsmos}
+C.~K. Reddy, V.~Gopal, and R.~Cutler, ``Dnsmos: A non-intrusive perceptual
+  objective speech quality metric to evaluate noise suppressors,'' in {\em
+  ICASSP 2021-2021 IEEE International Conference on Acoustics, Speech and
+  Signal Processing (ICASSP)}, pp.~6493--6497, IEEE, 2021.
+
+\bibitem{dnsmos_p835}
+C.~K. Reddy, V.~Gopal, and R.~Cutler, ``Dnsmos p. 835: A non-intrusive
+  perceptual objective speech quality metric to evaluate noise suppressors,''
+  in {\em ICASSP 2022-2022 IEEE International Conference on Acoustics, Speech
+  and Signal Processing (ICASSP)}, pp.~886--890, IEEE, 2022.
+
+\bibitem{itu_p808}
+``Itu-t recommendation p.808: Subjective evaluation of speech quality with a
+  crowdsourcing approach,'' 2021.
+
+\bibitem{itu_p835}
+``Itu-t recommendation p.835: Subjective test methodology for evaluating speech
+  communication systems that include noise suppression algorithm,'' 2003.
+
+\bibitem{speech_enhancement}
+P.~C. Loizou, ``Objective quality and intelligibility measures,'' in {\em
+  Speech enhancement: theory and practice}, pp.~459--578, CRC press, 2007.
+
+\bibitem{itu_p862.2}
+``Itu-t recommendation p.862.2: Wideband extension to recommendation p.862 for
+  the assessment of wideband telephone networks and speech codecs,'' 2007.
+
+\bibitem{itu_p862.1}
+``Itu-t recommendation p.862.1: Mapping function for transforming p.862 raw
+  result scores to mos-lqo,'' 2003.
+
+\bibitem{lstm}
+S.~Hochreiter and J.~Schmidhuber, ``Long short-term memory,'' {\em Neural
+  computation}, vol.~9, no.~8, pp.~1735--1780, 1997.
+
+\bibitem{forget_gate}
+F.~A. Gers, J.~Schmidhuber, and F.~Cummins, ``Learning to forget: Continual
+  prediction with lstm,'' {\em Neural computation}, vol.~12, no.~10,
+  pp.~2451--2471, 2000.
+
+\bibitem{dtln}
+N.~L. Westhausen and B.~T. Meyer, ``{Dual-Signal Transformation LSTM Network
+  for Real-Time Noise Suppression},'' in {\em Proc. Interspeech 2020},
+  pp.~2477--2481, 2020.
+
+\bibitem{subbandmodel}
+X.~Li and R.~Horaud, ``{Online Monaural Speech Enhancement Using Delayed
+  Subband LSTM},'' in {\em Proc. Interspeech 2020}, pp.~2462--2466, 2020.
+
+\bibitem{fullsubnet}
+X.~Hao, X.~Su, R.~Horaud, and X.~Li, ``{FullSubNet: a full-band and sub-band
+  fusion model for real-time single-channel speech enhancement},''
+  pp.~6633--6637, 2021.
+
+\bibitem{sisdr}
+J.~Le~Roux, S.~Wisdom, H.~Erdogan, and J.~R. Hershey, ``Sdr--half-baked or well
+  done?,'' in {\em ICASSP 2019-2019 IEEE International Conference on Acoustics,
+  Speech and Signal Processing (ICASSP)}, pp.~626--630, IEEE, 2019.
+
+\bibitem{dccrn}
+Y.~Hu, Y.~Liu, S.~Lv, M.~Xing, S.~Zhang, Y.~Fu, J.~Wu, B.~Zhang, and L.~Xie,
+  ``{DCCRN: Deep complex convolution recurrent network for phase-aware speech
+  enhancement},'' in {\em Proc. Interspeech 2020}, pp.~2472--2476, 2020.
+
+\bibitem{edata}
+C.~Valentini-Botinhao {\em et~al.}, ``Noisy speech database for training speech
+  enhancement algorithms and tts models,'' 2017.
+
+\bibitem{wavert}
+F.~Berreth, ``Low latency real-time audio streaming,'' {\em U.S. Patent No.
+  7,706,901}, 2010.
+
+\bibitem{dev_driver_wdf}
+P.~Orwick and G.~Smith, {\em Developing Drivers with the Windows Driver
+  Foundation: Dev Driver Win Driver Foudation}.
+\newblock Microsoft Press, 2007.
+
+\bibitem{win_internals}
+P.~Yosifovich, D.~A. Solomon, and A.~Ionescu, {\em Windows Internals}.
+\newblock Microsoft Press, 2017.
+
+\bibitem{vivos}
+H.~T. Luong and H.~Q. Vu, ``A non-expert kaldi recipe for vietnamese speech
+  recognition system,'' in {\em Proceedings of the Third International Workshop
+  on Worldwide Language Service Infrastructure and Second Workshop on Open
+  Infrastructures and Analysis Frameworks for Human Language Technologies
+  (WLSI/OIAF4HLT2016)}, pp.~51--55, 2016.
+
+\bibitem{approximate_trigonometric}
+M.~J.~D. Powell {\em et~al.}, ``Approximation to periodic functions,'' in {\em
+  Approximation theory and methods}, pp.~150--163, Cambridge university press,
+  1981.
+
+\bibitem{mat_120B_notes}
+E.~Low and R.~Winther, ``Fourier analysis, notes for mat 120b,'' 2001.
+
+\end{thebibliography}

@@ -1,0 +1,44 @@
+\babel@toc {vietnamese}{}
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {1.1}{\ignorespaces Giới hạn phạm vi đề tài\relax }}{3}{table.caption.11}%
+\contentsline {table}{\numberline {1.2}{\ignorespaces Các âm nhiễu được chọn từ các loại nhiễu phổ biến\relax }}{7}{table.caption.14}%
+\contentsline {table}{\numberline {1.3}{\ignorespaces Yêu cầu về cấu hình cần thiết để chạy ứng dụng\relax }}{8}{table.caption.15}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {2.1}{\ignorespaces Bảng đề xuất cửa sổ sử dụng trong một số trường hợp}}{15}{table.caption.23}%
+\contentsline {table}{\numberline {2.2}{\ignorespaces Bảng định nghĩa các hàm cửa sổ\relax }}{17}{table.caption.28}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {3.1}{\ignorespaces Bảng thang đo Mean Opinion Score (MOS)}}{47}{table.caption.76}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {4.1}{\ignorespaces Các hàm mất mát thường được sử dụng trong mô hình hồi quy\relax }}{61}{table.caption.88}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {5.1}{\ignorespaces Bảng các tiêu chí để thiết kế mạng học sâu\relax }}{86}{table.caption.132}%
+\contentsline {table}{\numberline {5.2}{\ignorespaces Cấu trúc của mô hình Post sơ khởi\relax }}{88}{table.caption.136}%
+\contentsline {table}{\numberline {5.3}{\ignorespaces Cấu trúc của mô hình Post sử dụng lookahead\relax }}{90}{table.caption.139}%
+\contentsline {table}{\numberline {5.4}{\ignorespaces Cấu trúc của bộ nén dữ liệu ở cải tiến thứ 3\relax }}{92}{table.caption.140}%
+\contentsline {table}{\numberline {5.5}{\ignorespaces Cấu trúc của mô hình Post sử dụng bộ nén dữ liệu cải tiến\relax }}{93}{table.caption.141}%
+\contentsline {table}{\numberline {5.6}{\ignorespaces Cấu trúc của mô hình lọc nhiễu tĩnh\relax }}{93}{table.caption.143}%
+\contentsline {table}{\numberline {5.7}{\ignorespaces Cấu trúc của mô hình lọc nhiễu động\relax }}{94}{table.caption.144}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {6.1}{\ignorespaces Mô tả yêu cầu về mặt dữ liệu của hệ thống\relax }}{96}{table.caption.145}%
+\contentsline {table}{\numberline {6.2}{\ignorespaces Yêu cầu phi chức năng chung đối với cả hai hệ thống\relax }}{96}{table.caption.146}%
+\contentsline {table}{\numberline {6.3}{\ignorespaces Yêu cầu phi chức năng riêng biệt cho từng hệ thống\relax }}{96}{table.caption.147}%
+\contentsline {table}{\numberline {6.4}{\ignorespaces Yêu cầu chức năng đối với hệ thống\relax }}{97}{table.caption.148}%
+\contentsline {table}{\numberline {6.5}{\ignorespaces Usecase load file âm thanh của hệ thống lọc nhiễu tĩnh\relax }}{97}{table.caption.149}%
+\contentsline {table}{\numberline {6.6}{\ignorespaces Usecase ghi âm của hệ thống lọc nhiễu tĩnh\relax }}{98}{table.caption.150}%
+\contentsline {table}{\numberline {6.7}{\ignorespaces Usecase xuất file âm thanh của hệ thống lọc nhiễu tĩnh\relax }}{98}{table.caption.151}%
+\contentsline {table}{\numberline {6.8}{\ignorespaces Usecase lọc nhiễu của hệ thống lọc nhiễu tĩnh\relax }}{99}{table.caption.152}%
+\contentsline {table}{\numberline {6.9}{\ignorespaces Usecase điều khiển hệ thống lọc nhiễu động của hệ thống lọc nhiễu tĩnh\relax }}{99}{table.caption.153}%
+\contentsline {table}{\numberline {6.10}{\ignorespaces Usecase chuyển đổi bộ lọc của hệ thống lọc nhiễu động\relax }}{103}{table.caption.159}%
+\contentsline {table}{\numberline {6.11}{\ignorespaces Các mã lệnh cố định và phạm vi định nghĩa bổ sung của mã điều khiển dịch vụ\relax }}{105}{table.caption.161}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {7.1}{\ignorespaces Các tập dữ liệu tiếng Anh được sử dụng trong luận văn\relax }}{118}{table.caption.179}%
+\contentsline {table}{\numberline {7.2}{\ignorespaces Các tập dữ liệu tiếng Việt được sử dụng trong luận văn\relax }}{119}{table.caption.180}%
+\contentsline {table}{\numberline {7.3}{\ignorespaces Metric trung bình trên từng bộ kiểm thử tiếng Việt ứng với các $\text {SNR}$ khác nhau\relax }}{120}{table.caption.182}%
+\contentsline {table}{\numberline {7.4}{\ignorespaces So sánh các mô hình thông qua các metrics trên bộ kiểm thử tiếng Việt\relax }}{122}{table.caption.183}%
+\contentsline {table}{\numberline {7.5}{\ignorespaces Độ trễ của pipeline lọc nhiễu động trong các trường hợp kiểm thử\relax }}{123}{table.caption.184}%
+\contentsline {table}{\numberline {7.6}{\ignorespaces So sánh các metrics giữa các mô hình trên bộ kiểm thử tiếng Việt\relax }}{124}{table.caption.185}%
+\contentsline {table}{\numberline {7.7}{\ignorespaces So sánh các metrics giữa mô hình đề xuất và các ứng dụng Sox phiên bản 14.4.2, CrystalSound phiên bản 0.15.2 (dòng trên) và phiên bản 1.4.0.0 (dòng dưới) trên bộ kiểm thử tiếng Việt\relax }}{125}{table.caption.186}%
+\contentsline {table}{\numberline {7.8}{\ignorespaces Metric trên từng bộ kiểm thử đa ngôn ngữ\relax }}{126}{table.caption.187}%
+\contentsline {table}{\numberline {7.9}{\ignorespaces Metrics mô hình đề xuất với các loại ngôn ngữ\relax }}{127}{table.caption.188}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }

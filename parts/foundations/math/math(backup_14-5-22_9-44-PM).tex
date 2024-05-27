@@ -1,0 +1,945 @@
+\newcommand{\mathimg}[1]{parts/foundations/math/img/#1}
+\setupfont{13pt}
+
+\chapter{Xử lý tín hiệu số}	\label{chapter::signal_processing}	
+
+\section{Phép biến đổi Fourier} \label{section::signal_processing::fourier}
+	
+	 Trong thực tế, quá trình truyền âm trong không khí từ nguồn âm tới bộ phận nhận được (trong luận văn này, bộ phận thu nhận âm thanh từ nguồn phát là microphone của máy tính) luôn tiềm ẩn những sự gián đoạn làm ảnh hưởng tới thông tin mà âm thanh ban đầu truyền đi. Tới khi máy tính nhận được các thông tin từ microphone thì âm thanh nhận được đó chỉ là một tập hợp của âm thanh gốc và rất nhiều các âm thanh khác lẫn vào đó. Dễ thấy việc loại bỏ trực tiếp từ các tín hiệu thu được từ microphone là vấn đề rất khó vì một số âm thanh có sự tương đồng với âm thanh cần làm sạch. Vì thế, ta trình bày một công cụ có khả năng phân tích các tín hiệu bị trộn lẫn này lại với nhau, đó là \textbf{Phép biến đổi Fourier}. Phép biến đổi Fourier có hai dạng: \textit{Phép biến đổi Fourier liên tục} và \textit{Phép biến đổi Fourier rời rạc}. Trước hết chúng tôi sẽ đề cập tới phép biến đổi Fourier liên tục.
+
+	\subsection{Định nghĩa và ví dụ }\label{subsection::signal_processing::fourier::def}
+	
+		Với một tín hiệu liên tục $f(t)$ theo thời gian $t$ (ở đây ta xét hàm theo thời gian vì nó liên quan mật thiết tới vấn đề mà chúng tôi cần giải quyết), \definition{biến đổi Fourier} với tốc độ góc $\omega$ (là tốc độ sóng dao động trong một chu kì) của $f(t)$ được định nghĩa như sau
+		
+			\begin{equation}
+				F(\omega) = \int_{-\infty}^{+\infty}\polarcomplex{f(t)}{-\omega t}dt.
+			\label{fourier::forward_formula}
+			\end{equation}
+		
+		Trước hết ta sẽ thể hiện một cách trực quan công thức biến đổi Fourier khi áp dụng lên dữ liệu trước khi đi sâu vào bản chất của nó. Công thức trên có thể được chia làm hai phần $\polarcomplex{f(t)}{-\omega t}$ và phần tích phân trên miền thời gian trong khoảng $(-\infty, +\infty)$. Công thức của Fourier $\polarcomplex{}{\phi} = \complex{\cos(\phi)}{\sin(\phi)}$ chính là biểu diễn cho một đường tròn có bán kính là 1, vậy nếu ta lấy $f(t)$ nhân với lại biểu thức này, việc đó ứng với việc uốn $f(t)$ từ hệ trục Cartesian $\cartesiancoord$ sang hệ trục phức hai chiều $\complexcoord$. Để hiểu rõ hơn công thức này, chúng tôi lấy một ví dụ về việc xử lý Fourier trên dữ liệu cho trước. Cho một hàm theo biến thời gian $f(t) = \sin(t) + \sin(2t) + \sin(3t)$, \figref{fourier::sample_data} là đồ thị của hàm này trong hệ tọa độ $\cartesiancoord$.
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=90mm]{\mathimg{fourier_data.png}}
+				\caption{Đồ thị hàm $f(t) = \sin(t) + \sin(2t) + \sin(3t)$}
+			\label{fourier::sample_data}
+			\end{figure}
+		
+		Bây giờ, ta sẽ thực hiện ``cuốn'' (wrap) hàm $f(t)$ bằng công thức $\polarcomplex{f(t)}{-\omega t}$ với $\omega = 4$. Chúng tôi thu được một đồ thị mới có hình dạng như \figref{fourier::ft_e_sample}. Sau khi đã thực hiện $\polarcomplex{f(t)}{-\omega t}$ chúng tôi lấy tích phân trên toàn bộ miền của $t$. Việc lấy tích phân này, dưới góc nhìn vật lý chính là đang đi tính khối tâm của đối tượng đang được xét. Cuối cùng, biến đổi Fourier tại $\omega$ trả về cho chúng tôi khối tâm hình học của $\polarcomplex{f(t)}{-\omega t}$.
+		
+			\begin{figure}[h]
+				\centering
+				\begin{subfigure}{0.5\textwidth}
+					\includegraphics[width=80mm]{\mathimg{fourier_w=2.09.png}}
+					\caption{$\polarcomplex{f(t)}{-\omega t}$ với $\omega = 2$}
+				\end{subfigure}%
+				\begin{subfigure}{0.5\textwidth}
+					\includegraphics[width=80mm]{\mathimg{fourier_w=4.19.png}}
+					\caption{$\polarcomplex{f(t)}{-\omega t}$ với $\omega = 4$}
+				\end{subfigure}
+				\caption{Đồ thị hàm $f(t)$ sau khi nhân với $\polarcomplex{}{-\omega t}$, điểm đỏ là khối tâm của vật thể này, các giá trị trả về lúc này đều là số phức vì vậy không gian của chúng tôi sử dụng không còn là $\cartesiancoord$ nữa mà là $\complexcoord$}
+				\label{fourier::ft_e_sample}
+			\end{figure}
+		
+		Sinh viên thực hiện thử cho nhiều giá trị khác của $\omega$ và nhận thấy, ở một số vị trí, trọng tâm của vật trả về bởi công thức của Fourier thay đổi rất nhiều tùy vào giá trị $\omega$ mà ta sử dụng, \figref{fourier::abs_sample} thể hiện giá trị biên độ (module) của giá trị phức được trả về của hàm dưới dấu tích phân ứng với các giá trị $\omega \in [-6, 6]$, biểu diễn của âm thanh dưới dạng này còn được gọi là \textbf{\spectrum{}}. 
+		
+		Có thể dễ dàng quan sát được một điều đặc biệt ở biến đổi Fourier, ở một số $\omega$ giá trị biên độ này rất lớn, và tương tự như vậy ở một số $\omega$ khác, giá trị biên độ trả về lại khá nhỏ. Các $\omega$ có biến đổi Fourier tại đó có giá trị biên độ lớn tương ứng với $\omega$ của các sóng cấu tạo nên $f(t)$ và $\omega$ của các sóng không có trong $f(t)$, giá trị biên độ thu được bởi biến đổi Fourier sẽ nhỏ hơn rất nhiều. Ta sẽ giải thích về hiện tượng đặc biệt này trong phần tiếp theo, đây cũng là điểm chính yếu khiến cho biến đổi Fourier trở nên rất quan trọng trong xử lý tín hiệu có dạng sóng.
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=90mm]{\mathimg{spectrum_v2.png}}
+				\caption{Đồ thị biên độ của trọng tâm (\spectrum{}) trả về theo $\omega$}
+				\label{fourier::abs_sample}
+			\end{figure}
+		
+	
+	\subsection{Bản chất của biến đổi Fourier thông qua chuỗi Fourier}\label{subsection::signal_processing::fourier::nature}
+		
+		Trước khi tiến hành phân tích bản chất của biến đổi Fourier, chúng tôi thu gọn phạm vi phân tích về lại một trường hợp đặc biệt của biến đổi Fourier là chuỗi Fourier. Chuỗi Fourier này được định nghĩa như sau
+		
+			\begin{equation}
+				f(t) = \sum_{k=-\omega}^{\omega} c_k \polarcomplex{}{k t},
+				\label{fourier::fourier_series_formula}
+			\end{equation}
+		
+		\noindent với $c_k$ là hệ số tương ứng với sóng thứ $k$, $\omega$ lúc này được giới hạn lại về miền số nguyên dương $\mathbb{Z}^+$. Bản chất của chuỗi Fourier này xuất phát từ định nghĩa của đa thức lượng giác (trigonometric polynomials). Đa thức lượng giác được định nghĩa trong \cite{approximate_trigonometric, mat_120B_notes} có dạng như sau
+		
+			\begin{equation}
+				f(t) = \frac{1}{2} a_0 + \sum_{k=1}^{\omega} (a_k \cos(kt) + b_k \sin(kt)),
+				\label{fourier::trigonometric_polynomials}
+			\end{equation}
+		
+		\noindent với các $a_k$, $b_k$ là các hệ số được tính toán để xấp xỉ lại $f(t)$. Theo \cite{approximate_trigonometric}, các hàm được xấp xỉ bằng đa thức lượng giác cần phải thỏa mãn tính tuần hoàn sau từng chu kì $T$
+		
+			\begin{equation}
+				f(t) = f(t + T).
+			\end{equation}
+			
+		Với tính chất này, chọn $T=2\pi$ ta kết luận được rằng \cite[\theorem{} 13.1]{approximate_trigonometric} với mọi $\epsilon \in \mathbb{R}$ sao cho $\epsilon > 0$, luôn tồn tại một đa thức lượng giác $p(t)$ sao cho
+		
+			\begin{equation}
+				\norm{f(t) - p(t)}_{\infty} \le \epsilon.
+			\end{equation}
+		
+		Kết luận này cũng dẫn tới sự hội tụ của đa thức lượng giác khi giá trị $\epsilon$ tiến về $0$, hàm xấp xỉ $p(t)$ hoàn toàn có thể được chuyển sang dạng của chuỗi Fourier được định nghĩa như công thức \formularef{fourier::fourier_series_formula} như sau
+		
+			\begin{align*}
+				p(t)	& = \frac{1}{2} a_0 + \sum_{k=1}^{\omega} (a_k \cos(kt) + b_k \sin(kt)) \\
+						& = \frac{1}{2} a_0 + \sum_{k=1}^{\omega} (a_k \frac{\polarcomplex{}{kt} + \polarcomplex{}{-kt}}{2} + b_k \frac{\polarcomplex{}{kt} - \polarcomplex{}{-kt}}{\imcomplex{2}}) \\
+						& = \frac{1}{2} (a_0 + b_0) + \sum_{k=1}^{\omega} \frac{a_k + b_k}{2} \polarcomplex{}{kt} + \sum_{k=1}^{\omega} \frac{a_k - b_k}{2} \polarcomplex{}{-kt},
+			\end{align*}
+		
+		\noindent với $c_0 = (a_0 + b_0)/2 = a_0/2$, $c_k = (a_k + b_k)/2$ và $c_{-k} = (a_k - b_k)/2$, từ đó thay vào công thức trên, ta thu được
+		
+			\begin{align*}
+				p(t)	& = \frac{1}{2} (a_0 + b_0) + \sum_{k=1}^{\omega} \frac{a_k + b_k}{2} \polarcomplex{}{kt} + \sum_{k=1}^{\omega} \frac{a_k - b_k}{2} \polarcomplex{}{-kt} \\
+						& = \sum_{k=-\omega}^{\omega} c_k \polarcomplex{}{kt}. \numberedeq
+				\label{fourier::infered_fourier_series}
+			\end{align*}
+		
+		Ta thu lại được công thức \formularef{fourier::infered_fourier_series} từ định nghĩa của đa thức lượng giác tương tự như công thức chuỗi Fourier được định nghĩa ở \formularef{fourier::fourier_series_formula}. Tức là ta đã chứng minh cho sự hội tụ của chuỗi Fourier \cite[\theorem{} 13.1]{approximate_trigonometric}.
+		
+		Cố gắng xấp xỉ lại $f(t)$ từ công thức đa thức lượng giác \formularef{fourier::trigonometric_polynomials}, sự xấp xỉ này đang cố gắng tối thiểu hóa lại hàm khoảng cách giữa hai hàm được xây dựng
+		
+			\begin{equation}
+				d(f, p) = \int_{-\infty}^{+\infty} (f(t) - q(t))^2 dt,
+				\label{fourier::distance_func}
+			\end{equation}
+		
+		\noindent với giả định rằng chu kì $T$ của cả hai hàm này đều là $2\pi$, người ta \cite{approximate_trigonometric} đã thu hẹp cận của tích phân khoảng cách này về lại cận $[-\pi, \pi]$, do đó tích phân trên được đánh giá trong đoạn $[-\pi, \pi]$
+		
+			\begin{equation}
+				d(f, p) = \int_{-\pi}^{\pi} (f(t) - q(t))^2 dt.
+			\end{equation}
+		
+		Dưới các điều kiện về tính trực giao giữa các hàm cosine và sine với nhau
+		
+			\begin{equation}
+				\forall j, k \in \mathbb{Z}^+, j \neq k: \int_{-\pi}^{\pi} \sin(jt) \sin(kt) dx = 0,
+			\end{equation}
+		
+			\begin{equation}
+				\forall j, k \in \mathbb{Z}^+, j = k: \int_{-\pi}^{\pi} \sin(jt) \sin(kt) dx = 2\pi,
+			\end{equation}
+		
+			\begin{equation}
+				\forall j, k \in \mathbb{Z}^+, j \neq k: \int_{-\pi}^{\pi} \sin(jt) \sin(kt) dx = 0,
+			\end{equation}
+		
+			\begin{equation}
+				\forall j, k \in \mathbb{Z}^+, j = k: \int_{-\pi}^{\pi} \sin(jt) \sin(kt) dx = 2\pi,
+			\end{equation}
+		
+			\begin{equation}
+				\forall j, k \in \mathbb{Z}^+: \int_{-\pi}^{\pi} \cos(jt) \sin(kt) dx = 0,
+			\end{equation}
+		
+		\noindent ta có thể chứng minh \cite[\theorem{} 13.2]{approximate_trigonometric} để đa thức lượng giác ở công thức \formularef{fourier::trigonometric_polynomials} đạt cực tiểu hàm khoảng cách giữa hai hàm \formularef{fourier::distance_func} so với $f(t)$ khi và chỉ khi các hệ số $a_k$ và $b_k$ được tính như sau
+		
+			\begin{equation}
+				a_j = \frac{1}{\pi} \int_{-\pi}^{\pi} f(t) \cos(j t) dt,
+			\end{equation}
+		
+			\begin{equation}
+				b_j = \frac{1}{\pi} \int_{-\pi}^{\pi} f(t) \sin(j t) dt,
+			\end{equation}
+		
+		\noindent với $j \in \mathbb{Z}^+$. Rõ ràng với các giá trị $a_k$ và $b_k$ được định nghĩa như trên, ta đang tạo ra một hệ trục tọa độ mới với các giá trị $a_k$ và $b_k$ tương ứng với các phép chiếu của $f(t)$ lần lượt lên các trục tọa độ được cấu tạo bởi $\cos(j t)$ và $\sin(j t)$. Nhờ vào điều này, ở các giá trị của $\omega$ cấu tạo nên sóng $f(t)$ sẽ đạt cực đại tương ứng với các giá trị $\omega = j$ với giá trị đúng bằng hình chiếu của chúng lên $\cos(j t)$ tương ứng.
+		
+		\subsub{Ví dụ} Để thấy rõ được tác dụng của phép chiếu này trên $f(t)$, ta xét một trường hợp cụ thể khi $f(t) = r \cos(j t + \phi)$, khi đó thực hiện tính toán các hệ số $a_k$ và $b_k$, ta thu được
+		
+			\begin{align*}
+				f'(t)	& = \frac{1}{2} a_0 + \sum_{k=1}^{\omega} (a_k \cos(kt) + b_k \sin(kt)) \\
+						& = a_j \cos(jt) + b_j \sin(jt), \numberedeq
+				\label{fourier::ex_f'}
+			\end{align*}
+		
+		\noindent với $a_j$ và $b_j$ được tính như sau
+		
+			\begin{align*}
+				a_j	& = \frac{1}{\pi} \int_{-\pi}^{\pi} f(t) \cos(j t) dt \\
+					& = \frac{1}{\pi} \int_{-\pi}^{\pi} r \cos(j t + \phi) \cos(j t) dt \\
+					& = \frac{r}{\pi} \int_{-\pi}^{\pi} \cos(j t) \cos(j t) \cos(\phi) + \sin(j t) \cos(j t) \sin(\phi) dt \\
+					& = r \cos(\phi), \numberedeq
+			\end{align*}
+			
+			\begin{align*}
+				b_j	& = \frac{1}{\pi} \int_{-\pi}^{\pi} f(t) \sin(j t) dt \\
+					& = \frac{1}{\pi} \int_{-\pi}^{\pi} r \cos(j t + \phi) \sin(j t) dt \\
+					& = \frac{r}{\pi} \int_{-\pi}^{\pi} \cos(j t) \sin(j t) \cos(\phi) + \sin(j t) \sin(j t) \sin(\phi) dt \\
+					& = r \sin(\phi). \numberedeq
+			\end{align*}
+	
+		Từ đó, \formularef{fourier::ex_f'} trở thành
+		
+			\begin{align*}
+				f'(t)	& = a_j \cos(jt) + b_j \sin(jt) \\
+						& = r \cos(\phi) \cos(jt) + r \sin(\phi) \sin(jt) \\
+						& = r \cos(jt + \phi). \\
+						& = f(t). \numberedeq
+			\end{align*}
+		
+		Công thức $f'(t)$ thu lại được đúng bằng với giá trị của $f(t)$ ban đầu và giá trị được ta ghi nhận được ở \figref{fourier::abs_sample} bởi công thức Fourier chính là chuẩn Euclid của vector do $f(t)$ chiếu vào hệ trục này. Ta khai triển tiếp tục
+		
+			\begin{equation}
+				a_j	= r \cos(\phi) = r \bigg( \frac{\polarcomplex{}{\phi} + \polarcomplex{}{- \phi}}{2} \bigg),
+			\end{equation}
+		
+			\begin{equation}
+				b_j = r \sin(\phi) = r \bigg( \frac{\polarcomplex{}{\phi} - \polarcomplex{}{- \phi}}{2i} \bigg),
+			\end{equation}
+		
+		\noindent và thay các giá trị $a_j$ và $b_j$ mới tìm được này vào công thức $c_j$ và $c_{-j}$ để thu được
+		
+			\begin{align*}
+				c_j	& = a_j + b_j \\
+					& = r \bigg( \frac{\polarcomplex{}{\phi} + \polarcomplex{}{- \phi}}{2} - \frac{\polarcomplex{}{\phi} - \polarcomplex{}{- \phi}}{2} \bigg) \\
+					& = r \polarcomplex{}{-\phi}, \numberedeq
+			\end{align*}
+		
+			\begin{align*}
+				c_{-j}	& = a_j + b_j \\
+						& = r \bigg( \frac{\polarcomplex{}{\phi} + \polarcomplex{}{- \phi}}{2} + \frac{\polarcomplex{}{\phi} - \polarcomplex{}{- \phi}}{2} \bigg) \\
+						& = r \polarcomplex{}{\phi}. \numberedeq
+			\end{align*}
+		
+		Thông qua hai công thức của $c_j$ và $c_{-j}$ này, ta nhận thấy biên độ của hai tần số đối xứng nhau $j$ và $-j$ sẽ có giá trị ngang nhau nhưng pha của $j$ sẽ bị ngược với pha của tần số ban đầu trong $f(t)$.
+		
+		
+	\subsection{Phép biến đổi Fourier ngược}\label{subsection::signal_processing::ifourier}
+	
+		Biến đổi Fourier ngoài việc cung cấp khả năng quan sát các thành phần sóng cấu tạo nên âm thanh ở miền tần số, còn cho phép chỉnh sửa và chuyển đổi ngược từ miền tần số về lại miền thời gian ban đầu. Như phần trước chúng tôi đã giới thiệu về biến đổi Fourier (thuận) liên tục, trong phần này ta sẽ tìm hiểu về phép biến đổi Fourier nghịch liên tục chuyển đổi dữ liệu từ miền tần số về miền thời gian.
+		
+		%cũng bởi lý do xấp xỉ độ ảnh hưởng (biên độ) của một sóng cosine lên dữ liệu được trả về không gian phức $\mathbb{C}$ mà dữ liệu được biến đổi Fourier thành còn có tên gọi là miền tần số, và miền dữ liệu gốc ban đầu được gọi là miền thời gian. Biến đổi Fourier chuyển đổi qua lại giữa hai miền này có tên gọi là biến đổi Fourier thuận và biến đổi Fourier nghịch. 
+		
+		\definition{Phép biến đổi Fourier ngược} của $F(\omega)$ được định nghĩa như sau
+		
+			\begin{equation}
+				f(t) = \int_{-\infty}^{\infty} \polarcomplex{F(\omega)}{\omega t}d\omega.
+			\end{equation}
+			
+		Công thức trên của biến đổi Fourier nghịch đơn thuần chỉ là sự tổng hợp của rất nhiều sóng với các bước sóng khác nhau. Vì trong luận văn này, chúng tôi đang xét tới âm thanh là một tập hợp của rất nhiều sóng khác nhau, do đó chúng tôi đặt giả thiết về $f(t)$ trong luận văn này để chứng minh các tính chất của $F(\omega)$ như sau
+		
+			\begin{equation}
+				f(t) = \sum_{j} r_j\cos(\omega_j t + \phi_j).
+			\end{equation}
+			
+		Đây là một tổng hữu hạn các sóng có bước sóng $\omega_j$, biên độ $r_j$ và pha ban đầu $\phi_j$. Chúng tôi chuyển đổi công thức trên sang dạng của công thức biến đổi Fourier nghịch
+		
+			\begin{align*}
+				f(t) 	& =  \sum_{j} r_j\cos(\omega_j t + \phi_j) \\
+						& =  \Re\bigg(\sum_{j} r_j\polarcomplex{}{(\omega_j t + \phi_j)}\bigg) \\
+						& =  \Re\bigg(\sum_{j} r_j\polarcomplex{}{\phi_j}\polarcomplex{}{\omega_j t}\bigg). \numberedeq
+				\label{ift::wave_formula}
+			\end{align*}
+		
+		Bằng cách tách ra như vậy, với mỗi sóng thứ $j$, chúng tôi thu được một biểu thức $r_j\polarcomplex{}{\phi_j}$ đại diện cho pha ban đầu và biên độ của sóng. Sự tương đồng giữa hai công thức biến đổi Fourier nghịch và công thức \formularef{ift::wave_formula} xuất hiện khi chúng tôi thay vì giả định $f(t)$ là tổng bao gồm một số các sóng rời rạc thì $f(t)$ lúc này sẽ được biểu diễn bằng tích phân của tất cả các bước sóng có trong $(-\infty, +\infty)$. Vậy nên, ta có
+		
+			\begin{align*}
+				f(t) 	& =  \Re\bigg(\int_{-\infty}^{\infty} r_j\polarcomplex{}{\phi_j}\polarcomplex{}{\omega t}d\omega\bigg) \\
+				& =  \Re\bigg(\int_{-\infty}^{\infty} F(\omega)\polarcomplex{}{\omega t}d\omega\bigg), \numberedeq
+			\end{align*}
+		
+		\noindent và với việc chứng minh $F(\omega_j) = r_j\polarcomplex{}{\phi_j}$ thì ta thu lại được công thức biến đổi Fourier nghịch như đã nêu ở ban đầu. Bằng cách chuyển đổi qua lại giữa hai miền, tần số và thời gian, các bước sóng tổng hợp có thể được phân tách thành rất nhiều sóng đơn có bước sóng khác nhau cũng như từ một số sóng đơn cho trước. Sự phân tích này rất hữu ích trong việc loại bỏ các bước sóng nhiễu ra khỏi âm thanh gốc ban đầu.
+		
+	
+\section{Phép biến đổi Fourier thời gian ngắn}\label{section::signal_processing::stft}
+	
+	Ở phần trên, chúng tôi đã đề cập về các tính chất đặc trưng của biến đổi Fourier và ứng dụng của nó vào biến đổi âm thanh để sử dụng trong luận văn này, nhưng một điều dễ thấy là giọng nói sẽ chỉ xuất hiện trong một thời gian ngắn và có xu hướng không ổn định theo thời gian, nó phụ thuộc vào âm độ giọng nói, thông tin người nói muốn truyền đạt, và cả tâm trạng người nói lúc đó nữa và nếu chỉ phân tích trên toàn bộ đoạn âm thanh, thì việc xác định tại thời điểm bất kì liệu đang có những sóng nào xuất hiện đối với biến đổi Fourier thông thường là không thể. Đó là lí do ta cần phải tìm hiểu về khái niệm \textbf{biến đổi Fourier trong thời gian ngắn} hay \textbf{short-time Fourier transform}, gọi tắt là STFT.
+
+	\subsection{Định nghĩa}\label{subsection::signal_processing::stft::def}
+	
+		\definition{Phép biến đổi Fourier trong thời gian ngắn} là một biến đổi Fourier nhưng chỉ thực hiện trong khoảng thời gian rất ngắn (thường được chọn là 32ms đối với tần số lấy mẫu là 16000 mẫu/s), và trả về \spectrum{} của các tần số cấu tạo nên âm thanh nằm trong khoảng thời gian đó. Về mặt toán học, \definition{Phép biến đổi Fourier trong thời gian ngắn} được định nghĩa như sau
+		
+			\begin{equation}
+				F(\tau, \omega) = \int_{-\infty}^{\infty} \polarcomplex{f(t) w(t - \tau)}{-\omega t}dt,
+			\label{stft::formula}
+			\end{equation}
+		
+		\noindent với $f(t)$ là tín hiệu theo thời gian, $w(t - \tau)$ là cửa sổ dùng để nén dữ liệu, ta sẽ làm rõ chức năng cụ thể của hàm cửa sổ này ở phần tiếp theo, và $F(\tau, \omega)$ là biểu diễn sóng có bước sóng $\omega$ tại thời điểm $\tau$ trong $f(t)$.
+		
+		% Về cơ bản biến đổi Fourier thời gian ngắn vẫn là một biến đổi Fourier nên vì thế các tính chất cơ bản về phân tích cấu tạo sóng vẫn được thỏa mãn, điều khác biệt nhất bây giờ chính là tại sao trong biến đổi Fourier thời gian ngắn lại cần phải sử dụng cửa sổ, và cửa sổ có tác dụng gì? Trong biến đổi Fourier, $f(t)$ được cấu thành bởi một tập hợp vô hạn các sóng có biên độ và pha ban đầu khác nhau, vì lẽ đó, phải tồn tại một chu kì $T$ nào đó mà $f(t) = f(t + kT)$ với $k$ là một số nguyên $\mathbb{Z}$ bất kì nào. Đây chính là giả định đầu tiên và cũng là lý do tại sao Fourier lại được sử dụng nhiều trên các tín hiệu sóng có tính điều hòa chứ không phải sử dụng trên dạng dữ liệu nào khác. Nhưng trong một khoảng thời gian ngắn từ $t_1$ tới $t_2$ nào đó, điều này hoàn toàn không thỏa mãn được, bởi làm sao biết được liệu $t_2 = t_1 + kT$, đây chính là điều mà chúng tôi không thể khẳng định và chắc chắn cũng sẽ không tồn tại điều này. Do đó để thỏa mãn lại điều kiện ban đầu của Fourier, chúng tôi sử dụng một cửa sổ đối xứng để đưa tín hiệu trong miền thời gian ngắn này sẽ xấp xỉ về 0 khi đi quá xa trung tâm cửa sổ từ đó thỏa mãn lại điều kiện về tính chu kì của Fourier. Biến $\tau$ đại diện cho sự dịch chuyển của cửa sổ trên tín hiệu. Hình \ref{stft::windowing} thể hiện quá trình cửa sổ hóa tín hiệu mà chúng tôi vừa mô tả.
+		
+		Ý tưởng chính của biến đổi Fourier thời gian ngắn là thay vì dữ liệu là cả một đoạn âm thanh dài, ta chỉ chọn lấy một khoảng dữ liệu nằm trong $[t_1, t_2]$ và thực hiện biến đổi Fourier lên đoạn dữ liệu này. Bằng việc giới hạn giá trị chỉ khác $0$ ở một số khoảng nhất định, hàm cửa sổ $w(t - \tau)$ khiến cho giá trị đầu vào của biến đổi Fourier thay đổi từ trên toàn bộ miền thời gian về chỉ còn tồn tại trong khoảng $[t_1, t_2]$. \figref{stft::w_transform} minh họa cho điều mà chúng tôi vừa trình bày. Giá trị $\tau$ ở đây được sử dụng như phép dịch của $w(t)$ trên miền thời gian để điều chỉnh khoảng $[t_1, t_2]$ cho đầu vào của biến đổi Fourier, giá trị này được gọi là \textbf{hop length} hay \textbf{độ dịch của cửa sổ}.
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=100mm]{\mathimg{stft_w_sample.png}}
+				\caption{Tác dụng của cửa sổ trong biến đổi Fourier thời gian ngắn}
+			\label{stft::w_transform}
+			\end{figure}
+		
+			\begin{figure}[h]
+				\centering
+				\begin{subfigure}{0.35\textwidth}
+					\centering
+					\includegraphics[width=50mm]{\mathimg{fourier_data.png}}
+					\caption{Dữ liệu đầu vào}
+				\end{subfigure}%
+				\begin{subfigure}{0.35\textwidth}
+					\centering
+					\includegraphics[width=50mm]{\mathimg{hann.png}}
+					\caption{Cửa sổ}
+				\end{subfigure}%
+				\begin{subfigure}{0.35\textwidth}
+					\centering
+					\includegraphics[width=50mm]{\mathimg{windowed_data.png}}
+					\caption{Dữ liệu sau quá trình cửa sổ hóa}
+				\end{subfigure}
+			\caption{Quá trình của sổ hóa tín hiệu thời gian ngắn trong biến đổi Fourier thời gian ngắn}
+			\label{stft::windowing}
+			\end{figure}
+		
+		Việc xác định các giá trị của $\tau$ và khoảng cách giữa $t_1$, $t_2$ là tùy vào nhu cầu, độ mịn cần thiết của ứng dụng mà tùy chỉnh sao cho phù hợp. Trong luận văn này, ta sử dụng chiều dài tín hiệu là 32ms (ứng với 512 mẫu được lấy mẫu với tần số 16000 mẫu/s) và khoảng cách giữa hai tín hiệu là 8ms (ứng với 128 mẫu được lấy mẫu với tần số là 16000 mẫu/s). Sau khi đã cửa sổ hóa tín hiệu, sử dụng biến đổi Fourier lên các tín hiệu đã được cửa sổ hóa và lấy kết quả của chúng biểu diễn theo hai trục $\omega$ và $\tau$, ta thu được biểu diễn của âm thanh theo miền tần số thời gian và đó cũng là miền thông tin mà sinh viên thực hiện sẽ sử dụng để huấn luyện mô hình của mình. Biểu diễn âm thanh trong miền này bằng các giá trị biên độ số phức gọi là \textbf{\spectrogram{}}.
+		
+			\begin{figure}[h]
+				\centering
+				\begin{subfigure}{0.35\textwidth}
+					\centering
+					\includegraphics[width=50mm]{\mathimg{stft_data.png}}
+					\caption{Âm thanh sạch ban đầu}
+				\end{subfigure}%
+				\begin{subfigure}{0.35\textwidth}
+					\centering
+					\includegraphics[width=50mm]{\mathimg{stft_win=512_hop=512.png}}
+					\caption{$(512, 512)$}
+					\label{stft::sample_hop128}
+				\end{subfigure}%
+				\begin{subfigure}{0.35\textwidth}
+					\centering
+					\includegraphics[width=50mm]{\mathimg{stft_win=512_hop=128.png}}
+					\caption{$(512, 128)$}
+					\label{stft::sample_hop512}
+				\end{subfigure}
+			
+				\begin{subfigure}{0.35\textwidth}
+					\centering
+					\includegraphics[width=50mm]{\mathimg{stft_win=256_hop=512.png}}
+					\caption{$(256, 512)$}
+					\label{stft::sample_w=256_hop512}
+				\end{subfigure}%
+				\begin{subfigure}{0.35\textwidth}
+					\centering
+					\includegraphics[width=50mm]{\mathimg{stft_win=256_hop=128.png}}
+					\caption{$(256, 128)$}
+					\label{stft::sample_w=256_hop128}
+				\end{subfigure}%
+				\begin{subfigure}{0.35\textwidth}
+					\centering
+					\includegraphics[width=50mm]{\mathimg{stft_win=128_hop=128.png}}
+					\caption{$(128, 128)$}
+					\label{stft::sample_w=128_hop128}
+				\end{subfigure}
+			\caption{\Spectrogram{} biểu diễn với chiều dài cửa sổ $T$ và khoảng cách giữa các tín hiệu $\tau$, được kí hiệu trong hình là $(T, \tau)$}
+			\end{figure}
+		
+	\subsection{Hàm cửa sổ}\label{subsection::signal_processing::stft::win_func}
+	
+		Trong công thức biến đổi Fourier thời gian ngắn được nêu ở công thức \formularef{stft::formula}. Hàm $w(t - \tau)$ hay trong phần này chúng tôi sẽ gọi là hàm cửa sổ đóng vai trò như một bộ giới hạn tín hiệu về một khoảng thời gian ngắn tùy thuộc vào chiều dài cửa sổ đầu vào. Để định nghĩa cho hàm cửa sổ này, chúng tôi gọi $w_0(t)$ đại diện cho hàm số thể hiện các giá trị mà tại đó hàm cửa sổ này mang giá trị khác $0$, như vậy định nghĩa của hàm cửa sổ có thể được chúng tôi thể hiện như sau
+		
+			\begin{align*}
+				w(t) & =
+				\begin{cases}
+					w_0(t),	& \ifc{} t_1 \le t \le t_2, \\
+					0,		& \otherwise.
+				\end{cases} \numberedeq
+				\label{stft::window_formula}
+			\end{align*}
+		
+		Dễ thấy, hàm cửa sổ của chúng tôi được chia thành hai nhánh giá trị, một của $w_0(t)$ và $0$. Các giá trị nhận từ hàm $w_0(t)$ chỉ được giới hạn trong khoảng $[t_1, t_2]$, nếu giá trị của $t$ rời ra khỏi khoảng này, giá trị hàm cửa sổ trả về sẽ mang giá trị $0$. Theo công thức \formularef{stft::formula}, $w(t - \tau)$ sẽ làm cho $w(t)$ bị dịch sang bên phải một đoạn $\tau$ nên ở đây $\tau$ đóng vai trò như một bộ dịch chuyển cửa sổ đi xuyên suốt trên miền thời gian $t$ của dữ liệu $f(t)$ và với chiều dài cửa sổ $T$ là không đổi, giá trị $t_1$ và $t_2$ hoàn toàn có thể xác định được.
+		
+		Sau khi $f(t)$ nhân với cửa sổ $w(t - \tau)$ này, vì các giá trị của cửa sổ chỉ khác 0 khi $t - \tau$ rơi vào khoảng $[t_1, t_2]$ và là $0$ với tất cả các điểm khác, điều này làm cho công thức \formularef{stft::formula} được chuyển thành
+		
+			\begin{align*}
+				F(\tau, \omega)	& = \int_{-\infty}^{\infty} \polarcomplex{f(t) w(t - \tau)}{-\omega t}dt \\
+								& = \scalemath{0.9}{\int_{-\infty}^{t_1} \polarcomplex{f(t) w(t - \tau)}{-\omega t}dt
+								+ \int_{t_1}^{t_2} \polarcomplex{f(t) w(t - \tau)}{-\omega t}dt + \int_{t_2}^{\infty} \polarcomplex{f(t) w(t - \tau)}{-\omega t}dt} \\
+								& = 0
+								+ \int_{t_1}^{t_2} \polarcomplex{f(t) w_0(t - \tau)}{-\omega t}dt
+								+ 0 \\
+								& = \int_{t_1}^{t_2} \polarcomplex{f(t) w_0(t - \tau)}{-\omega t}dt, \numberedeq
+			\end{align*}
+		
+		\noindent và đây chính là điều làm nên tính \textit{``thời gian ngắn''} trong biên đổi Fourier thời gian ngắn. 
+		
+		Cửa sổ đã làm cho các phần dữ liệu nằm bên ngoài cửa sổ bị suy giảm về $0$ và biến đổi Fourier chỉ thực sự xảy ra cho các phần dữ liệu nằm bên trong cửa sổ lúc này mang giá trị tương ứng $w_0(t - \tau) f(t)$. Và vì biến đổi Fourier được thực hiện trên dữ liệu đã bị cửa sổ hóa (đã được nhân với hàm cửa sổ) do đó, các loại cửa sổ khác nhau cũng sẽ làm ảnh hưởng tới kết quả của quá trình biến đổi này.
+		
+		Trong thực tế, có khá nhiều loại cửa sổ có thể được sử dụng, \tableref{stft::window_suggestion} liệt kê một số cửa sổ và dữ liệu chúng thường được sử dụng trong thực tế. Để thể hiện tác dụng khác nhau của các loại cửa sổ lên cùng một loại dữ liệu, chúng tôi lấy dữ liệu từ hàm $f(t) = \sin(t)$ với $t \in [0, 12\pi]$ (tương ứng với sáu chu kì của $\sin(t)$).
+		
+			\begin{table}
+				\centering
+				\begin{tabular}{c c}
+					\hline
+					\textbf{Loại tín hiệu}						& \textbf{Cửa sổ} \\
+					\hline
+					Tổng hợp các sóng sine và cosine			& Hann \\
+					Nhiễu tín hiệu								& Uniform \\
+					Sóng sine và cosine có tần số gần nhau		& Uniform \\
+					Chưa xác định								& Hann (phù hợp 95\% loại dữ liệu)\\
+					\hline
+				\end{tabular}
+			\srccaption{Bảng đề xuất cửa sổ sử dụng trong một số trường hợp}{\urlsrc{https://www.ni.com/en-vn/innovations/white-papers/06/understanding-ffts-and-windowing.html}}
+			%https://download.ni.com/evaluation/pxi/Understanding\%20FFTs\%20and\%20Windowing.pdf
+			\label{stft::window_suggestion}
+			\end{table}
+		
+		Kết quả \spectrum{} của biến đổi Fourier được thể hiện ở \figref{stft::window_effect_result} đã cho thấy phần nào tác động của cửa sổ ảnh hưởng lên kết quả cuối cùng của biến đổi Fourier thời gian ngắn. Cửa sổ Hann và cửa sổ tam giác cho kết quả khá tốt với các giá trị cửa sổ bị tách ra riêng biệt và các vùng lân cận cũng không bị ảnh hưởng nhiều, trái với đó cửa sổ đều trả về kết quả với các vùng tần số lân cận tần số chính bị ảnh hưởng khá nhiều do đó sẽ không phù hợp với dữ liệu dạng sóng sine hay cosine. Trong trường hợp của chúng tôi, các âm thanh đầu vào cấu tạo từ các sóng sine và cosine và ảnh hưởng trực tiếp tới thiết kế của mô hình do vậy cửa sổ Hann là phù hợp nhất với yêu cầu của đề tài này.
+		
+			\begin{figure}[h]
+				\centering
+				\begin{subfigure}{0.35\textwidth}
+					\centering
+					\includegraphics[width=50mm]{\mathimg{w_hann.png}}
+					\caption{Cửa sổ Hann}
+				\end{subfigure}%
+				\begin{subfigure}{0.35\textwidth}
+					\centering
+					\includegraphics[width=50mm]{\mathimg{w_triang.png}}
+					\caption{Cửa sổ tam giác}
+				\end{subfigure}%
+				\begin{subfigure}{0.35\textwidth}
+					\centering
+					\includegraphics[width=50mm]{\mathimg{w_uniform.png}}
+					\caption{Cửa sổ đều}
+				\end{subfigure}
+				\caption{Đồ thị ba loại cửa sổ Hann, tam giác và đều}
+				\label{stft::windows}
+			\end{figure}
+		
+			\begin{figure}[h]
+				\centering
+				\begin{subfigure}{0.35\textwidth}
+					\centering
+					\includegraphics[width=50mm]{\mathimg{w_datain.png}}
+					\caption{Dữ liệu đầu vào}
+				\end{subfigure}%
+				\begin{subfigure}{0.35\textwidth}
+					\centering
+					\includegraphics[width=50mm]{\mathimg{w_hann_result.png}}
+					\caption{Cửa sổ Hann}
+				\end{subfigure}
+				
+				\begin{subfigure}{0.35\textwidth}
+					\centering
+					\includegraphics[width=50mm]{\mathimg{w_triang_result.png}}
+					\caption{Cửa sổ tam giác}
+				\end{subfigure}
+				\begin{subfigure}{0.35\textwidth}
+					\centering
+					\includegraphics[width=50mm]{\mathimg{w_uniform_result.png}}
+					\caption{Cửa sổ đều}
+				\end{subfigure}
+				\caption{\spectrogram{} của dữ liệu được cửa sổ hóa bởi ba loại cửa sổ Hann, tam giác và đều, tác dụng của cửa sổ lên \spectrogram{} được thể hiện ở vùng khoanh đỏ.}
+				\label{stft::window_effect_result}
+			\end{figure}
+		
+	\subsection{Phương pháp Overlap Add}\label{subsection::signal_processing::stft::ola}
+		
+		Xuất phát từ bài toán tìm lại hàm $f(t)$ từ \spectrogram{} thu được từ bước biến đổi thuận được nêu ở công thức \formularef{stft::formula} và các tài liệu \cite{stft_allen, stft_allen_rabiner}. Để bắt đầu vào việc phân tích bản chất của phương pháp này, chúng tôi đặt ra một số định nghĩa:
+		
+			\begin{itemize}
+				\item $F(\omega, \tau) = \mathcal{F}\{f(t)\}(\omega, \tau)$ là biến đổi Fourier thời gian ngắn ứng với tốc độ góc $\omega$ và độ dịch cửa sổ $\tau$.
+				\item $f(t)$ là tín hiệu đầu vào.
+				\item $w(t)$ là hàm cửa sổ.
+			\end{itemize}
+		
+		Biến đổi Fourier thời gian ngắn như đã định nghĩa ở công thức \formularef{stft::formula}
+		
+			\begin{equation*}
+				F(\omega, \tau) = \int_{-\infty}^{+\infty} w(t - \tau) f(t) \polarcomplex{}{-\omega t} dt,
+			\end{equation*}
+			
+		\noindent sau khi đã biến đổi thuận sang miền tần số thời gian, được thể hiện dưới các giá trị phức của \spectrogram{} và thực hiện các phép biến đổi, phân tích trên miền này, chúng tôi cần một phương pháp để có thể chuyển đổi được \spectrogram{} $F$ này về lại miền thời gian dưới dạng $f(t)$. Phương pháp Overlap Add được sử dụng nhằm mục đích chuyển đổi ngược từ miền tần số thời gian về miền thời gian, có thể được xem mà một bước cần thiết bên trong biến đổi Fourier ngược thời gian ngắn \cite{stft_allen, stft_allen_rabiner}. Overlap Add được chia thành hai trường hợp: \textit{\spectrogram{} không bị biến đổi} và \textit{\spectrogram{} đã bị biến đổi}. Để thuận tiện trong trình bày, chúng tôi gọi $F'(\omega, \tau)$ và $f'(t)$ lần lượt là giá trị của \spectrogram{} sau khi bị biến đổi và giá trị trên miền thời gian sau khi nghịch đảo biến đổi Fourier tương ứng với $F'(\omega, \tau)$. 
+		
+		\textit{\Spectrogram{} không bị biến đổi:} Biến đổi Fourier ngược của $F(\omega, \tau)$ là
+		
+			\begin{equation}
+				\mathcal{F}^{-1}\{F'(\omega, \tau)\}(t) = \mathcal{F}^{-1}\{F(\omega, \tau)\}(t) = w(t - \tau) f(t).
+				\label{ola::non_modified_spectrogram_f}
+			\end{equation}
+		
+		Thông qua công thức \formularef{ola::non_modified_spectrogram_f}, dễ thấy, phương pháp Overlap Add được hiện thực nhằm tìm hàm $f'(t)$ từ dữ liệu bị cửa sổ hóa $w(t - \tau) f(t)$. Trong trường hợp này, Overlap Add sẽ được thực hiện thông qua một tính chất của hàm cửa sổ được trình bày như sau
+		
+			\begin{align*}
+				f'(t)	& = \int_{-\infty}^{+\infty} \mathcal{F}^{-1}\{F'(\omega, \tau)\}(t) d\tau \\
+						& = \int_{-\infty}^{+\infty} w(t - \tau) f(t) d\tau \\
+						& = f(t) \int_{-\infty}^{+\infty} w(t - \tau) d\tau \\
+						& = C f(t). \numberedeq
+				\label{ola:non_modified_spectrogram_main_formula}
+			\end{align*}
+		
+		Công thức \formularef{ola:non_modified_spectrogram_main_formula} thể hiện bản chất của Overlap Add và đây là một tính chất đặc trưng của các hàm cửa sổ. Dễ thấy, khi cộng tất cả các dữ liệu đã bị cửa sổ hóa $w(t - \tau) f(t)$, chúng tôi thu lại được giá trị của $f(t)$ bị nhân thêm cho một hằng $C$ lần. Để lần lượt kiểm chứng tính chất này lên các loại cửa sổ khác nhau, ta sẽ tiến hành tìm giá trị của $C$ trong ba trường hợp cửa sổ thường được sử dụng: \textit{cửa sổ Hann}, \textit{cửa sổ đều} và \textit{cửa sổ tam giác}. Các hàm cửa sổ được định nghĩa như trong \tableref{ola::window_def_table}.
+		
+			\begin{table}
+				\centering
+				\begin{tabular}{c p{60mm} c c c}
+					\hline
+					\textbf{Cửa sổ}	$w(t)$	& \textbf{Định nghĩa}		& $T$		& $t_1$		& $t_2$ \\
+					\hline
+					Hann					& $w_0(t) = 1 + \cos(t)$	& $2\pi$	& $-\pi$	& $\pi$ \\
+					Tam giác				& $w_0(t) = \begin{cases}
+						t		& \ifc{} 0 \le t < 1, \\
+						-t + 2	& \ifc{} 1 \le t \le 2
+					\end{cases}$			& $2$		& $0$		& $2$ \\
+					Đều						& $w_0(t) = 1$				& $1$		& $0$		& $1$ \\
+					\hline
+				\end{tabular}
+				\caption{Bảng định nghĩa các hàm cửa sổ}
+				\label{ola::window_def_table}
+			\end{table}
+		
+		Tính toán chi tiết các cửa sổ:
+			\begin{enumerate}[i)]
+				\item \enumentry{Hàm cửa sổ Hann.}
+				
+					\begin{equation*}
+						\begin{aligned}
+							f'(t)	& = \int_{t_1}^{t_2} w(t - \tau) f(t) d\tau \\
+							& = \int_{-\pi}^{\pi} (1 + cos(t - \tau)) f(t) d\tau \\
+							& = \int_{-\pi}^{\pi} f(t) d\tau + \int_{-\pi}^{\pi} cos(t - \tau) f(t) d\tau \\
+							& = \tau f(t) \bigg \rvert_{-\pi}^{\pi} + f(t) \sin(t - \tau) \bigg \rvert_{-\pi}^{\pi} \\
+							& = 2\pi f(t) + f(t) (\sin(t - \pi) - \sin(t + \tau)) \\
+							& = 2\pi f(t).
+						\end{aligned}
+					\end{equation*}
+				
+				\item \enumentry{Hàm cửa sổ tam giác}
+				
+					\begin{equation*}
+						\begin{aligned}
+							f'(t)	& = \int_{t_1}^{t_2} w(t - \tau) f(t) d\tau \\
+							& = \int_{0}^{1} (t - \tau) f(t) d\tau + \int_{1}^{2} (\tau - t + 2) f(t) d\tau \\
+							& = \bigg( \tau t f(t) - \frac{\tau^2}{2} f(t) \bigg)\bigg \rvert_0^1 + \bigg( \frac{\tau^2}{2} f(t) - \tau t f(t) + 2\tau f(t) \bigg) \bigg \rvert_1^2\\
+							& = t f(t) - \frac{f(t)}{2}
+							+ 2f(t) - 2t f(t) + 4f(t) 
+							- \frac{f(t)}{2} + t f(t) - 2f(t)\\
+							& = 3 f(t).
+						\end{aligned}
+					\end{equation*}
+				
+				\item \enumentry{Hàm cửa sổ đều}
+				
+					\begin{equation*}
+						\begin{aligned}
+							f'(t)	& = \int_{t_1}^{t_2} w(t - \tau) f(t) d\tau \\
+							& = \int_{0}^{1} 1 f(t) d\tau \\
+							%& = \tau f(t) \bigg \rvert_0^1 \\
+							& = f(t).
+						\end{aligned}
+					\end{equation*}
+				
+			\end{enumerate}
+		
+		Như vậy, cả ba hàm cửa sổ thông dụng đều thỏa được tính chất của hàm cửa sổ trong phương pháp Overlp Add. Nhưng trong luận văn này, \spectrogram{} của ta sẽ bị biến đổi (được đem nhân với một ``mask'' số thực, cụ thể sẽ được trình bày trong \chapterref{chapter::relatedworks}), như vậy tính chất của Overlap Add khi \spectrogram{} không bị biến đổi sẽ không còn đúng nữa, lúc này $F'(\omega, \tau) \neq F(\omega, \tau)$. Do đó, chúng tôi sẽ tiếp tục với phương pháp Overlap Add trong trường hợp \spectrogram{} bị biến đổi.
+		
+		\textit{\Spectrogram{} bị biến đổi:} Lại có công thức của Overlap Add được thể hiện dưới biến đổi Fourier ngược của \spectrogram{} $F(\omega, \tau)$ được thay đổi thông qua mask dự đoán $P(\omega, \tau)$
+		
+			\begin{equation}
+				f'(t) = \int_{-\infty}^{+\infty} \mathcal{F}^{-1}\{F(\omega, \tau) P(\omega, \tau)\}(t) w^{-1}(t - \tau) d\tau, \\
+				\label{ola::modified_spectrogram_prob}
+			\end{equation}
+		
+		\noindent với $\mathcal{F}^{-1}\{.\}(t)$ đại diện cho biến đổi Fourier nghịch của tín hiệu tại thời điểm $t$, $P(\omega, \tau)$ là ``mask'' được mô hình chúng tôi dự đoán, mask này ở dạng tổng quát và được chúng tôi xét như một ``mask'' số phức, $p(t)$ là tín hiệu được tạo ra bởi biến đổi Fourier nghịch của $P(\omega, \tau)$, $w^{-1}(t)$ là hàm cửa sổ nghịch được định nghĩa như sau
+		
+			\begin{equation}
+				\int_{-\infty}^{+\infty} w(t) w^{-1}(t) dt = 1,
+			\end{equation}
+		
+		\noindent tương ứng với mỗi hàm cửa sổ $w(t)$, để có thể thực hiện phương pháp Overlap Add và đảm bảo tính liên tục của dữ liệu, chúng tôi nhân thêm vào kết quả sau khi thực hiện biến đổi Fourier nghịch một cửa sổ $w^{-1}(t)$ đảm bảo điều kiện trên và thông qua đó tính toán được kết quả cuối cùng. Để xem xét các tính chất của kết quả tạo ra bởi phương pháp Overlap Add trong trường hợp này và lý do phải tách thành hai trường hợp Overlap Add cho từng loại \spectrogram{}, ta sẽ tiến hành biến đổi từ vấn đề đã được nêu trong công thức \formularef{ola::modified_spectrogram_prob} như sau
+		
+			\begin{align*}
+				f'(t) 	& = \int_{-\infty}^{+\infty} \mathcal{F}^{-1}\{F(\omega, \tau) P(\omega, \tau)\}(t) w^{-1}(t - \tau) d\tau \\
+						& = \int_{-\infty}^{+\infty} ((wf) \ast p)(t) w^{-1}(t - \tau) d\tau \\
+						& = \int_{-\infty}^{+\infty} \bigg( \int_{-\infty}^{+\infty} w(t - \tau - \tau') f(t - \tau') p(\tau') d\tau' \bigg) w^{-1}(t - \tau) d\tau \\
+						& = \int_{-\infty}^{+\infty} f(t - \tau') p(\tau') \int_{-\infty}^{+\infty} w(t - \tau - \tau') w^{-1}(t - \tau) d\tau d\tau' \\ % Fubini's theorem
+						& = \int_{-\infty}^{+\infty} f(t - \tau') w'(\tau) p(\tau') d\tau' \\
+						& = (f \ast w'p)(t). \numberedeq
+				\label{ola::modified_spectrogram_f'}
+			\end{align*}
+		
+		Sự liên hệ giữa phép tích chập và biến đổi Fourier sẽ được chúng tôi chứng minh ở \sectionref{section::relatedworks::traditional_approach}, $w'(\tau)$ là một cửa sổ mới được cấu tạo từ
+		
+			\begin{equation}
+				w'(\tau) = \int_{-\infty}^{+\infty} w(t + \tau) w^{-1}(t) dt.
+				\label{ola::modified_spectrogram_windows_integral}
+			\end{equation}
+		
+		Để có thể chứng minh được tích phân \formularef{ola::modified_spectrogram_windows_integral} sẽ tạo thành một hàm cửa sổ, chúng tôi xét công thức tổng quát hơn của cửa sổ được tạo từ công thức \formularef{ola::modified_spectrogram_windows_integral}, với $w_1(t)$ và $w_2(t)$ như sau
+		
+			\begin{equation}
+				w'(\tau) = \int_{-\infty}^{+\infty} w_1(t + \tau) w_2(t) dt,
+				\label{ola::modified_spectrogram_general_windows_integral}
+			\end{equation}
+		
+		\noindent với $T_1$ và $T_2$ ứng với chiều dài cửa sổ $w_1$ và $w_2$ (khoảng thời gian mà trong đó cửa sổ có giá trị khác $0$).  Lại có
+		
+			\begin{equation}
+				w_1(t) = \begin{cases}
+					f(w_1(t + \tau)),		& \ifc{} \frac{-T_1}{2} + \tau \le t + \tau \le \frac{T_1}{2} + \tau, \\
+					0,						& \otherwise,
+				\end{cases}
+			\end{equation}
+		
+			\begin{equation}
+				w_2(t) = \begin{cases}
+					f(w_2(t)),		& \ifc{} \frac{-T_2}{2} \le t \le \frac{T_2}{2}, \\
+					0,				& \otherwise,
+				\end{cases}
+			\end{equation}
+		
+		\noindent với $f(w(t))$ là hàm lấy giá trị cửa cửa sổ $w(t)$ tại thời điểm $t$ mà tại đó $w(t)$ có giá trị khác $0$. Vậy công thức tích phân \formularef{ola::modified_spectrogram_general_windows_integral} có thể được hiểu thành độ trùng lắp giữa cửa sổ $w_2(t)$ và cửa sổ $w_1(t)$ được dịch đi một đoạn $\tau$. Dễ thấy
+		
+			\begin{equation}
+				w_1(t + \tau) w_2(t) = \begin{cases}
+					f(w_1(t + \tau)) f(w_2(\tau)),	& \scalemath{0.9}{\ifc{} \max(\frac{-T_1}{2} + \tau, \frac{-T_2}{2}) \le t \le \min(\frac{T_1}{2} + \tau, \frac{T_2}{2})}, \\
+					0,								& \otherwise.
+				\end{cases}
+			\label{ola::modified_spectrogram_multiply_w}
+			\end{equation}
+		
+		Vậy tích hai cửa sổ được tạo thành bởi $w_1(t + \tau)$ và $w_2(t)$ sẽ chỉ có giá trị khi
+		
+			\begin{equation}
+				\max \bigg( \frac{-T_1}{2} + \tau, \frac{-T_2}{2} \bigg) \le \min \bigg( \frac{T_1}{2} + \tau, \frac{T_2}{2} \bigg),
+			\end{equation}
+			
+		\noindent và nếu như bất đẳng thức trên không được thỏa mãn bởi $T_1$, $T_2$ và $\tau$ thì giá trị của tích này sẽ $0$ và tích phân ở công thức \formularef{ola::modified_spectrogram_general_windows_integral} cũng sẽ có giá trị $0$. Vậy nên hàm mới được tạo ra bởi tích phân \formularef{ola::modified_spectrogram_general_windows_integral} sẽ thỏa mãn tính chất của một hàm cửa sổ. Vậy giả định của cửa sổ sẽ quy định giá trị $w'(0)$ này. 
+		
+		Lại có
+		
+			\begin{align*}
+				f'(t) 	& = \int_{-\infty}^{+\infty} \mathcal{F}^{-1}\{F(\omega, \tau) P(\omega, \tau)\}(t) d\tau \\
+				& = \int_{-\infty}^{+\infty} ((wf) \ast p)(t) d\tau \\
+				& = \int_{-\infty}^{+\infty} \bigg( \int_{-\infty}^{+\infty} w(t - \tau - \tau') f(t - \tau') p(\tau') d\tau' \bigg) d\tau \\
+				& = \int_{-\infty}^{+\infty} f(t - \tau') p(\tau') \int_{-\infty}^{+\infty} w(t - \tau - \tau') d\tau d\tau' \\ % Fubini's theorem
+				%& = C \int_{-\infty}^{+\infty} f(t - \tau') p(\tau') d\tau' \\
+				& = C \times (f \ast p)(t). \numberedeq
+			\end{align*}
+		
+		Khi sử dụng \spectrogram{} bị biến đổi vào giải thuật Overlap Add với giả định \spectrogram{} không biến đổi, chúng tôi thu được tính chất
+		
+			\begin{align*}
+				\frac{d}{dt} f'(t)	& = \frac{d}{dt} \bigg( \int_{-\infty}^{+\infty} f(\tau) p(t - \tau) d\tau \bigg) \\
+									& = \int_{-\infty}^{+\infty} f(\tau) \bigg( \frac{d}{dt} p(t - \tau) \bigg) d\tau,
+			\end{align*}
+		
+		\noindent vì đạo hàm $p(t)$ sẽ không liên tục vì dữ liệu này được dự đoán ra bởi mô hình và với giả định của biến đổi Fourier rời rạc (xảy ra khi nghịch đảo Fourier cho từng khoảng) rằng dữ liệu sẽ lặp lại sau từng chu kì của chúng. Do vậy tại các điểm mút của $p(t)$, sự chuyển tiếp sẽ xảy ra và nếu dữ liệu ở hai điểm đầu và cuối của mỗi chu kì kế tiếp nhau không khớp, chúng sẽ gây ra sự không liên tục và khiến cho đạo hàm của $p(t)$ bị gián đoạn. Nhưng mặt khác
+		
+			\begin{align*}
+				\frac{d}{dt} f'(t)	& = \frac{d}{dt} \bigg( \int_{-\infty}^{+\infty} f(\tau) w'(t - \tau) p(t - \tau) d\tau \bigg) \\
+									& = \int_{-\infty}^{+\infty} f(\tau) \bigg( \frac{d}{dt} (w'(t - \tau) p(t - \tau)) \bigg) d\tau,
+			\end{align*}
+		
+		\noindent sự không liên tục này lại không xảy ra khi nhân thêm một cửa sổ $w'(t)$ vào $p(t)$, lúc này hai đầu mút của dữ liệu được biến đổi dần về $0$ và sự không liên tục không xảy ra. 
+		
+		Hiện tượng trên được chúng tôi bắt gặp trong lúc hiện thực luận văn của mình. Sự không liên tục này gây ra các tiếng lạ trong âm thanh đầu ra bởi đường ống lọc nhiễu của ứng dụng khiến cho giọng nói sau khi lọc không còn đảm bảo chất lượng nữa.
+		
+		Thông qua hai trường hợp của \spectrogram{} bị thay đổi và \spectrogram{} không thay đổi, chúng tôi đã cho thấy phương pháp Overlap Add thỏa mãn được xây dựng lại hàm $f'(t)$ của chúng tôi khi có một tập hợp các dữ liệu được cửa sổ hóa thu được từ \spectrogram{} được mask bởi mô hình. Do đó, phương pháp Overlap Add sẽ được chúng tôi hiện thực ở cuối đường ống lọc nhiễu động (sẽ được chúng tôi thể hiện ở \sectionref{section::design::realtime}) như một bộ tổng hợp để trả về kết quả cho người dùng.
+		
+	\section{Biến đổi Fourier rời rạc}\label{section::signal_processing::dft}
+		
+		Trong các phần trước chúng tôi đã giới thiệu về biến đổi Fourier liên tục trong miền thời gian vô hạn, nhưng trong thực tế, khi máy tính hoạt động việc tính toán biến đổi Fourier liên tục với $f(t)$ vô hạn là không thể bởi những giới hạn về phần cứng máy tính. Do vậy trong phần này, chúng tôi sẽ giới thiệu về phiên bản rời rạc hóa của biến đổi Fourier và các giải thuật được sử dụng để tính toán biến đổi Fourier rời rạc này. Giải thuật Fast Fourier Transform (FFT) được sử dụng để tính toán biến đổi Fourier được lần đầu giới thiệu bởi Cooley \cite{fft_cooley} còn được biết đến với cái tên \textbf{radix-2 Fast Fourier Transform} và sau đó được cải thiện bởi Rader và Brenner \cite{fft_rader_brenner, fft_springer_nuss}. Ngoài các phiên bản kể trên như radix-2 hay Rader Brenner, còn có rất nhiều phiên bản khác của giải thuật này với các hướng tiếp cận khác nhau như trong \cite{fft_bergland}, tác giả sử dụng giả định chuỗi đầu vào là số thực và cắt giảm số lượng tính toán trong giải thuật xuống một nửa so với giải thuật của Cooley. Trước khi đi chi tiết vào các giải thuật để tính toán biến đổi Fourier rời rạc, chúng tôi sẽ bắt đầu với định nghĩa của biến đổi Fourier rời rạc.
+	
+		\subsection{Từ liên tục tới rời rạc}\label{subsection::signal_processing::dft::def}
+		
+			Xuất phát từ định nghĩa của biến đổi Fourier liên tục
+			
+				\begin{equation*}
+					X(\omega) = \int_{-\infty}^{+\infty} \polarcomplex{x(t)}{-\omega t} dt.
+				\end{equation*}
+			
+			%\noindent chúng tôi có thể chuyển đổi công thức $X(\omega)$ về biến tần số $f$ với $\omega = 2\pi f$ như sau
+			
+			%	\begin{equation}
+			%		X(f) = \int_{-\infty}^{\infty} \polarcomplex{x(t)}{-2\pi f t} dt,
+			%	\label{dct::var_freq_formula}
+			%	\end{equation}
+			
+			%\noindent $x(t)$ lúc này có thể được xem là một chuỗi $N$ phần tử chứa bên trong một mảng số phức (chúng tôi đang xét trong trường hợp biến đổi Fourier tổng quát nên $x(t)$ có thể thuộc $\mathbb{C}^N$) với phần tử thứ $k$ tại thời điểm $t$ tương ứng sẽ được kí hiệu bằng $x_k$, giá trị của $x(t)$ sẽ được lặp lại sau mỗi chu kì $T$ của mảng này nhờ vậy công thức biến đổi Fourier liên tục có thể được rời rạc hóa như sau
+				
+			%	\begin{align*}
+			%		X(f) 	& = \sum_{t=-\infty}^{\infty} \polarcomplex{x(t)}{-2\pi f t} \Delta t \\
+			%				& = \lim_{n \rightarrow \infty} n \sum_{k=0}^{N - 1} \polarcomplex{x_k}{-2\pi f k \Delta t} \Delta t. \numberedeq
+			%	\end{align*}
+			
+			%Vì $\lim_{n \rightarrow \infty}$ có thể được bỏ qua vì kết quả cuối cùng không phụ thuộc vào giá trị của giới hạn và chỉ phụ thuộc vào phần tổng trên $x(t)$ nên chúng tôi có thể bỏ qua phần giới hạn này.
+			
+				\begin{figure}[h]
+					\begin{subfigure}{\textwidth}
+						\centering
+						\includegraphics[width=100mm]{\mathimg{f_s.PNG}}
+						\caption{Đồ thị theo thời gian của hàm $f_s$}
+						\label{fourier::fs::time_func}
+					\end{subfigure}
+					
+					\begin{subfigure}{\textwidth}
+						\centering
+						\includegraphics[width=100mm]{\mathimg{Ff_s.PNG}}
+						\caption{Đồ thị theo tần số của hàm $F_s$}
+						\label{fourier::fs::omega_func}
+					\end{subfigure}
+					\caption{Đồ thị theo thời gian của $f_s$ và đồ thị theo tần số của $F_s$ \citesrc{fft_brigham}}
+				\end{figure}
+			
+			Brigham \cite{fft_brigham} rời rạc hóa $f(t)$ bằng cách nhân giữa $f(t)$ với $f_s(t)$ có đồ thị theo thời gian như \figref{fourier::fs::time_func}. Biến đổi Fourier của tích của hai hàm theo thời gian có thể được quy đổi lại thành tích chập của hai biến đổi Fourier giữa chúng, điều này có thể được chứng minh như sau
+			
+				\begin{align*}
+					\mathcal{F}\{f(t) f_s(t)\}(\omega)	& = \int_{-\infty}^{+\infty} f(t) f_s(t) \polarcomplex{}{- \omega t} dt \\
+							& = \int_{-\infty}^{+\infty} \bigg( \int_{-\infty}^{+\infty} F(\omega') \polarcomplex{}{\omega' t} d\omega' \bigg) f_s(t) \polarcomplex{}{- \omega t} dt \\
+							& = \int_{-\infty}^{+\infty} \bigg( \int_{-\infty}^{+\infty} f_s(t) \polarcomplex{}{- (\omega - \omega') t} dt \bigg)  F(\omega') d\omega' \\
+							& = \int_{-\infty}^{+\infty} F_s(\omega - \omega') F(\omega') d\omega' \\
+							& = (F_s \ast F)(\omega). \numberedeq
+				\end{align*}
+			
+			Thông qua công thức trên, người ta \cite{fft_brigham} đã chứng minh được rằng \spectrum{} được tạo ra bởi tích chập giữa $F$ và $F_s$ sẽ có tính tuần hoàn với chu kì là $1/\Delta t$ với $Delta t$ là khoảng thời gian lấy mẫu. Từ đó, ta suy ra được công thức rời rạc của biến đổi Fourier liên tục như sau
+			
+				\begin{equation}
+					X(f) = \sum_{k=0}^{N - 1} \polarcomplex{x_k}{-2\pi f k \Delta t} \Delta t.
+				\label{dct::var_freq_formula_discrete}
+				\end{equation}
+			
+			Ta lại tiếp tục đổi biến số của công thức $X(f)$ một lần nữa, lần này biến $f$ được biến đổi dựa vào định lý lấy mẫu của Nyquist (Nyquist-Shannon sampling theorem) \cite{mdft}. Theo định lý Nyquist, tần số được truyền đi sẽ không bao giờ vượt quá được một nửa tần số truyền đi. Do đó, tần số sóng tồn tại bên trong $x(t)$ sau khi đã chịu ảnh hưởng bởi quá trình rời rạc hóa sẽ không bao giờ vượt quá được một nửa tần số lấy mẫu của sóng này, vậy nên $-f_0 / 2 \le f \le f_0 / 2$ với $f_0$ là tần số truyền tải hay tần số lấy mẫu theo định lý của Nyquist. Ta bắt đầu tiến hành rời rạc hóa $f$ trong khoảng $[-f_0 / 2, f_0 / 2]$, bằng cách chia khoảng nhỏ này thành $N$ đoạn có kích thước $\Delta f$, $N$ có thể xem là số lượng mẫu được lấy từ $x(t)$, do vậy ta có $f = j\Delta f$ với $j \in \mathbb{Z}^+$. Ta lại có sự liên hệ giữa $\Delta t$, $f_0$ và $\Delta f$ như sau
+			
+				\begin{equation}
+					\begin{cases}
+						f_0 = \frac{1}{\Delta t}, \\
+						\Delta t = \frac{T}{N}, \\
+						\Delta f = \frac{f_0}{N} = \frac{1}{T}.
+					\end{cases}
+				\label{dct::relation_formulas}
+				\end{equation}
+			
+			Thay các công thức \formularef{dct::relation_formulas} vào công thức \formularef{dct::var_freq_formula_discrete} chúng tôi thu được
+			
+				\begin{align*}
+					X(f)	& = \sum_{k=0}^{N - 1} \polarcomplex{x_k}{-2\pi f k \Delta t} \Delta t \\
+							& = \sum_{k=0}^{N - 1} \polarcomplex{x_k}{-2\pi j k \Delta f \Delta t} \Delta t \\
+							& = \sum_{k=0}^{N - 1} \polarcomplex{x_k}{-2\pi j k \frac{1}{T} \frac{T}{N}} \frac{T}{N} \\
+							& = \sum_{k=0}^{N - 1} \polarcomplex{x_k}{-2\pi \frac{j k}{N}} \frac{T}{N}. \numberedeq
+				\end{align*}
+			
+			Và vì $T/N$ là hằng số với mọi $j$, $k$ nên ta có thể bỏ nó ra khỏi công thức $X(f)$ (lúc này đã chuyển thành $X(j)$) để tạo thành công thức chính của biến đổi Fourier rời rạc
+			
+				\begin{equation}
+					X(j) = \sum_{k=0}^{N - 1} \polarcomplex{x_k}{-2\pi \frac{j k}{N}} = \sum_{k=0}^{N - 1} x_k W^{jk}.
+				\label{dct::dct_formula}
+				\end{equation}
+			
+			Dễ dàng thấy được nếu như chúng tôi chạy giải thuật tiếp cận theo định nghĩa của biến đổi Fourier rời rạc thì $\bigO(N^2)$ phép toán tổng quát (phép cộng và nhân số phức) sẽ cần thiết để tính được $N$ thành phần $X(j)$ từ $x(t)$, việc này làm cho Fourier rời rạc trở thành nút thắt trong quá trình tính toán với $N$ rất lớn. Để giải quyết vấn đề này, nhiều nghiên cứu đã xuất hiện và trong các nghiên cứu đã được tìm hiểu, sinh viên thực hiện muốn đề cập tới các nghiên cứu về giải thuật \textbf{biến đổi Fourier nhanh} hay \textbf{Fast Fourier Transform}.
+		
+		\subsection{Biến đổi Fourier nhanh}\label{subsection::signal_processing::dft::fft}
+		
+			Năm 1965, James Cooley \cite{fft_cooley} đã đề xuất ra giải thuật được sử dụng để tính toán biến đổi Fourier rời rạc của một dãy số phức có chiều dài $N$. Theo sau \cite{fft_cooley}, hàng loạt các bài báo khác nhằm thể hiện rõ hơn ý tưởng của giải thuật này cũng được xuất bản \cite{fft_for_fun, ws_fft}. Tuy được cho là đã có nhiều công trình khác sử dụng giải thuật này trước khi Cooley công bố kết quả của ông \cite{historical_fft}, nhưng công trình của Cooley góp phần rất lớn vào việc rút giảm độ phức tạp sinh ra bởi tính toán biến đổi Fourier rời rạc (hiện đang là nút thắt cho rất nhiều công trình khác) giảm xuống còn $\bigO(N \log N)$. Phương pháp của ông được biết đến như giải thuật biến đổi Fourier nhanh cơ số 2 hay còn được gọi là \textbf{radix-2 Fast Fourier Transform} (radix-2 FFT).
+			
+			\subsub{Biến đổi Fourier nhanh cơ số 2} Biến đổi Fourier nhanh cơ số 2 được chia làm hai loại: \textit{chia theo thời gian (decimation in time)} và \textit{chia theo tần số (decimation in frequency)}. Hai cách chia này về cơ bản khá giống nhau và với giả định $N=2^p$, giải thuật này thực hiện theo cơ chế chia để trị, thông qua gọi đệ quy của biến đổi Fourier nhanh trên các tập con nhỏ hơn của vector đầu vào $x$ từ đó giảm độ phức tạp xuống $\bigO(N \log N)$.
+				
+				\textit{Chia theo thời gian:} Xuất phát từ vector $x$ có độ dài $N = 2^p$ với $p \in \mathbb{Z}^+$, kết quả đầu ra mà chúng tôi mong muốn là một \spectrum{} $X(j)$ với tất cả các giá trị $j$ nguyên có trong $0 \le j \le N - 1$. Từ phần trước, chúng tôi đã cho thấy độ phức tạp của việc tính toán biến đổi Fourier rời rạc thông qua định nghĩa sẽ tiêu tốn $\bigO(N^2)$ trên phép toán cộng và nhân số phức. Với
+				
+					\begin{align*}
+						W^{j + N/2} & = \polarcomplex{}{-2\pi \frac{j + N/2}{N}} \\
+						& = \polarcomplex{}{(-2\pi \frac{j}{N} - \pi)} \\
+						& = - W^j, \numberedeq
+					\end{align*}
+					
+					\begin{align*}
+						W^{2a(j + N/2)}		& = \polarcomplex{}{-2\pi \frac{2a(j + N/2)}{N}} \\
+						& = \polarcomplex{}{(-2\pi \frac{2aj}{N} - 2\pi a)} \\
+						& = \polarcomplex{}{-2\pi \frac{2aj}{N}} \\
+						& = W^{2aj}, \numberedeq
+					\end{align*}
+					
+					\begin{align*}
+						W^{(2a + 1)(j + N/2)} 	& = W^{j + N/2} W^{2a(j + N/2)} \\
+						& = W^{j + N/2} W^{2aj}, \numberedeq
+					\end{align*}
+				
+					\begin{align*}
+						W^{aN} 	W^{jN}	& = \polarcomplex{}{-2\pi \frac{aN}{N}} \\
+						& = \polarcomplex{}{-2\pi a} \\
+						& = 1, \numberedeq
+					\end{align*}
+				
+				\noindent chúng tôi có
+				
+					\begin{align*}
+						X_j & = \sum_{k=0}^{N - 1} x_k W^{kj} \\
+							& = \sum_{a=0}^{\frac{N}{2} - 1} x_{2a} W^{2aj} + \sum_{a=0}^{\frac{N}{2} - 1} x_{2a + 1} W^{(2a + 1)j} \\
+							& = \sum_{a=0}^{\frac{N}{2} - 1} x_{2a} W^{2aj} + W^j\sum_{a=0}^{\frac{N}{2} - 1} x_{2a + 1} W^{2aj}, \numberedeq
+					\end{align*}
+				
+				%Dễ thấy, $A_j$ và $B_j$ là các tính toán biến đổi Fourier rời rạc trên tập con phần tử chẵn và lẻ từ $x(t)$. Việc thay thế tính toán này giúp cho chi phí tính toán $X_j$ chỉ còn phụ thuộc vào giá trị được trả về từ $A_j$, $B_j$ và cộng với 1 phép cộng và 1 phép nhân số phức.
+				
+				%	\begin{equation}
+				%		\begin{aligned}
+				%			C_j & = 1 + 1 + C({A_j}) + C({B_j})
+				%		\end{aligned}
+				%	\end{equation}
+				
+				%Từ công thức của $C_j$ (chi phí tính từng $X_j$), dễ dàng suy ra được chi phí $C$ của toàn bộ giải thuật
+				
+				%	\begin{equation}
+				%			C 	& = \sum_{j=0}^{N-1} C_j \\
+				%				& = 2N + \sum_{j=0}^{N - 1} (C(A_j) + C(B_j))
+				%		\end{aligned}
+				%	\label{fft::complexity_ab_formula}
+				%	\end{equation}
+				
+				%Như trong công thức cũng đã cho thấy rõ, chi phí để tính toán lúc này bao gồm chi phí tính toán 2 biến đổi Fourier rời rạc con $A_j$ và $B_j$. Xét $X_{j + N/2}$
+				
+				%Lúc này, nếu chúng tôi tiếp tục phân tách $A_j$ thành $A_{j1}$ và $A_{j2}$, $B_j$ thành $B_{j1}$ và $B_{j2}$, và tiếp tục như vậy
+				
+				%	\begin{equation}
+				%		\begin{aligned}
+				%			C 	& = 2N + \sum_{j=0}^{N - 1} (C(A_j) + C(B_j)) \\
+				%				& = 2N + 4N + \sum_{j=0}^{N - 1} (C(A_{j1}) + C(A_{j2}) + C(B_{j1}) + C(B_{j2})) \\
+				%				& = \sum_{i=1}^{\log N} 2^iN + \sum_{j=0}^{N - 1} (C(A_{j1\dots1}) + \dots + C(A_{j2\dots2}) + C(B_{j1\dots1}) + \dots + C(B_{j2\dots2})) \\
+				%				& = 2N^2 - N + N^2 \\
+				%				& = 3N^2 - N \\
+				%				& \approx O(N^2)
+				%		\end{aligned}
+				%	\end{equation}
+				
+				%Với các chi phí $C(A_{j\dots})$ và $C(B_{j\dots})$ lúc này đều suy giảm về $1$, chúng tôi thu được chi phí tính toán của giải thuật lúc này không hơn gì chi phí tính toán của giải thuật gốc, tuy nhiên công thức của biến đổi Fourier rời rạc còn có một tính chất khác. Xét $X_{j + N/2}$
+				
+					\begin{align*}
+						X_{j + N/2} & = \sum_{k=0}^{N - 1} x_k W^{kj} \\
+									& = \sum_{a=0}^{\frac{N}{2} - 1} x_{2a} W^{2a(j + N/2)} + \sum_{a=0}^{\frac{N}{2} - 1} x_{2a + 1} W^{(2a + 1)(j + N/2)} \\
+									& = \sum_{a=0}^{\frac{N}{2} - 1} x_{2a} W^{2aj} + W^{j + N/2}\sum_{a=0}^{\frac{N}{2} - 1} x_{2a + 1} W^{2aj} \\
+									& = \sum_{a=0}^{\frac{N}{2} - 1} x_{2a} W^{2aj} - W^j\sum_{a=0}^{\frac{N}{2} - 1} x_{2a + 1} W^{2aj}, \numberedeq
+					\end{align*}
+				
+				với các tính chất của $X_j$ và $X_{j + N/2}$, mỗi biến đổi Fourier rời rạc với $N$ mẫu sẽ được tách thành hai biến đổi Fourier nhỏ hơn với $N / 2$ mẫu cho mỗi biến đổi cộng thêm $N$ phép cộng và $N / 2$ phép nhân trên số phức. \figref{fft::algorithm} thể hiện ý tưởng chia để trị trong biến đổi Fourier nhanh, từ một biến đổi lớn thành hai biến đổi con với số lượng phần tử đầu vào bằng một nửa ban đầu.
+				
+					\begin{figure}[h]
+						\centering
+						\includegraphics[width=100mm]{\mathimg{fft_idea.PNG}}
+						\caption{Sơ đồ ý tưởng đệ quy của biến đổi Fourier nhanh (chia theo thời gian) \citesrc{ws_fft}}
+						\label{fft::algorithm}
+					\end{figure}
+				
+				Từ các nhận định trên, ta thu được hệ thức truy hồi sau, nếu gọi $C_N$ là độ phức tạp khi thực hiện biến đổi Fourier nhanh trên dữ liệu đầu vào kích thước $N$
+				
+					\begin{align*}
+						C_N	& = N + \frac{N}{2} + 2 C_{N/2} \\
+							& = 2N + N + 4 C_{N/4}.
+					\end{align*}
+				
+				Tiếp tục khai triển $k$ lần, ta thu được hệ thức truy hồi của $C_N$ như sau
+				
+					\begin{equation}
+						C_N = N k + \frac{kN}{2} + 2^k C_{N/2^k},
+						\label{fft::recursive_k_formula}
+					\end{equation}
+				
+				\noindent khai triển với $k = \log_2(N)$, khi $N$ là $1$, giải thuật sẽ mất chi phí $1$ phép nhân số phức nên $C_1 = 1$ nên do đó ta có
+				
+					\begin{align*}
+						C_N	& = N \log_2(N) + \frac{N}{2} \log_2(N) + 2^{\log_2(N)} C_1 \\
+							& = N \log_2(N) + \frac{N}{2} \log_2(N) + N \\
+							& \le N \log N + \frac{N}{2} \log N + N \\
+							& \approx N \log N
+					\end{align*}
+					
+				Dễ thấy khi $N$ dần tiến tới vô cùng, chi phí giải thuật $C_N$ sẽ bị chặn bởi $N \log N$ do vậy ta có giải thuật biến đổi Fourier nhanh có chi phí là $O(N \log N)$. Đây cũng chính là chứng minh cho độ phức tạp của toàn bộ thuật toán biến đổi Fourier rời rạc theo cơ số 2 này, và cũng do sự chia đôi phép tính toán Fourier được định nghĩa ra thành hai phép biến đổi Fourier con mà Cooley đã chứng minh trong bài báo gốc của ông \cite{fft_cooley}.
+				
+					\begin{figure}[h]
+						\centering
+						\includegraphics[width=120mm]{\mathimg{fft_butterfly.PNG}}
+						\caption{Nguyên nhân của hiện tượng đảo bit trong biến đổi Fourier nhanh cơ số 2 (chia theo thời gian), với các bit được sắp xếp dần thể hiện qua các số được khoanh trong ô màu đỏ \citesrc{fft_brigham}}
+						\label{fft::butterfly}
+					\end{figure}
+				
+				Biến đổi Fourier nhanh theo cơ số 2 sẽ gây ra hiện tượng đảo bit bên trong kết quả $X_j$ nếu là hướng chia theo tần số và đảo bit trong chuỗi đầu vào $x_k$ nếu là hướng chia theo thời gian. Hiện tượng này được thể hiện trong \figref{fft::butterfly} và có thể được giải thích như sau. Gọi
+				
+					\begin{equation*}
+						k = 2^{b_{i - 1}} + 2^{b_{i - 2}} + \dots + 2^{b_0}.
+					\end{equation*}
+				
+				Nhờ đó, bằng việc kiểm tra xem giá trị $x_k$ thuộc chẵn hay lẻ tương ứng với việc đang xét tới giá trị $b_0$, các số $k$ có $b_0$ là bit $0$ ứng với chẵn sẽ nằm về $A_j$ trong khi các số có $b_0$ là bit $1$ ứng với số lẻ sẽ thuộc về $B_j$, việc này tiếp tục tới $b_1$ bởi vì những số có $b_1$, $b_0$ ứng với $0$ và $0$ sẽ ở vị trí chẵn bên trong $A_j$ và nếu số có $b_1$, $b_0$ ứng với $1$ và $0$ sẽ nằm ở vị trí lẻ trong $A_j$. Tương tự như vậy, các số có $b_1$, $b_0$ ứng với $0$ và $1$ sẽ nằm ở vị trí chẵn và nếu $b_1$ là $1$ sẽ nằm ở vị trí lẻ trong $B_j$. Cứ như vậy quá trình này tính toán tới giá trị của $b_{i}$, và một điều kiện tương tự lại diễn ra. Bằng cách ghi nhận lại thứ tự bit được lấy ra và thứ tự bit lấy ra, chúng tôi dễ dàng quan sát được sự đảo bit bên trong giải thuật biến đổi Fourier rời rạc cơ số 2 này.
+				
+				\textit{Chia theo tần số:} Tương tự như cách chia theo thời gian, để thực hiện biến đổi Fourier nhanh chúng tôi cũng bắt đầu từ một cặp giá trị của $X$, lần này là $X_{2j}$ và $X_{2j + 1}$, với
+				
+					\begin{align*}
+						W^{jN} = 1. \numberedeq
+					\end{align*}
+				
+				\noindent có
+				
+					\begin{align*}
+						X_{2j}	& = \sum_{k=0}^{N - 1} x_k W^{2jk} \\
+								& = \sum_{k=0}^{\frac{N}{2} - 1} x_k W^{2jk} + \sum_{k=0}^{\frac{N}{2} - 1} x_{k + N/2} W^{2j(k + N/2)} \\
+								& = \sum_{k=0}^{\frac{N}{2} - 1} x_k W^{2jk} + \sum_{k=0}^{\frac{N}{2} - 1} W^{jN} x_{k + N/2} W^{2jk} \\
+								& = \sum_{k=0}^{\frac{N}{2} - 1} (x_k + x_{k + N/2}) W^{2jk}, \numberedeq
+						\label{fft::freq_X_even_formula}
+					\end{align*}
+							
+					\begin{align*}
+						X_{2j + 1}	& = \sum_{k=0}^{N - 1} x_k W^{(2j + 1)k} \\
+									%& = \sum_{k=0}^{N - 1} W^k x_k W^{2jk} \\
+									& = \sum_{k=0}^{\frac{N}{2} - 1} W^k x_k W^{2jk} + \sum_{k=0}^{\frac{N}{2} - 1} W^{k + N/2} x_{k + N/2} W^{2j(k + N/2)} \\
+									& = \sum_{k=0}^{\frac{N}{2} - 1} W^{k} x_k W^{2jk} + \sum_{k=0}^{\frac{N}{2} - 1} W^{k + N/2} W^{jN} x_{k + N/2} W^{2jk} \\
+									& = \sum_{k=0}^{\frac{N}{2} - 1} (x_k - x_{k + N/2}) W^k W^{2jk}, \numberedeq
+						\label{fft::freq_X_odd_formula}
+					\end{align*}
+				
+				Bằng các tính chất nêu ở công thức \formularef{fft::freq_X_even_formula} và \formularef{fft::freq_X_odd_formula}, chúng tôi có thể xây dựng lại được giải thuật có độ phức tạp tương đương với giải thuật biến đổi Fourier nhanh được chia theo thời gian bằng hệ thức hồi quy của hai biến đổi Fourier rời rạc với dữ liệu mới là $(x_k - x_{k + N/2})$ và $W^k (x_k - x_{k + N/2})$.
+				
+					\begin{figure}[h]
+						\centering
+						\includegraphics[width=100mm]{\mathimg{fft_dcf_idea.PNG}}
+						\caption{Sơ đồ ý tưởng đệ quy của biến đổi Fourier nhanh (chia theo tần số) \citesrc{ws_fft}}
+						\label{fft::dcf_algorithm}
+					\end{figure}
+				
+				\figref{fft::dcf_algorithm} thể hiện việc chia từ một biến đổi Fourier nhanh với đầu vào có N mẫu về hai biến đổi Fourier nhanh nhỏ hơn với đầu vào có kích thước $N/2$. Hai cách chia chỉ khác ở thành phần được xét chẵn hay lẻ nằm ở miền thời gian ($x(t)$) hay mở miền tần số ($X(\omega)$). %Và cũng thông qua việc chia ở \figref{fft::dcf_algorithm}, ta có khai triển biến đổi Fourier rời rạc nhanh về đầu vào được thể hiện như \figref{fft::dcf_butterfly}.
+				
+					%\begin{figure}[h]
+					%	\centering
+					%	\includegraphics[width=100mm]{\mathimg{fft_dcf_butterfly.PNG}}
+					%	\caption{Khai triển biến đổi Fourier nhanh (chia theo tần số) về dữ liệu đầu vào \citesrc{ws_fft}}
+					%	\label{fft::dcf_butterfly}
+					%\end{figure}
+				
+			\subsub{Cải tiến của Rader và Brenner} Như cũng đã thấy rõ trong cả phiên bản chia theo thời gian và chia theo tần số của biến đổi Fourier nhanh cơ số 2, các phép nhân số phức xảy ra trong giải thuật chỉ xuất hiện ở một trong hai biến đổi Fourier con của giải thuật gốc ban đầu. Nhưng so sánh với phép cộng số phức, phép nhân phức tạp hơn nhiều và cũng yêu cầu nguồn tài nguyên tính toán gấp đôi phép cộng số phức do vậy giảm lượng phép nhân trong giải thuật là một điều cần thiết. Nhận thấy điều này, trong \cite{fft_rader_brenner}, Rader và Brenner đã đề xuất ra thêm một số bước biến đổi thực hiện trên cơ sở của giải thuật biến đổi Fourier nhanh cơ số 2 chia theo thời gian để cắt giảm lượng phép nhân trong giải thuật này. Như ta đã thấy ở phần trên, giá trị của $X_{j + N/2}$ sẽ được tính toán như sau
+				
+					\begin{align*}
+						X_{j + N/2}	& = \sum_{a=0}^{\frac{N}{2} - 1} x_{2a} W^{2aj} + W^j \sum_{a=0}^{\frac{N}{2} - 1} x_{2a + 1} W^{2aj} \\
+								& = B_{2j} - W^j D_{2j}. \numberedeq
+						\label{fft::rader_brenner_original_formula}
+					\end{align*}
+				
+				Dễ thấy phép nhân số phức bắt nguồn từ $W^j D_{2j}$, để có thể giảm đi lượng phép nhân, Rader và Brenner đề xuất một cách biến đổi như sau. Gọi $c_{a} = x_{2a + 1} - x_{2a - 1}$, chúng tôi có thể tính được giá trị của biến đổi Fourier rời rạc $C_{2j}$ của các $c_k$
+				
+					\begin{align*}
+						C_{2j}	& = \sum_{a=0}^{\frac{N}{2} - 1} c_{a} W^{2aj} \\
+								& = \sum_{a=0}^{\frac{N}{2} - 1} x_{2a + 1} W^{2aj} - \sum_{a=0}^{\frac{N}{2} - 1} x_{2a - 1} W^{2aj} \\
+								%& = D_{2j} - \sum_{b=-1}^{\frac{N}{2} - 2} x_{2b + 1} W^{2j (b + 1)} \\
+								& = D_{2j} - W^{2j} \sum_{b=0}^{\frac{N}{2} - 1} x_{2b + 1} W^{2bj} \\
+								%& = D_{2j} - W^{2j} D_{2j} \\
+								& = D_{2j} (1 - W^{2j}) \\
+								& = - W^j D_{2j} (W^j - W^{-j}). \numberedeq
+						\label{fft::rader_brenner_c_formula}
+					\end{align*}
+				
+				Thông qua công thức \formularef{fft::rader_brenner_c_formula}, ta dễ dàng thu được công thức của $- W^j D_{2j}$ theo $C_{2j}$
+				
+					\begin{equation}
+						W^j D_{2j} = - \frac{1}{W^j - W^{-j}} C_{2j}.
+					\label{fft::rader_brenner_d_c_formula}
+					\end{equation}
+				
+				Bằng cách thay công thức \formularef{fft::rader_brenner_d_c_formula} vào công thức \formularef{fft::rader_brenner_original_formula}, ta thu được biến đổi Fourier với phần nhân số phức cắt giảm
+				
+					\begin{align*}
+						X_{j}	& = B_{2j} + W^j D_{2j} \\
+								& = B_{2j} - \frac{1}{W^j - W^{-j}} C_{2j} \\
+								& = B_{2j} - \frac{1}{\imcomplex{\sin(2\pi j)}} C_{2j} \\
+								& = \sum_{a=0}^{\frac{N}{2} - 1} x_{2a} W^{2aj} - \frac{1}{\imcomplex{\sin(2\pi j)}} \sum_{a=0}^{\frac{N}{2} - 1} (x_{2a + 1} - x_{2a - 1}) W^{2aj}. \numberedeq
+						\label{fft::rader_brenner_final}
+					\end{align*}
+				
+				Bằng việc phân tách $W^j D_{2j}$, số lượng phép nhân bây giờ đã được suy giảm còn lại phép chia các số thuần ảo. Nhưng có một vấn đề với $\sin(2\pi j)$, sẽ có một vài điểm mang giá trị $0$ nên sẽ gây bất hợp lý cho công thức trên, do vậy ở các điểm giá đoạn, chúng tôi sẽ đặt một số giá trị $Q$ được tính toán từ công thức gốc $W^j D_{2j}$ thay vì sử dụng công thức \formularef{fft::rader_brenner_final}.
+				
+				
+% \section{Wavelet transform}
+% \section{Laplace transform}

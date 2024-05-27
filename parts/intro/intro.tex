@@ -1,0 +1,213 @@
+\newcommand{\introimg}[1]{parts/intro/img/#1}
+\setupfont{13pt}
+
+\chapter{Giới thiệu}\label{chapter::intro}
+
+	Trong chương này, chúng tôi giới thiệu về lý do chọn đề tài, phạm vi thực hiện, mục đích cũng như ý nghĩa khi chúng tôi tiến hành thực hiện đề tài này. Tuy nhiên trước hết chúng tôi sẽ trình bày lại một số khái niệm căn bản về âm thanh đã được trình bày trong sách giáo khoa Vật Lý lớp 12.
+	
+	\section{Âm thanh}\label{section::intro::sound}
+	
+		Âm thanh được định nghĩa như là các dao động cưỡng bức dưới tác dụng của một lực nào đó lên các phần tử không khí khiến cho chúng dao động qua lại tạo nên các sóng âm truyền đi trong không khí và cuối cùng là tới được các thành phần có chức năng nhận biết. Nói một cách tổng quát hơn, âm thanh chính là tập hợp rất nhiều dao động cơ học trong đó các phần tử không khí đóng vai trò như một quả lắc. Chúng dao động qua lại, va chạm vào nhau khiến cho năng lượng của sự dao động này được truyền đi trong môi trường vật chất.
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=120mm]{\introimg{soundwave.jpg}}
+				\caption{Sự truyền âm trong không khí, C (R) là nơi mà mật độ các hạt không khí dày (thưa) tương ứng}
+			\end{figure}
+	
+		Sự dao động qua lại của các phần tử không khí có thể chung quy lại được xem là một hệ dao động điều hòa cưỡng bức dưới tác động của một hệ lực được tạo bởi nguồn phát. Để hình dung sự tương đồng này  ta xét một hệ một con lắc đơn dao động điều hòa dưới tác dụng của trọng lực. \figref{intro::harmonic_oscillator} thể hiện hệ cơ học mà chúng tôi đang xét.
+		
+		%\footnote{Nguồn tham khảo: \href{http://www.phon.ox.ac.uk/jcoleman/intro2acoustics1.htm?fbclid=IwAR22vyPMX5Wdlk842p3xd2oq6A1tQ-_7hn5cZUBQGFw4qbUqQMH-DeuS4Vc}{Introduction to Speech Acoustics 1}}
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=120mm]{\introimg{spring_sys.png}}
+				\caption{Một hệ dao động điều hòa dưới tác dụng của của trọng lực và lực kéo từ lò xo có độ cứng là $K$ được kéo ra một đoạn ban đầu $x_0$ so với vị trí cân bằng}%{\urlsrc{shorturl.at/diHJU}}
+				%https://www.ux1.eiu.edu/~cfadd/1150/15Period/Vert.html
+				\label{intro::harmonic_oscillator}
+			\end{figure}
+	
+		Khi đó, giả sử lò xo đó có độ cứng là $K$ và vật có khối lượng là $m$. Ta có phương trình sau
+		
+			\begin{equation}
+				m\vec{a} + m\vec{g} = K (\vec{x} + \vec{\delta x}).
+			\label{intro::harmonic_formula_0}
+			\end{equation}
+		
+		Nhưng do phương trình cân bằng lực tại vị trí cân bằng của lò xo, chúng tôi đã có $m\vec{g} = K\vec{\delta x}$ nên công thức \formularef{intro::harmonic_formula_0} sẽ được biến đổi thành
+		
+			\begin{equation*}
+				m\vec{a} = K \vec{x}
+			\end{equation*}
+		
+		Từ đó suy ra
+		
+			\begin{equation}
+				m (x)'' = -K x.
+				\label{intro::harmonic_formula_1}
+			\end{equation}
+		
+		\noindent chiếu phương trình trên lên trên trục đứng của hệ chúng ta có thể bỏ dấu vector của hệ đi, phương trình thu được chính là phương trình đại diện cho dao động của hệ này. Kết quả ta thu được đó chính là biểu thức
+		
+			\begin{equation}
+				x = x_0 \cos(\omega (t - t_0)),
+				\label{intro::harmonic_formula_2}
+			\end{equation}
+		
+		\noindent với $\omega = \sqrt{K/m}$, $t_0$ thể hiện gốc thời gian hệ bắt đầu giao động và $x_0$ chính là giá trị bị kéo ra của lò xo ở vị trí ban đầu. 
+		
+		Dễ thấy đây chính là một hàm lượng giác với chu kì $T = 2\pi\sqrt{m/K}$. Tuy nhiên, đây chỉ là phương trình dao động tại thời điểm ban đầu của hệ, để phương trình này vẫn còn thỏa mãn hệ sau khi đã dao động qua một khoảng thời gian $t$, điều cần thiết phải đặt ra là năng lượng của hệ cơ học không thay đổi hay nói cách khác thì năng lượng của hệ không bị mất mát đi trong quá trình dao động.
+			
+		Trong thực tế, năng lượng của sóng âm truyền đi này không ổn định, mà chúng sẽ giảm dần theo cả chiều không và thời gian. Sự suy giảm này có thể được nhận thấy rất rõ khi quan sát sự truyền đi các sóng trên mặt nước với điểm phát sóng đi là một nguồn điểm. Tuy nhiên, ở trong luận văn này, ở phương diện của máy tính, khi giọng nói được ghi nhận từ microphone, tín hiệu được giả định là đã ở mức ổn định và chúng tôi sẽ tiến hành xử lý trên đoạn âm thanh được ghi nhận, do vậy các yếu tố vật lý nêu trên sẽ chỉ ảnh hưởng tới quá trình âm thanh truyền từ miệng người sử dụng tới microphone của máy tính. Các tính chất suy giảm biên độ này ảnh hưởng trực tiếp tới quá trình kiểm thử mô hình của chúng tôi và sẽ được chúng tôi trình bày cụ thể hơn ở \sectionref{section::results::data_preparation}.
+		
+			\begin{table}
+				\centering
+				\begin{tabular}{c l}
+					\hline
+					& \multicolumn{1}{c}{\textbf{Phạm vi giới hạn}} \\
+					\hline
+					1	& Chỉ lọc các âm nhiễu được đề ra ở \tableref{intro::noises} \\
+					2	& Các tiếng vang và dội sẽ không được loại bỏ \\
+					3	& Chỉ nhắm đến độ hiệu quả khi lọc nhiễu ra khỏi tiếng Việt và tiếng Anh \\
+					4	& Ứng dụng sẽ chỉ được hiện thực cho hệ điều hành Windows \\
+					\hline
+				\end{tabular}
+				\caption{Giới hạn phạm vi đề tài}
+				\label{intro::thesis_limits}
+			\end{table}
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=120mm]{\introimg{rir.jpg}}
+				\caption{Hiện tượng Room Impulse Response (tiếng dội) xảy ra khi âm thanh gốc bị suy giảm một lượng tuyến tính với thời gian truyền đi và lại bị ghi nhận lại sau một khoảng thời gian nhất định}%{\urlsrc{shorturl.at/ksFT1}}
+				%https://desena.org/dropbox/aes_tutorial/Tutorial_at_AES_VR_AR_2020_Conference.pdf
+				\label{intro::rir_pic}
+			\end{figure}
+		
+		Tuy nhiên, hiện tượng giảm âm khi truyền đi trong không khí có thể gây ra một số hiệu ứng đặc biệt, một ví dụ điển hình trong thực tế là hiện tượng tiếng vang xuất phát từ giọng nói bị dội lại khi người sử dụng đang ở trong phòng kín (Echo và Reverberation). Có khá nhiều các cuộc thi và các sản phẩm công nghiệp được thương mại hóa khác nhau nhắm tới việc đồng thời khử cả vang và tiếng dội này nhưng trong luận văn của chúng tôi, giới hạn sẽ chỉ nằm ở việc khử nhiễu, chúng tôi sẽ không xử lý cho trường hợp tiếng nói bị vang hay trường hợp người dùng sử dụng trong phòng kín làm cho giọng nói bị dội lại nhiều lần. \figref{intro::rir_pic} thể hiện cho việc âm thanh sẽ bị dội khi người dùng đang ở trong phòng kín. \tableref{intro::thesis_limits} nêu ra các giới hạn cho phạm vi đề tài của luận văn của chúng tôi.
+		
+	\section{Đặt vấn đề}\label{section::intro::problem_statements}
+	
+		Nhiễu có thể được hiểu là các thành phần dư thừa không mong muốn xuất hiện trong dữ liệu thực tế. Các dữ liệu nhiễu này không mang nhiều thông tin có giá trị về ý nghĩa của một câu nói hay một đoạn âm thanh, đôi khi chúng có thể gây hại cho các hệ thống xử lý tín hiệu. Trong thời kì dịch bệnh hoành hành như hiện nay, khiến cho các hoạt động trực tiếp dần được thay thế bởi các hoạt động trực tuyến. Các cuộc họp, các buổi học online cũng dần trở nên phổ biến hơn, và ngày càng nhanh chóng thích nghi hơn với yêu cầu giao tiếp hiện tại. Nhu cầu giao tiếp trực tuyến nhiều hơn, yêu cầu về chất lượng âm thanh khi giao tiếp cũng cần phải được chú trọng. Nhưng một vấn đề không phải ai cũng có thể đảm bảo được trong quá trình hoạt động trực tuyến, đó chính là môi trường hoạt động của mình. Rất nhiều vấn đề khác nảy sinh từ vấn đề này, nhà có trẻ con đang quấy khóc, nhà gần đường lộ tiếng ồn từ hoạt động giao thông, và các yếu tố môi trường như mưa, gió, quạt bị hư gây ra các tiếng ồn lớn ảnh hưởng rất nhiều tới bản thân người đang hoạt động trực tuyến cũng như những người cùng tham gia vào phiên hoạt động đó. Để làm rõ lý do thực hiện đề tài này, chúng tôi sẽ nêu ra một số định nghĩa. Một đoạn âm thanh bất kì phát ra từ nguồn âm và lan truyền tới tai người nghe có thể được định nghĩa như sau
+		
+			\begin{equation}
+				y(t) = x(t) + n(t),
+			\label{intro::normal_speech}
+			\end{equation}
+	
+		\noindent với $y(t)$ là âm thanh hay trong trường hợp này là giọng nói, được ghi âm lại trong thực tế, $x(t)$ chính là thông tin hay giọng nói sạch được ghi lại trong đoạn ghi âm đó, $n(t)$ là các âm nhiễu xuất hiện từ các yếu tố khách quan như môi trường xung quanh người ghi âm. Vậy với một mô hình, chúng tôi gọi là $f$ thì kết quả đầu ra của quá trình lọc được định nghĩa như sau
+		
+			\begin{equation}
+				\hat{x}(t) = f(y(t)) \approx x(t),
+			\label{intro::target}
+			\end{equation}
+	
+		\noindent với $\hat{x}(t)$ chính là kết quả đầu ra của mô hình. Hay nói cách khác, mô hình chúng tôi cần huấn luyện phải có khả năng tách được các thành phần của giọng nói sạch từ một âm thanh hỗn tạp được cho trước, để làm được như vậy chúng tôi cần xác định mô hình phải chịu được nhiễu từ các nguồn như thế nào.
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=120mm]{\introimg{noises_popularity.png}}
+				\caption{Sáu loại nhiễu phổ biến nhất theo khảo sát được chúng tôi thực hiện}
+				\label{intro::popular_noises}
+			\end{figure}
+	
+		Do chỉ được định nghĩa một cách rất tổng quát, là các phần dư thừa không mong muốn của dữ liệu, nhiễu có thể mang bất cứ hình dạng trong bất cứ ngữ cảnh nào. Nếu đặt trường hợp giao tiếp trong môi trường là quán cà phê, chính các âm thanh được tạo bởi môi trường đó, tiếng cốc nước leng keng, tiếng nhạc phát ra từ các bộ loa đặt xung quanh quán, tiếng người nói chuyện trong quán, đôi khi lẫn cả tiếng xe cộ chạy qua lại trên đường. Chỉ trong một ngữ cảnh đơn giản, đã có thể thấy dù đi đâu, ở trong bất cứ môi trường nào, âm thanh mà tai người nghe được luôn tồn tại một lượng nhiễu nhất định nào đó. Chính vì sự đa dạng như vậy, số lượng âm thanh nhiễu có trong thực tế là rất lớn. Đã có nhiều cuộc thi được tổ chức ở quy mô toàn cầu nhằm tìm kiếm các giải pháp để loại bỏ nhiễu một cách tổng quát và triệt để. Tuy nhiên điều này vấp phải nhiều khó khăn, từ các loại nhiễu có tần số cấu tạo ổn định theo thời gian tới các âm nhiễu có các tần số cấu tạo biến đổi tương tự giọng nói như giọng thuyết minh được phát ra từ tivi trong quá trình người nói hoạt động trực tuyến. Dù đã được nghiên cứu trong nhiều năm, từ những thuật toán cổ điển như lọc nhiễu thông qua các bộ lọc với giả định nhiễu không có sự biến thiên liên tục về tần số cấu tạo theo thời gian cho tới những cách tiếp cận gần đây như các mô hình học sâu được đề xuất trong cuộc thi Deep Noise Suppression (DNS) \cite{dns} của Microsoft, DEMAND \cite{demand}, Chime \cite{chime}, ... Nhưng kết quả thu được vẫn còn khá nhiều hạn chế, về cả chất lượng của âm thanh đầu ra và cả khả năng lọc của các cách tiếp cận. Do vậy trong luận văn này, trong số sáu loại nhiễu phổ biến mà chúng tôi đã chọn ra từ khảo sát\footnote{Khảo sát tại \url{https://docs.google.com/forms/d/1p_3ndm-ggG1ezMbWb1KGSpMHOOcWZ_zSfcOy1XKsnjI}} của mình được thể hiện trong \figref{intro::popular_noises}, từ đó chúng tôi lựa ra nhiễu cụ thể cho từng loại. Chúng tôi trình bày các trường hợp được chọn ở \tableref{intro::noises}.
+		
+			\begin{table}
+				\centering
+				\begin{tabular}{c c}
+					\hline
+					\textbf{Loại nhiễu}		& \textbf{Các nhiễu cụ thể}\\
+					\hline
+					Người khác nói chuyện	& Tiếng thông báo ở sân bay, sân tàu; tiếng trong quán cà phê\\
+					Xe cộ					& Tiếng xe tải chạy; tiếng đường kẹt xe\\
+					Môi trường				& Tiếng mưa (mưa to, vừa, nhỏ)\\
+					Thiết bị gia dụng		& Tiếng quạt (quạt bị hư)\\
+					Tiếng rè				& Nhiễu trắng (white noise)\\
+					Trẻ em					& Tiếng em bé khóc\\
+					\hline
+				\end{tabular}
+			\caption{Các âm nhiễu được chọn từ các loại nhiễu phổ biến}
+			\label{intro::noises}
+			\end{table}
+	
+	\section{Mục tiêu và nhiệm vụ đề tài}\label{section::intro::thesis_target}
+	
+		Mục tiêu của đề tài này là sử dụng các mô hình học sâu để xử lý loại bỏ nhiễu ra khỏi một đoạn âm thanh đầu vào và sau đó mở rộng ra sử dụng mô hình này cho các cuộc hội thoại thời gian thực. Để thực hiện điều này chúng tôi chia mục tiêu trên thành các nhiệm vụ dưới đây
+		
+			\begin{enumerate}[\bfseries $\text{Nhiệm vụ}$ 1.]
+				\item Tìm hiểu sâu kiến thức về các phép xử lý tín hiệu số
+					\begin{itemize}
+						\item Biến đổi Fourier
+						\item Biến đổi Fourier thời gian ngắn
+						\item Biến đổi Fourier rời rạc và giải thuật biến đổi Fourier nhanh
+					\end{itemize}
+				\item Tìm hiểu sâu các khái niệm trong âm học
+					\begin{itemize}
+						\item Tần số cảm nhận
+						\item Đặc biệt là thang đo độ to, và các metrics đo chất lượng âm thanh
+					\end{itemize}
+				\item Tìm hiểu sâu về học máy nền tảng
+					\begin{itemize}
+						\item Tìm hiểu RNN
+						\item Tìm hiểu LSTM
+					\end{itemize}
+				\item Tìm hiểu, khảo sát các hướng tiếp cận và đề xuất mô hình
+					\begin{itemize}
+						\item Fullband and Subband Fusion Model
+						\item Deep Complex Convolution RNN
+						\item Discrete Cosine Transform Convolution RNN
+						\item Dual signal Transformation LSTM
+					\end{itemize}
+				\item Tinh chỉnh mô hình đề xuất được chọn cho phù hợp với yêu cầu bài toán
+					\begin{itemize}
+						\item Rút giảm số tham số mô hình
+						\item Nén mô hình xuống để phù hợp với thiết bị
+						\item Giảm độ trễ của mô hình trên thiết bị
+					\end{itemize}
+				\item Sử dụng mô hình vào một sản phẩm ứng dụng thực tế
+			\end{enumerate}
+		
+	
+		Ứng dụng cuối cùng sau khi hoàn thành luận văn này, chúng tôi kì vọng sẽ có thể hoàn thành được một ứng dụng chạy trên máy tính cá nhân với cấu hình như \tableref{intro::req}. Các cấu hình dựa trên khảo sát\footnote{Khảo sát tại \url{https://docs.google.com/forms/d/1HzyYfNQ-ECDQ-yq-6XoHTLTp5ikJBNd0A5Lds9CA1Mo}} về máy tính của chúng tôi, được chọn từ cấu hình hệ thống phổ biến nhất trong khảo sát và quyết định đó sẽ là cấu hình mà chúng tôi sử dụng như yêu cầu cho ứng dụng này.
+		
+			\begin{table}[h]
+				\centering
+				\begin{tabular}{l r}
+					\hline
+					\multicolumn{2}{c}{\textbf{Yêu cầu tối thiểu}}\\
+					\hline
+					Hệ điều hành	& Windows 10\\
+					CPU 			& Intel i5 (4 cores), 2.1 GHz \\
+					RAM				& 4GB, 2666 MHz\\
+					GPU				& Không sử dụng\\
+					\hline
+				\end{tabular}
+				\caption{Yêu cầu về cấu hình cần thiết để chạy ứng dụng}
+				\label{intro::req}
+			\end{table}
+		
+	\section{Kết quả mong đợi}\label{section::intro::expected}
+		
+		Sau luận văn này, ngoài các kiến thức thu được trong quá trình tìm hiểu, chúng tôi mong muốn sẽ có thể đề xuất được một hàm mất mát mới dựa trên các hàm mất mát được sử dụng phổ biến trong xử lý âm thanh, một mô hình vừa có khả năng đáp ứng tính thời gian thực của hệ thống lọc nhiễu được huấn luyện dựa trên hàm mất mát mà chúng tôi đề xuất. Ngoài ra về khía cạnh ứng dụng, chúng tôi mong muốn có thể ứng dụng mô hình của mình vào một ứng dụng thực tế và có khả năng hoạt động trong thời gian thực đối với các dòng máy tương đối yếu (\tableref{intro::req}) mà vẫn đảm bảo yếu tố chất lượng giọng nói sau khi lọc.
+
+	\section{Ý nghĩa của đề tài}\label{section::intro::meaning}
+	
+		Xuất phát từ nhu cầu giao tiếp thực tế, cùng với thực trạng ô nhiễm tiếng ồn ở nhiều nơi trong thành phố Hồ Chí Minh, đề tài luận văn của chúng tôi mong muốn sẽ có thể góp phần vào cải thiện chất lượng của các cuộc hội họp học tập trực tuyến từ đó có thể nâng cao hiệu quả cũng như chất lượng trong học tập và làm việc trong tình hình dịch bệnh còn nhiều diễn biến phức tạp.
+		
+	\section{Cấu trúc luận văn}
+	
+		Luận văn được chia thành các chương như sau
+		
+			\begin{itemize}
+				\item \textbf{\chapterref{chapter::intro}}. Ở chương này, chúng tôi giới thiệu về đề tài, định nghĩa bài toán, giới hạn phạm vi và đề ra các nhiệm vụ, kết quả mong đợi và cả ý nghĩa thực tiễn của việc thực hiện đề tài.
+				\item \textbf{\chapterref{chapter::signal_processing}}. Chương này sẽ trình bày về các khái niệm cơ bản trong xử lý tín hiệu số.
+				\item \textbf{\chapterref{chapter::sound}}. Chương này sẽ giới thiệu về âm thanh và các tính chất cơ bản của nó.
+				\item \textbf{\chapterref{chapter::ml}}. Chương này giới thiệu về các khái niệm học sâu được chúng tôi sử dụng trong luận văn này.
+				\item \textbf{\chapterref{chapter::relatedworks}}. Đây là chương chúng tôi nghiên cứu về các mô hình từ các cuộc thi lớn từ đó đề xuất ra mô hình và cải tiến hàm mất mát của mình.
+				\item \textbf{\chapterref{chapter::design}}.
+				Đây là chương chúng tôi phân tích các đặc điểm dữ liệu từ đó nêu các ra các yêu cầu cho ứng dụng. Các thiết kế cũng sẽ được miêu tả chi tiết trong chương này.
+				\item \textbf{\chapterref{chapter::results}}. Đây là chương chúng tôi tiến hành kiểm thử mô hình của mình và so sánh với các mô hình, ứng dụng được đề xuất trong nghiên cứu và công nghiệp.
+				\item \textbf{\chapterref{chapter::final}}. Chương này kết luận lại những điều chúng tôi đã thực hiện được, các hạn chế của nó và mục tiêu kế tiếp của chúng tôi cho đề tài này.
+				%\item \textbf{\appendixref{proof::spring_formula}} và \textbf{\appendixref{proof::euler_formula}}. Chương này bổ sung một số chứng minh cho các công thức cơ bản mà chúng tôi sử dụng.
+			\end{itemize}

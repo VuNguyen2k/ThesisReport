@@ -1,0 +1,298 @@
+\section{Số phức}
+
+	Bắt đầu từ một bài toán đa thức đơn biến bậc $n$
+		\[f(x) = a_0 x^n + a_1 x^{n-1} + \dots + a_{n-1} = 0\]
+	Để có thể giải được bài toán này, điều trước tiên là phải phân tích được phương trình trên về thành các tích của các nhân tử của nó. Một cách toán học, bất cứ phương trình đa thức bậc $n$ đơn biến nào bằng cách
+	
+		\begin{equation}
+			\begin{aligned}
+				f(x)	& = a_0 x^n + a_1 x^{n-1} + \dots + a_{n-1} 						& = 0\\
+						& = a_0 (x - \hat{x}_0) (x - \hat{x}_1) \dots (x - \hat{x}_{n-1}) 	& = 0
+			\end{aligned}
+		\label{complex::pow2_original_func}
+		\end{equation}
+	
+	Bằng cách phân tách một đa thức bậc $n$ ra như vậy, có thể dễ dàng kết luận được phương trình đơn biến $x$ bậc $n$ có $n$ nghiệm $\hat{x}_0, \hat{x}_1, \dots, \hat{x}_{n-1}$. Nhưng trong không gian $\mathbb{R}$ không phải đa thức nào cũng có thể phân tích thành nhân tử như vậy được, lấy một ví dụ của phương trình bậc 2
+	
+		\[f(x) = x^2 - b\]
+		
+	%Hình \ref{complex::square_x_pb} thể hiện các trường hợp nghiệm của $f(x) = 0$ với các giá trị $b$ là -2, 0 và 2. Tương ứng với các trường hợp của b, $b < 0$, $b > 0$ và trường hợp $b = 0$; dễ thấy nếu chỉ với cách phân tách $x \in \mathbb{R}$ thành $x_1 \in \mathbb{R}$ và $x_2 \in \mathbb{R}$ thì trong trường hợp $b > 0$, chuyện này trở nên không thể, vì không có một số thức $x_1$ và $x_2$ nào có thể thỏa mãn được điều kiện này. Vậy liệu một phương trình đơn biến bậc $n$ có thể luôn luôn có $n$ nghiệm? Điều này dẫn tới sự hình thành của số phức.
+	
+	Bằng cách phân tách phương trình bậc 2 thành tích của 2 phương trình bậc 1, ở đây, tạm gọi 2 nghiệm của phương trình trên là $x_1$ và $x_2$. Tiến hành phân tích phương trình bậc 2 thành tích của các phương trình bậc 1
+	
+		\begin{equation}
+			\begin{aligned}
+							& (x - x_1) (x - x_2) & = 0\\
+				\Rightarrow & x^2 - (x_1 + x_2)x + x_1 x_2 & = 0
+			\end{aligned}
+		\label{complex::pow2_transformed_func}
+		\end{equation}
+	
+	Do đây là phương trình ở đẳng thức \ref{complex::pow2_original_func} và \ref{complex::pow2_transformed_func} phải tương đương lẫn nhau nên, ở đây 2 giá trị $x_1$ và $x_2$ phải thỏa mãn được điều kiện này. Để có thể xác định được $x_1$ và $x_2$, điều cần thiết là phải cân bằng được hệ số trong 2 phương trình. Từ điều kiện này, đi xác định các nghiệm $x_1$ và $x_2$ từ 2 đẳng thức sau
+		
+		\begin{equation}
+			x_1 + x_2 = 0
+		\label{complex:sum_sol}
+		\end{equation}
+	và
+		\begin{equation}
+			x_1 x_2 = b
+		\label{complex::prod_sol}
+		\end{equation}
+
+	Dễ thấy từ đẳng thức \ref{complex:sum_sol} có thể suy ra được giá trị của $x_1 = -x_2$, từ đó thay vào giá trị của đẳng thức \ref{complex::prod_sol}. Từ đó, hàm tích 2 biến ở vế phải suy biến về còn 1 biến là $x_2$
+		
+		\begin{equation}
+			\begin{aligned}
+							& x_2^2 & = & b \\
+				\Rightarrow	& x_2	& = & \pm \sqrt{b}
+			\end{aligned}
+		\label{complex::sol_x2}
+		\end{equation}
+	
+	Dễ thấy để có thể tồn tại nghiệm $x_2$, giá trị của $b$ phải luôn lớn hơn hoặc bằng 0. Nhưng nếu như điều này không xảy ra, hay nói cách khá trong trường hợp $b < 0$, $x_2$ liệu có tồn tại? Và nếu giả sử như nó tồn tại, thì giá trị của $x_2$ lúc này là gì? Điều này dẫn chúng tôi tới một khái niệm mới \textbf{Số phức}.
+	
+	
+	%\iffalse
+	%\begin{figure}[h]
+	%	\centering
+	%	\begin{subfigure}{0.35\textwidth}
+	%		\includegraphics[width=50mm]{\mathimg{y=x^2-2.png}}
+	%		\caption{$f(x) = x^2 - 2$}
+	%	\end{subfigure}%
+	%	\begin{subfigure}{0.34\textwidth}
+	%		\includegraphics[width=50mm]{\mathimg{y=x^2.png}}
+	%		\caption{$f(x) = x^2 + 0$}
+	%	\end{subfigure}%
+	%	\begin{subfigure}{0.35\textwidth}
+	%		\includegraphics[width=50mm]{\mathimg{y=x^2+2.png}}
+	%		\caption{$f(x) = x^2 + 2$}
+	%	\end{subfigure}
+	%\caption{Các trường hợp nghiệm của phương trình $f(x) = x^2 + b = 0$}
+	%\label{complex::square_x_pb}
+	%\end{figure}
+	%\fi
+
+	\subsection{Định nghĩa}
+	
+		Một số phức $z \in \mathbb{C}$ được định nghĩa như sau
+		
+			\[z = \complex{a}{b}\]
+		
+		Với $a, b \in \mathbb{R}$, $a$ được gọi là phần thực và $b$ được gọi là phần ảo của số phức $z$. Tương tự như trong hình học phẳng, một số phức cũng có thể được biểu diễn dưới dạng $a\vec{j} + b\vec{k}$ với $\vec{j}, \vec{k}$ trong mặt phẳng phức lần lượt là $\vec{x}$ và $\vec{i}$. $\vec{x}$ là vector đơn vị của trục hoành trong hệ trục tọa độ thực, $\vec{i}$ là vector đơn vị phức trên trục hoành với giá trị được định nghĩa là
+		
+			\[i^2 = -1\]
+			
+		Hình \ref{complex::OReIm} minh họa cho một số phức $z = \complex{1}{1}$ trong mặt phẳng tạo bởi 2 trục tọa độ. Trục hoành hay còn được gọi là trục thực được kí hiệu là $\Re$ lấy từ kí hiệu của hàm tách phần thực của một số phức $z = \complex{a}{b}$ bất kì $\Re(z) = a$. Ngược lại trục tung của hệ trục tọa độ trên chính là biểu diễn cho phần ảo được kí hiệu là $\Im$ lấy từ hàm tách lấy phần ảo $\Im(z) = b$. Ngoài cách biểu diễn bằng 2 giá trị theo 2 trục thực và ảo như vậy, số phức còn có thể được biểu diễn theo một dạng khác. Với mỗi số phức $z = \complex{a}{b}$
+		
+			\begin{equation}
+				\begin{aligned}
+					z	& = & \complex{a}{b}\\
+						& = & r \times (\tricomplex{\phi}{\phi})
+				\end{aligned}
+			\end{equation}
+	
+		Với $r = |z| = \sqrt{a^2 + b^2}$ được gọi là modulo của z, đặc trưng cho bán kính quay của số phức quanh tâm $O(0 + 0i)$ của hệ trục với một góc quay $\phi = \arctan(\frac{b}{a})$ so với trục hoành. Bởi hàm $\tan$ có tính chu kì trong một khoảng $\pi$ nên giá trị $\phi$ mà chúng tôi chọn sẽ chỉ có giá trị dao động trong khoảng từ $(-\frac{\pi}{2}, \frac{\pi}{2})$. Hệ trục được tính theo 2 giá trị của $r$ và $\phi$ này được gọi là hệ trục cực của số phức.
+	
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=80mm]{\mathimg{1+1i.png}}
+				\caption{Hình minh họa của một số phức $1 + 1i$ trong mặt phẳng $O\Re\Im$}
+				\label{complex::OReIm}
+			\end{figure}
+	
+		Quay lại với bài toán tìm $x_2^2 = b$, khi trong trục số thực, chúng tôi đã kết luận với các giá trị của $b < 0$ thì hoàn toàn bài toán này không thể nào có nghiệm được. Nhưng bây giờ, khi sử dụng số phức để giải phương trình trên với giá trị $b < 0$
+		
+			\begin{equation}
+				\begin{aligned}
+								& x_2^2 & = & b \\
+					\Rightarrow & x_2	& = & \pm \sqrt{i^2(-b)} \\
+					\Rightarrow & x_2	& = & \pm \sqrt{-b}i
+				\end{aligned}
+			\label{complex::x2_sol_1}
+			\end{equation}
+		
+		Một cách tiếp cận khác, chúng tôi sẽ chuyển toàn bộ phương trình trên về dạng phức, lúc này $x_2$ không còn là một biến thực nữa mà là một biến phức do đó, chúng tôi đặt $x_2 = \complex{c}{d}$. Và chúng tôi sẽ giải lại phương trình $x_2^2 = b$ với $b < 0$ theo một đẳng thức số phức
+		
+			\begin{equation*}
+				\begin{aligned}
+								& x_2^2						& = & b \\
+					\Rightarrow & (\complex{c}{d})^2		& = & b \\
+					\Rightarrow & \complex{c^2 - d^2}{2cd}	& = & b
+				\end{aligned}
+			\end{equation*}
+		
+		Một số thực $x$ có giá trị là $b$ cũng có thể được xem là một số phức với phần ảo bằng 0 nên do vậy, chúng tôi xem vế phải của đẳng thức trên là một số phức $\complex{b}{0}$. Theo định nghĩa của số phức, 2 số phức chỉ có thể bằng nhau khi cả phần thực và ảo của nó đều giống nhau. Vì vậy nên để 2 vế của đẳng thức phức trên thỏa mãn điều kiện, chúng tôi rút ra được 2 phương trình theo $c$ và $d$
+			
+			\begin{equation}
+				c^2 - d^2 = b
+			\label{complex::real_sol_cd}
+			\end{equation}
+		
+		và
+		
+			\begin{equation}
+				2cd = 0
+			\label{complex::imag_sol_cd}
+			\end{equation}
+		
+		Từ đẳng thức \ref{complex::real_sol_cd}, chúng tôi có thể kết luận $c$ hoặc $d$ phải là 0. Thay lần lượt vào đẳng thức \ref{complex::imag_sol_cd}, chúng tôi lân lượt thu được các đẳng thức mới theo $c$ và $d$. Dễ thấy trong trường hợp $d = 0$, thu được $c^2 = b$ nhưng phương trình này là vô nghiệm trong không gian số thực, vì vậy nên chỉ còn giá trị của $d$ trong trường hợp $c = 0$. Với trường hợp này, chúng tôi có thể tính toán ra được $d = \pm \sqrt{-b}$, và thay các giá trị của $c$ và $d$ ngược lại vào biểu thức tính $x_2$ ban đầu
+			
+			\begin{equation}
+				\begin{aligned}
+								& x_2 & = & \complex{c}{d} \\
+					\Rightarrow & x_2 & = & \pm \sqrt{-b}i
+				\end{aligned}
+			\end{equation}
+		
+		Như trong trường hợp giả định $x_2$ là một số phức, số phức đã chuyển đổi không gian nghiệm ràng buộc của $x_2$ sang thành 2 miền khác nhau, nên dù trong một miền không thể thỏa mãn được điều kiện của đẳng thức thì miền kia vẫn có khả năng tồn tại một nghiệm nào đấy thỏa mãn điều này. Bài toán số phức lúc này quay lại trở thành bài toán hệ phương trình 2 ẩn số.
+		
+			\begin{figure}[h]
+				\centering
+				\begin{subfigure}{0.5\textwidth}
+					\includegraphics[width=80mm]{\mathimg{real_x2_sol.png}}
+					\caption{Phần thực của $x_2^2$}
+				\end{subfigure}%
+				\begin{subfigure}{0.5\textwidth}
+					\includegraphics[width=80mm]{\mathimg{imag_x2_sol.png}}
+					\caption{Phần ảo của $x_2^2$}
+				\end{subfigure}
+			\caption{Phần thực và phần ảo của số phức $x_2^2$ theo 2 giá trị $c$ và $d$. Mặt phẳng màu đỏ lá đại diện cho mặt phẳng $c = 0$ và mặt phẳng xanh lá đại diện cho mặt phẳng $d = 0$}
+			\end{figure}
+		
+		Trở lại dạng tổng quát của một đa thức đơn biến bậc $n$, việc phân tách thành nhân tử bây giờ đã được tổng quát lại như sau: \textit{Với mọi đa thức đơn biến bậc $n$ $f(x) = 0$, luôn tồn tại $n$ nghiệm phức (tính các nghiệm trùng như một nghiệm riêng biệt) để thỏa mãn phương trình trên}. Hay nói theo cách phân tích đa thức thành nhân tử thì, một đa thức đơn biến bậc $n$ luôn có thể được tách thành tích các đa thức bậc nhất bằng số phức.
+		
+		\[\sum_{i=0}^{n-1}a_ix^i = a_{n-1}\prod_{i=0}^{n-2}(b_i x - \hat{x}_i)\]
+		
+		Với $a_i$ là hệ số của $x^i$, $b_i$ là hệ số sau khi phân tách thành nhân tử, $\hat{x}_i$	là nghiệm phức thứ $i$ của đẳng thức.
+		
+	\subsection{Các phép toán trên số phức}
+	
+		Về cơ bản các phép toán của số phức không khác với số thực nhiều, dưới đây chúng tôi sẽ liệu kê lại các phép toán có thể sử dụng trên số phức. Cho 2 số phức $z_1 =\complex{a_1}{b_1}$ và $z_2 = \complex{a_2}{b_2}$
+		
+		\subsubsection*{Phép cộng và trừ}
+		
+			Khá giống với phép cộng vector trong không gian 2 chiều, số phức cũng được tính tổng dựa trên tổng của riêng từng phần thực và phần ảo. Tổng của 2 số phức $z_1$ và $z_2$ được định nghĩa
+				
+				\[z_t = z_1 + z_2 = \complex{(a_1 + a_2)}{(b_1 + b_2)}\]
+				
+			Có thể mở rộng lên cho một tập hợp các số phức trong một chuỗi số
+			
+				\[z_t = \sum_j z_j = \complex{\sum_j a_j}{\sum_j b_j}\]
+				
+			Thể hiện phép toán này lên không gian 2 chiều $O\Re\Im$, có thể hình dung với 2 số phức bất kì $z_1$ và $z_2$, tổng của chúng sẽ như hình \ref{complex::complex_sum}. Các tính chất của số phức trước hết phải kể đến là tính kết hợp $z_1 + (z_2 + z_3) = (z_1 + z_2) + z_3$ và tính giao hoán $z_1 + z_2 = z_2 + z_1$. Hai tính chất này khá cở bản kể cả trong không gian thực $\mathbb{R}$. Đối với phép trừ, phép cộng được thực hiện lại trên nghịch đảo của $z$, do vậy các tính chất của phép cộng và trừ là như nhau.
+			
+				\begin{figure}[h]
+					\centering
+					\includegraphics[width=100mm]{\mathimg{complex_sum.png}}
+					\caption{Tổng của 2 số phức $z_1$ và $z_2$ trong không gian phức $O\Re\Im$}
+					\label{complex::complex_sum}
+				\end{figure}
+			
+		\subsubsection*{Phép nhân và chia}
+		
+			Ở phép toán này, số phức phức tạp hơn số thực rất nhiều. Cho 2 số phức $z_1 = \complex{a_1}{b_1} = r_1\tricomplex{\phi_1}{\phi_1}$ và $z_2 = \complex{a_2}{b_2} = r_2\tricomplex{\phi_2}{\phi_2}$, tích của 2 số phức này được định nghĩa như sau
+				
+				\begin{equation}
+					\begin{aligned}
+						z_p = z_1 z_2 = \complex{(a_1 a_2 - b_1 b_2)}{(a_1 b_2 + a_2 b_1)}
+					\end{aligned}
+				\label{complex::prod_main}
+				\end{equation}
+				
+			Thể hiện số phức $z_p$ này lên mặt phẳng, dễ thấy $z_p$ này thay đổi một lượng nào đó có phụ thuộc vào giá trị của $z_1$ và $z_2$, chúng tôi sẽ đi tìm sự quan hệ giữa các thành phần của $z_p$ trong hệ tọa độ cực đối với các giá trị của $r_1$, $r_2$, $\phi_1$ và $\phi_2$.
+			
+				\begin{figure}[h]
+					\centering
+					\includegraphics[width=100mm]{\mathimg{complex_prod.png}}
+					\caption{Tích của 2 số phức $z_1$ và $z_2$ trong không gian phức $O\Re\Im$}
+				\end{figure}
+		
+			Từ công thức của tích 2 số phức nếu trên, tính toán giá trị $r$ trong hệ tọa độ cực của $z_p$
+			
+				\begin{equation}
+					\begin{aligned}
+						|z_p| = r 	& = & \sqrt{(a_1 a_2 - b_1 b_2)^2 + (a_1 b_2 + a_2 b_1)^2} \\
+									& =	& \sqrt{(a_1 a_2)^2 + (b_1 b_2)^2 + (a_1 b_2)^2 + (a_2 b_1)^2 - 2 a_1 b_1 a_2 b_2 + 2 a_1 b_1 a_2 b_2} \\
+									& =	& \sqrt{(a_1^2 + b_1^2)(a_2^2 + b_2^2)} \\
+									& = & |z_1| |z_2|
+					\end{aligned}
+				\end{equation}
+				
+			Chuyển đổi giá trị của $a_1$, $b_1$, $a_2$ và $b_2$ về giá trị trong tọa độ cực theo $r_1$, $r_2$, $\phi_1$ và $\phi_2$, chúng tôi thu được
+			
+				\begin{equation}
+					\begin{aligned}
+						a_1 & = & r_1 \cos(\phi_1)\\
+						b_1 & = & r_1 \sin(\phi_1)\\
+						a_2 & = & r_2 \cos(\phi_2)\\
+						b_2 & = & r_2 \sin(\phi_2)
+					\end{aligned}
+				\end{equation}
+			
+			Thay giá trị của $a_1$, $b_1$, $a_2$ và $b_2$ này vào biểu thức \ref{complex::prod_main} (chỉ xét phần thực của số phức $z_p$), chúng tôi thu được quan hệ giữa các giá trị của $\phi$, $\phi_1$ và $\phi_2$
+			
+				\begin{equation}
+					\begin{aligned}
+									& r \cos(\phi)	& = & r_1 r_2 \cos(\phi_1) \cos(\phi_2) - r_1 r_2 \sin(\phi_1) \sin(\phi_2) \\
+									&				& = & r_1 r_2 (\cos(\phi_1 + \phi_2)) \\
+									&				& = & r (\cos(\phi_1 + \phi_2)) \\
+						\Rightarrow & \cos(\phi)	& = & \cos(\phi_1 + \phi_2) \\
+						\Rightarrow & \phi			& = & \phi_1 + \phi_2 + k2\pi
+					\end{aligned}
+				\end{equation}
+			
+			Cuối cùng chúng tôi đã chứng minh được quan hệ giữa tích và thừa số của nó
+				
+				\begin{equation*}
+					\begin{aligned}
+						|z_p|	& = & |z_1| |z_2|\\
+						\phi	& = & \phi_1 + \phi_2 + k2\pi
+					\end{aligned}
+				\end{equation*}
+		
+		\subsubsection*{Phần bù}
+		
+			Phần bù của một số phức $z$ được định nghĩa khá đơn giản, nểu có một số phức $z = a + bi$ bất k, thì phần bù của $z$ được định nghĩa
+			
+				\[\overline{z} = a - bi\]
+			
+			Trong không gian phức $O\Re\Im$ thì phần bù của $z$ là $z$ được lấy đối xứng qua trục hoành. Một số tính chất của phần bù số phức
+			
+				\begin{description}
+					\centering
+					\item $z + \overline{z} = 2a$
+					\item $z - \overline{z} = 2bi$
+					\item $z   \overline{z} = |z|^2$
+				\end{description}
+	
+		\subsubsection*{Phép mũ và log}
+		
+			Phép mũ $e^{ix}$ còn có tên gọi khác là công thức của Fourier. Công thức này có rất nhiều đặc điểm thú vị và một trong những điểm cốt lõi của công thức biến đổi Fourier mà chúng tôi sẽ trình bày ở phần tiếp theo. Công thức này được định nghĩa như sau
+			
+				\begin{equation}
+					e^{i\phi} = \tricomplex{\phi}{\phi}
+				\label{complex::fourier_formula}
+				\end{equation}
+			
+			Phần chứng minh của công thức Fourier có thể tham khảo ở phần \hyperref[proof::euler_formula]{phụ lục}. Điều khiến cho công thức đẹp đẽ này trở nên đặc biệt đó là nó có thể biểu diễn cho một phương trình đường tròn một cách gọn gàng. Các phép toán cũng dễ dàng để chứng minh hơn khi chúng tôi chuyển số phức sang dạng này. Lấy một ví dụ, như ở phần trước đã có chứng minh, tính chất của phép nhân trong số phức bằng các cách biểu diễn của $z_1$ và $z_2$ trong hệ tọa độ cực, bây giờ chúng tôi sẽ chứng minh lại những công thức đó bằng cách biểu diễn theo công thức của Fourier. Cho 2 số phức $z_1 = \polarcomplex{r_1}{\phi_1}$ và $z_2 = \polarcomplex{r_2}{\phi_2}$
+			
+				\begin{equation*}
+					\begin{aligned}
+						z_p = z_1 z_2 	& = & \polarcomplex{r_1}{\phi_1} \polarcomplex{r_2}{\phi_2}\\
+										& = & \polarcomplex{r_1 r_2}{(\phi_1 + \phi_2)}
+					\end{aligned}
+				\end{equation*}
+			
+			Từ công thức Fourier thu được của số phức $z_p$, có thể kết luận $|z_p| = r_1 r_2 = |z_1| |z_2|$ và $\phi = \phi_1 + \phi_2$, đây là điều mà chúng tôi đã chứng minh ở phần trước. Biểu diễn hình học của công thức Fourier được nêu ở \ref{complex::fourier_formula} là một đường tròn tâm O và bán kính 1, điều này khá dễ dàng để nhận thấy bởi $\Re(\polarcomplex{}{\phi})^2 + \Im(\polarcomplex{}{\phi})^2 = 1$ và hình \ref{complex::viz_fourier_formula} thể hiện công thức này lên hệ trục tọa độ O$\Re\Im$.
+			
+				\begin{figure}[h]
+					\centering
+					\includegraphics[width=80mm]{\mathimg{e^ix.png}}
+					\caption{Công thức của Fourier trong mặt phẳng phức}
+					\label{complex::viz_fourier_formula}
+				\end{figure}
+			
+			Cũng nhờ công thức Fourier, bây giờ $\ln$ của một số phức $z = \complex{a}{b}$ đã có thể được định nghĩa
+			
+				\[\ln(\complex{a}{b}) = \ln(\polarcomplex{r}{\phi}) = \complex{\ln(r)}{\phi}\]

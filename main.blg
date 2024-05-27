@@ -1,0 +1,87 @@
+This is BibTeX, Version 0.99d
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: main.aux
+Reallocating 'name_of_file' (item size: 1) to 22 items.
+A level-1 auxiliary file: parts/intro/intro.aux
+Reallocating 'name_of_file' (item size: 1) to 32 items.
+A level-1 auxiliary file: parts/foundations/math/math.aux
+Reallocating 'name_of_file' (item size: 1) to 34 items.
+A level-1 auxiliary file: parts/foundations/sound/sound.aux
+Reallocating 'name_of_file' (item size: 1) to 28 items.
+A level-1 auxiliary file: parts/foundations/ml/ml.aux
+Reallocating 'name_of_file' (item size: 1) to 36 items.
+A level-1 auxiliary file: parts/relatedworks/relatedworks.aux
+Reallocating 'name_of_file' (item size: 1) to 24 items.
+A level-1 auxiliary file: parts/design/design.aux
+Reallocating 'name_of_file' (item size: 1) to 26 items.
+A level-1 auxiliary file: parts/results/results.aux
+Reallocating 'name_of_file' (item size: 1) to 22 items.
+A level-1 auxiliary file: parts/final/final.aux
+Reallocating 'name_of_file' (item size: 1) to 7 items.
+The style file: ieeetr.bst
+Reallocating 'name_of_file' (item size: 1) to 5 items.
+Reallocating 'name_of_file' (item size: 1) to 27 items.
+A level-1 auxiliary file: parts/appendix/fourier.aux
+Database file #1: refs.bib
+Warning--entry type for "understand_fft" isn't style-file defined
+--line 476 of file refs.bib
+Warning--empty journal in dns
+Warning--can't use both volume and number fields in demand
+Warning--empty journal in chime
+Warning--empty author in ansi_s1.11
+Warning--empty journal in ansi_s1.11
+Warning--empty author in iso_532
+Warning--empty journal in iso_532
+Warning--empty author in itu_p808
+Warning--empty journal in itu_p808
+Warning--empty author in itu_p835
+Warning--empty journal in itu_p835
+Warning--empty author in itu_p862.2
+Warning--empty journal in itu_p862.2
+Warning--empty author in itu_p862.1
+Warning--empty journal in itu_p862.1
+Warning--empty journal in fullsubnet
+Warning--empty journal in edata
+Warning--empty journal in mat_120B_notes
+You've used 48 entries,
+            1876 wiz_defined-function locations,
+            741 strings with 11686 characters,
+and the built_in function-call counts, 13452 in all, are:
+= -- 1362
+> -- 421
+< -- 0
++ -- 162
+- -- 114
+* -- 915
+:= -- 1773
+add.period$ -- 51
+call.type$ -- 48
+change.case$ -- 44
+chr.to.int$ -- 0
+cite$ -- 66
+duplicate$ -- 737
+empty$ -- 1349
+format.name$ -- 114
+if$ -- 3324
+int.to.chr$ -- 0
+int.to.str$ -- 48
+missing$ -- 51
+newline$ -- 151
+num.names$ -- 42
+pop$ -- 205
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 507
+stack$ -- 0
+substring$ -- 1019
+swap$ -- 297
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 18
+while$ -- 134
+width$ -- 50
+write$ -- 449
+(There were 19 warnings)

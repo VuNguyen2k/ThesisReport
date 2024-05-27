@@ -1,0 +1,877 @@
+\newcommand{\rlimg}[1]{parts/relatedworks/img/#1}
+\setupfont{13pt}
+
+\chapter{Các công trình nghiên cứu liên quan} \label{chapter::relatedworks}
+	
+	Trong chương này, chúng tôi sẽ nêu một số hướng tiếp cận mà chúng tôi khảo sát được, giải thích lý do tại sao chúng tôi lại chọn hướng tiếp cận học sâu thay vì các hướng tiếp cận cổ điển. Cuối cùng dựa vào những hướng tiếp cận trên, chúng tôi đề xuất phương pháp của mình về việc cải tiến hàm mất mát và đề xuất mô hình để phù hợp hơn với những yêu cầu từ phía ứng dụng cho người dùng.
+	
+\section{Cách tiếp cận cổ điển}\label{section::relatedworks::traditional_approach}
+
+	Nhắc lại một chút về bài toán đang xét của chúng ta, bài toán thực tế mà ta cần phải giải là với dữ liệu đầu vào $y(t)$, mô hình sử dụng là $f$, $x(t)$ và $n(t)$ lần lượt là giọng nói sạch và nhiễu lẫn trong giọng nói đầu vào mô hình
+	
+		\begin{equation}
+			\hat{x}(t) = f(y(t)) \approx x(t).
+		\end{equation}
+		
+	Giá trị đầu ra của mô hình ta mong muốn sẽ có thể xấp xỉ giọng nói sạch $x(t)$, và vẫn có thể bảo toàn hết khả năng nội dung được truyền tải. Với cách tiếp cận cổ điển, mô hình là một bộ lọc $g(t)$, bộ lọc này sau đó được đem đi nhân tích chập cho tín hiệu đầu vào $x(t)$ để từ đó tạo thành tín hiệu xử lý $\hat{x}(t)$. Qua đó, ta có
+	
+		\begin{equation}
+			\hat{x}(t) = f(y(t)) = (y \ast g)(t),
+		\end{equation}
+	
+	\noindent với $(y \ast g)(t)$ là tích chập của hai tín hiệu $g(t)$ và $y(t)$. Chúng tôi bắt đầu với việc xét biến đổi Fourier của tích chập hai tín hiệu $y(t)$ và $g(t)$ được định nghĩa như sau
+	
+		\begin{align*}
+			\mathcal{F}\{(y \ast g)(t)\}(\omega)	& = \int_{-\infty}^{+\infty} \bigg( \int_{-\infty}^{+\infty} y(\tau) g(t - \tau) d\tau \bigg) \polarcomplex{}{- \omega t} dt \\
+													& = \int_{-\infty}^{+\infty} \int_{-\infty}^{+\infty} \polarcomplex{y(\tau)}{- \omega \tau} \polarcomplex{g(t - \tau)}{- \omega (t - \tau)} d\tau dt \\
+													%& = \int_{-\infty}^{+\infty} \int_{-\infty}^{+\infty} \polarcomplex{y(\tau)}{- \omega \tau} \polarcomplex{g(t - \tau)}{- \omega (t - \tau)} d\tau d(t - \tau) \\
+													& = \int_{-\infty}^{+\infty} \polarcomplex{y(\tau)}{- \omega \tau} d\tau \int_{-\infty}^{+\infty} \polarcomplex{g(t - \tau)}{- \omega (t - \tau)} d(t - \tau) \\
+													& = \mathcal{F}\{y(t)\}(\omega) \mathcal{F}\{g(t)\}(\omega), \numberedeq
+			\label{rl::conv_as_Fourier}
+		\end{align*}
+	
+	\noindent với $\mathcal{F}\{.\}(\omega)$ là biến đổi Fourier của tín hiệu với bước sóng $\omega$. Như vậy thông qua công thức \formularef{rl::conv_as_Fourier}, rõ ràng cách tiếp cận cổ điển đang cố gắng tìm một tín hiệu $g(t)$ sao cho biến đổi của nó khiến cho độ mất mát của âm thanh sau khi nhân tích chập và âm thanh sạch nhỏ nhất. Vậy trong cách tiếp cận cổ điển này, ta sẽ đi cực tiểu hóa hàm mất mát dưới đây trên toàn bộ miền giá trị $T$ như sau
+	
+		\begin{align*}
+			L(\hat{x}, x) = \int_T (\hat{x}(t) - x(t))^2 dt = \int_T ((y \ast g)(t) - x(t))^2 dt. \numberedeq
+		\label{rl::MSE}
+		\end{align*}
+	
+	Lấy đạo hàm của hàm trên, ta có
+	
+		\begin{align*}
+			\frac{d}{d(g(t))} L(\hat{x}, x)	& = \int_T \frac{d}{d(g(t))} ((y \ast g)(t) - x(t))^2 dt \\
+											& = 2\int_T ((y \ast g)(t) - x(t)) \frac{d}{d(g(t))} \hat{x}(t) dt \\
+											& = 2\int_T ((y \ast g)(t) - x(t)) \frac{d}{d(g(t))} \bigg( \int_{-\infty}^{+\infty} y(\tau) g(t - \tau) d\tau \bigg) dt \\
+											& = 2\int_T ((y \ast g)(t) - x(t)) \bigg( \int_{-\infty}^{+\infty} y(\tau) d\tau \bigg) dt \\ % tích phân này thỏa mãn là vì điều kiện tồn tại của Fourier tích phân trên vô cùng của y(t) < vô cùng
+											& = 2C \int_T ((y \ast g)(t) - x(t)) dt.
+		\end{align*}
+	
+	Bằng các phép biến đổi tích phân Leibniz, chúng tôi đã khai triển đạo hàm của hàm mất mát được sử dụng trong các bộ lọc truyền thống, chúng tôi thu được đạo hàm sẽ tỉ lệ tuyến tính với sự sai khác giữa tín hiệu dự đoán và tín hiệu sạch, chúng tôi lại có dưới biến đổi Fourier, sự sai khác giữa $\hat{x}(t)$ và $x(t)$ được thể hiện
+	
+		\begin{align*}
+			\mathcal{F}\{(y \ast g)(t) - x(t)\}(\omega)	& = \mathcal{F}\{y(t)\}(\omega) \mathcal{F}\{g(t)\}(\omega) - \mathcal{F}\{x(t)\}(\omega),
+		\end{align*}
+	
+	\noindent và với trường hợp tối ưu nhất khi đạo hàm của công thức \formularef{rl::MSE} là $0$, tương ứng với đó, giá trị biến đổi Fourier sai khác cũng là $0$, chúng tôi suy ra được giá trị của biến đổi Fourier tương ứng với bộ lọc $g(t)$ là
+	
+		\begin{equation}
+			\mathcal{F}\{g(t)\}(\omega) = \frac{\mathcal{F}\{x(t)\}(\omega)}{\mathcal{F}\{y(t)\}(\omega)},.
+		\end{equation}
+	
+	Vậy chúng tôi thu được biến đổi Fourier của bộ lọc $g(t)$ được tối ưu như trên.
+	
+	Dễ thấy được bộ lọc này là cố định cho tất cả các khoảng thời gian khác nhau, do đó, bộ lọc này sẽ hiệu quả với các âm nhiễu có \spectrum{} cố định qua thời gian như nhiễu trắng và các loại nhiễu điện tử được gây ra bởi thiết bị. Nhưng hiệu quả của việc lọc này không được đảm bảo khi âm nhiễu có \spectrum{} bị biến đổi theo thời gian. Đây cũng chính là hạn chế chính của cách tiếp cận cổ điển.
+	
+	%Nhược điểm lớn nhất của cách tiếp cận cổ điển chính là chỉ có thể lọc tốt với những âm nhiễu $n(t)$ mà những âm đó có hệ số tương quan $r = \frac{\sum_t (x(t) - \bar{x}) (n(t) - \bar{n})}{\sqrt{(\sum_t (x(t) - \bar{x})^2) (\sum_t (n(t) - \bar{n})^2)}}$ là 0, nghĩ là nhiễu với giọng nói không hề có sự quan hệ về biên độ gì với nhau. Điều này đúng trong khá nhiều trường hợp, lấy một ví dụ trong bộ truyền tin vô tuyến, các tín hiệu âm thanh được truyền đi có thể xuất hiện các nhiễu rè do môi trường vật lý tác động lên các thiết bị tạo nên các tiếng rè khó chịu trong âm thanh đầu vào, các cách tiếp cận cổ điển (điển hình là bộ lọc Wiener) khá hiệu quả khi lọc các tín hiệu lọc này, nhưng đây cũng chính là giả định của hướng tiếp cận cổ điển quan hệ giữa tín hiệu nhiễu và tín hiệu giọng nói.
+	
+		\begin{figure}[h]
+			\centering
+			\begin{subfigure}{0.5\textwidth}
+				\centering
+				\includegraphics[width=80mm]{\rlimg{filter_y.png}}
+				\caption{Giọng nói có chứa nhiễu $y(t)$}
+			\end{subfigure}%
+			\begin{subfigure}{0.5\textwidth}
+				\centering
+				\includegraphics[width=80mm]{\rlimg{filter_g.png}}
+				\caption{Bộ lọc $g(t)$}
+			\end{subfigure}
+		
+			\begin{subfigure}{0.5\textwidth}
+				\centering
+				\includegraphics[width=80mm]{\rlimg{filter_xhat.png}}
+				\caption{Giọng nói sau qua bộ lọc nhiễu $\hat{x}(t)$}
+			\end{subfigure}%
+			\begin{subfigure}{0.5\textwidth}
+				\centering
+				\includegraphics[width=80mm]{\rlimg{filter_x.png}}
+				\caption{Giọng nói sạch $x(t)$}
+			\end{subfigure}
+		\caption{Quá trình lọc âm nhiễu theo hướng tiếp cận cổ điển}
+		\end{figure}
+	
+	%Về cơ bản, các cách tiếp cận cổ điển dựa hoàn toàn trên miền thời gian để biểu diễn dữ liệu, điều này làm cho cách tiếp cận cổ điển có tốc độ vượt trội hơn hẳn những cách tiếp cận học sâu và học máy vì lượng tính toán cần thiết phải sử dụng là khá ít. Đối với bộ lọc Wiener, dữ liệu trên miền thời gian (waveform) $y(t)$ được thực hiện nhân chập với một cửa sổ $g(t)$ sao cho giá trị $g(t)$ này thỏa mãn $\min ((g(t) \ast y(t)) - x_t)^2$. Nhưng với kiểu tối ưu cho từng loại nhiễu như vậy, cùng với sự đa dạng của nhiễu mà chúng tôi đã đề cập đến ở trên, việc sử dụng vào thực tế với các nhiễu không được nhìn thấy từ trước thì cách tiếp cận này không đáp ứng được, và hiện tại bây giờ việc xác định nhiễu đang gặp trong âm thanh là loại nào hay trong một số trường hợp các nhiễu được pha trộn vào nhau khiến cho việc cứng nhắc mô hình theo 1 hay một vài loại nhiễu khiến cho cách tiếp cận này gặp nhiều khó khăn khi ứng dụng vào thực tế. Với động lực từ việc cải thiện một cách tự động giọng nói cho một hay nhiều loại nhiễu khác nhau có lẫn trong giọng nói thì vẫn có một bộ lọc phù hợp để lọc được các nhiễu này, cách tiếp cận tiếp theo mà chúng tôi muốn nói tới chính là tiếp cận theo hướng end-to-end sử dụng các mô hình học máy để dự đoán ra các bộ lọc phù hợp.
+	
+% \section{Đánh đổi giữa chất lượng giọng nói và lọc nhiễu}
+
+\section{Tiếp cận theo bằng học sâu}
+
+	Với mục tiêu khắc phục được hạn chế của cách tiếp cận truyền thống và tạo thành một bộ lọc có tính tự động cao với cả những loại nhiễu không được huấn luyện. Chúng tôi tiếp cận bài toán của mình theo hướng tiếp cận sử dụng học sâu thay cho bộ lọc $g(t)$ được nêu trong cách tiếp cận truyền thống.
+	
+	Điều cần thiết nhất để có thể đưa ra một mô hình học máy tốt chính là dữ liệu và cách tiếp cận phù hợp. Việc xử lý dữ liệu và pha nhiễu sẽ được chúng tôi trình bày ở \sectionref{section::results::data_preparation}, ở chương này, chúng tôi sẽ trình bày về các hướng tiếp cận của mô hình trong vấn đề lọc nhiễu trong âm thanh biểu diễn trên miền tần số thời gian (còn được gọi là time frequency domain). Trong miền tần số thời gian, âm thanh được biểu diễn dưới dạng \spectrogram{} (hình ảnh biên độ của biến đổi Fourier thời gian ngắn). \Spectrogram{} này sau đó được cho vào mô hình để dự đoán ra một ``mask'', và nhân ``mask'' này với \spectrogram{} ban đầu, sau khi thực hiện biến đổi Fourier thời gian ngắn nghịch, kết quả thu được đó chính là âm thanh xấp xỉ của giọng nói $\hat{x}(t)$ mà chúng tôi muốn mô hình lọc được.
+	
+	Mô hình học sâu của chúng tôi tiếp cận theo hai hướng: \textit{``Mask'' số thực} và \textit{``Mask'' số phức}. Đối với ``mask'' số thực, mục tiêu của chúng tôi là cắt giảm những thành phần tần số nhiễu nhưng vẫn giữ lại các thành phần pha của chúng, nhưng điều này lại làm cho những phần nhiễu lẫn trong âm vẫn sẽ còn tồn tại và không bị loại bỏ hoàn toàn, tuy vậy, với cách tiếp cận học sâu, mô hình dự đoán ra một ``mask'' số phức từ đó có khả năng dự đoán cả thành phần biên độ lẫn góc của nhiễu tồn tại trong giọng nói từ đó có thể loại bỏ hoàn toàn được nhiễu ra khỏi âm. Dưới đây chúng tôi lẫn lượt sẽ trình bày về hai cách tiếp cận này và nêu các cách tiếp cận tiêu biểu mà chúng tôi tham khảo được.
+	
+	%Để trả lời cho câu hỏi thứ 1 \textit{Tại sao chúng tôi phải dự đoán mask? Sao chúng tôi không dự đoán trực tiếp giá trị của \spectrogram{}?}. Đây là một câu hỏi mang tính thực nghiệm, lý do chủ yếu mà chúng tôi không sử dụng cách dự đoán trực tiếp \spectrogram{} là vì lý do giới hạn của các hàm, các hàm được chúng tôi sử dụng để dự đoán trong mạng này là các hàm sigmoid và tanh, chúng tôi sử dụng chúng bởi vì chúng có tồn tại giới hạn trên và dưới giúp cho kết quả của chúng tôi chỉ có thể dao động quanh một phạm vi nhất định thay vì chạy trên toàn bộ miền $\mathbb{R}^+$. Lý do thứ 2 của việc chúng tôi sử dụng mask trong mạng này là vì hiện tượng bùng nổ gradient (explode gradient) hiện tượng này xuất hiện là do sự gia tăng đột biến của giá trị của gradient, chuyện này thường xảy ra ở những mô hình hồi quy vì ở đó, đạo hàm theo thời gian là các giả trị của output sau dựa vào output trước nếu như không có một khoảng chặn trong giá trị của những output này thì sẽ dẫn tới bị tràn số khi tính toán khiến mô hình không tiếp tục học được nữa. Về câu hỏi thử 2, việc nhân 2 giá trị mask và \spectrogram{} của âm thanh ban đầu, chúng tôi đang muốn tìm giao của 2 giá trị này, nếu 1 trong 2 giá trị gần về 0 thì hiển nhiên giá trị còn lại cũng sẽ bị triệt tiêu và ngược lại, những điểm mà ở đó cả 2 giá trị cùng cao sẽ là những điểm mang thông tin giọng nói quan trọng mà chúng tôi muốn mô hình học được. Mask ở đây có thể hiểu như một gate sẽ cho những điểm thuộc giọng nói đi qua (giá trị mask $\approx$ 1) và những điểm nhiễu sẽ bị ngưng lại (giá trị mask $\approx$ 0). Âm thanh sau khi được đi qua biến đổi Fourier thời gian ngắn, giá trị của biến đổi Fourier lúc này là 1 số phức, và một số phức cũng có thể đồng thời là một số thực được, đó là lý do của 2 loại mask sẽ được chúng tôi đề cập ở phần tiếp theo.
+
+	\subsection{Mask số thực trên miền tần số thời gian}
+		
+		Gọi $Y_k(\omega) = \polarcomplex{r_\omega}{\phi_\omega} \in \mathbb{C}$ là giá trị phức đại diện cho biến đổi Fourier thời gian ngắn tại khung thời gian thứ $k$ với sóng có bước sóng $\omega$ của âm thanh đã pha nhiễu $y(t)$, $M_k(\omega) = r \in \mathbb{R}$ là giá trị ``mask'' ứng với giá trị của biến đổi Fourier thời gian ngắn. Giá trị biến đổi Fourier thời gian ngắn thu được sau khi áp ``mask'' này lên giá trị biến đổi Fourier thời gian ngắn của âm thanh sạch được tính như sau
+		
+			\begin{equation}
+				\hat{X}_k(\omega) = M_k(\omega) Y_k(\omega) = r \polarcomplex{r_\omega}{\phi_\omega}.
+			\label{rl::real_mask}
+			\end{equation}
+		
+		%Dễ thấy giá trị $M_k(\omega)$ (đại diện cho mask này trong miền số thực được chúng tôi gọi là $r$) có thể được đổi thành dạng số phức $\polarcomplex{r}{(k\pi)} = r(\tricomplex{k\pi}{k\pi})$ với $k \in \mathbb{Z}$, rõ ràng với mask số thực này, chúng tôi đang muốn thay đổi không chỉ giá trị của $r_\omega$ mà cũng thay đổi luôn giá trị của $\phi_\omega$ một lượng $k\pi$. Trong phần này
+		Với mask số thực, các hàm kích hoạt được sử dụng bên trong mạng hồi quy đều được giới hạn lại trong khoảng $(0, 1)$ hoặc $(-1, 1)$ khiến cho giá trị tối đa mà biên độ mới nhận được cũng sẽ chỉ nằm trong khoảng $(0, r_\omega]$. Đây chính là điều ta mong muốn, đối với âm thanh được mô hình xác định là giọng nói giá trị $r$ này sẽ được đẩy lên rất gần với $1.0$ từ đó biên độ sau khi lọc ``mask'' sẽ gần như bằng với giá trị biên độ gốc có trong âm thanh đầu vào $r_\omega$. Tuy nhiên với biến đổi pha của giọng nói, ``mask'' số thực hoạt động không thực sự hiệu quả, bởi các giá trị pha đầu ra của mô hình (chỉ khi sử dụng $\tanh$ như hàm kích hoạt thì mới tồn tại sự điều chỉnh pha do phần âm $(-1, 0]$ của hàm $\tanh$) chỉ là $k\pi$. Do vậy sự điều chỉnh về pha của giọng nói sẽ không có nhiều sự tác động, do vậy trong ``mask'' số thực, tác động của pha lên giọng nói sẽ được bỏ qua và giả định pha của giọng nói chính là pha trong giá trị đầu vào mô hình. Nhưng bù cho những khuyết điểm đó, các mô hình sử dụng ``mask'' số thực thường có cấu tạo đơn giản và hoạt động khá hiệu quả trong thực tế.
+		
+		% mask thực
+		\subsub{Dual signal Transformation LSTM} Mô hình đầu tiên mà chúng tôi muốn đề cập chính là Dual signal Transformation LSTM (DTLN). Kiến trúc của mô hình này được thể hiện như \figref{rl::dtln_arch}. %Trong luận văn này, chúng tôi sẽ nghiên cứu và ứng dụng các mô hình sử dụng mask số thực lên âm thanh từ đó lọc ra các nhiễu và sử dụng chúng vào ứng dụng của mình.
+			
+				\begin{figure}[h]
+					\centering
+					\includegraphics[width=70mm]{\rlimg{dtln_net_arch.PNG}}
+					\srccaption{Kiến trúc mạng Dual signal Transformation LSTM}{\citesrc{dtln}}
+				\label{rl::dtln_arch}
+				\end{figure}
+			
+			Mô hình được chia làm hai phần chính: \textit{phần lọc bằng cách chuyển tín hiệu sang miền tần số thời gian} và \textit{mô hình tự học cách lọc trên miền biến đổi dữ liệu (chúng tôi gọi đây là miền thuộc tính - features domain)}. Kết quả metrics của mô hình này trên bộ kiểm thử của chúng tôi được thể hiện trong \tableref{re::competitors_metrics}. \figref{rl::dtln_layer_output_0} và \figref{rl::dtln_layer_output_1} là kết quả tại một số lớp trong mô hình DTLN.
+			
+				\begin{figure}[h]
+					\centering
+					\begin{subfigure}{0.35\textwidth}
+						\centering
+						\includegraphics[width=50mm]{\rlimg{dtln_real_layers_7_in_mag.png}}
+						\caption{\spectrogram{} của âm đầu vào}
+					\end{subfigure}%
+					\begin{subfigure}{0.35\textwidth}
+						\centering
+						\includegraphics[width=50mm]{\rlimg{dtln_real_layers_7_in_mask.png}}
+						\caption{Mask được mô hình dự đoán}
+					\end{subfigure}%
+					\begin{subfigure}{0.35\textwidth}
+						\centering
+						\includegraphics[width=50mm]{\rlimg{dtln_real_layers_7_out.png}}
+						\caption{Kết quả của bước 1}
+					\end{subfigure}
+				
+				\caption{Ở miền tần số thời gian, ``mask'' mà mô hình học được có khả năng xác định những phần nhiễu không liên quan tới giọng nói, ở bước này, chủ yếu mô hình học cách để loại bỏ các nhiễu mạnh làm cho giọng nói trong hơn bằng cách tổng hợp các sóng cosine lại với nhau thông qua biến đổi Fourier nghịch}
+				\label{rl::dtln_layer_output_0}
+				\end{figure}
+			
+				\begin{figure}[h]
+					\centering
+					\begin{subfigure}{0.35\textwidth}
+						\centering
+						\includegraphics[width=50mm]{\rlimg{dtln_real_layers_9_out.png}}
+						\caption{Đầu ra của lớp conv thứ nhất}
+					\end{subfigure}%
+					\begin{subfigure}{0.35\textwidth}
+						\centering
+						\includegraphics[width=50mm]{\rlimg{dtln_real_layers_-2_in.png}}
+						\caption{Input của lớp conv thứ 2}
+					\end{subfigure}%
+					\begin{subfigure}{0.35\textwidth}
+						\centering
+						\includegraphics[width=50mm]{\rlimg{dtln_real_layers_-2_out.png}}
+						\caption{Đầu ra của lớp conv thứ 2}
+					\end{subfigure}
+				
+				\caption{Ở bước này, mô hình học cách biểu diễn âm thanh đã được lọc qua ở phần trên sang một miền mới và tách các nhiễu ở đó, kì vọng với cách tiếp cận này, mô hình có thể loại bỏ hầu hết các nhiễu bên trong âm thanh mà làm mất mát ít thông tin nhất}
+				\label{rl::dtln_layer_output_1}
+				\end{figure}
+			
+			Tuy với cách tiếp cận khá thú vị là tự học phép biến đổi dữ liệu ở mô hình này, thì số lượng tham số cần tính toán để học hết phép biến đổi này chiếm khá nhiều chi phí tính toán. Nhưng kết quả lọc nhiễu của mô hình này khá tốt (\tableref{re::competitors_metrics}) với điểm metrics khá cao trên tập kiểm thử của chúng tôi. Đồng thời với lượng tham số khoảng 967000 và tốc độ chạy thời gian thực trên một khung dữ liệu vào khoảng 2ms, chúng tôi cho rằng đây là một hướng tiếp cận phù hợp cho bài toán của mình. Do đó mà mô hình của chúng tôi thời điểm đầu chính là phiên bản thu gọn của mô hình DTLN này.
+			
+			%Không những vậy, chất lượng âm (theo kết quả huấn luyện lại mô hình của chúng tôi) cũng bị giảm khá nhiều sau khi đi qua biến đổi này. Nhưng với số lượng tham số khoảng 967000 và tốc độ chạy thời gian thực trên một khung dữ liệu vào khoảng 2ms, chúng tôi cho rằng đây là một hướng tiếp cận khả thi cho bài toán của chúng tôi. Dưới đây, chúng tôi sẽ giải thích một số khái niệm được nêu ở trong mô hình.
+			
+				\subsub{Instant Layer Normalization} Gọi $F_k$ là một dãy tần số được trả về bởi biên độ của biến đổi Fourier hay biến đổi do mô hình học được ở trên, tác giả \cite{dtln} quy các vector này về một biến ngẫu nhiên và đặt ra phép chuẩn hóa trên biến này được định nghĩa như sau
+					
+						\begin{equation}
+							\tilde{F_k} = \gamma \frac{F_k - \bar{F_k}}{\sigma_{F_k}} + \beta,
+						\label{rl::iLN_formula}
+						\end{equation}
+					
+					\noindent với $\gamma, \beta \in \mathbb{R}$ và $\sigma_{F_k}$ là độ lệch chuẩn được tính trên các kênh của $F_k$ với trung bình thống kê $\bar{F_k}$. Giá trị $(F_k - \bar{F_k})/\sigma_{F_k}$ là  \name{z-score} được áp dụng vào đây nhằm mục đích chuẩn hóa phân phối của các giá trị trong $F_k$ về phân phối có trung bình thống kê là $0$ và độ lệch chuẩn là $1$.
+					
+					Phần $\gamma$ và $\beta$ chính là dùng để thay đổi độ lệch chuẩn và trung bình thống kê của phân phối vừa nhận được, phân phối này được sử dụng chung cho toàn bộ các khung thời gian của chung một đoạn âm thanh nên mô hình sẽ cố gắng học ra được phân bố đem lại nhiều thông tin nhất có thể. Ngoài ra để tăng hiệu quả của phép chuẩn hóa này, tác giả cũng sử dụng hàm $\log$ lên biên độ được trả về bởi biến đổi Fourier và giá trị tự học của mô hình trước khi đem đi chuẩn hóa bằng công thức ở bên trên.
+	
+	\subsection{Mask số phức trên miền tần số thời gian}
+	
+		Xuất phát như một cải tiến của hướng tiếp cận theo ``mask'' số thực, ``mask'' số phức cho phép mô hình điều chỉnh cả về biên độ lẫn pha của âm thanh bên trong giọng nói cho phép mô hình loại bỏ hoàn toàn âm thanh nhiễu ra khỏi giọng nói. Điều này xuất phát từ định nghĩa của âm thanh, bất cứ một loại sóng âm nào cũng phải có ba thành phần cơ bản: \textit{biên độ}, \textit{pha} và \textit{tốc độ góc}. Trong quá trình truyền tải, các nhiễu được tổng hợp lại với âm thanh
+		
+			\begin{equation*}
+				y(t) = x(t) + n(t).
+			\end{equation*}
+			
+		Việc tổng hợp sóng âm như vậy, về bản chất cũng làm thay đổi cấu tạo của âm từ đó làm thay đổi luôn cả \spectrogram{} của giọng nói ban đầu. Gọi $X_k(\omega)$ là \spectrogram{} của giọng nói và $N_k(\omega)$ là \spectrogram{} của âm nhiễu, do biến đổi Fourier có tính chất tuyến tính, nên \spectrogram{} của âm tổng hợp $Y_k(\omega)$ sẽ là
+		
+			\begin{equation*}
+				Y_k(\omega) = X_k(\omega) + N_k(\omega).
+			\end{equation*}
+			
+		Thông qua việc tổng hợp này, biên độ và pha của $Y(\omega)$ đã bị biến đổi đi so với giọng nói ban đầu $X(\omega)$. Ở ``mask'' số thực, việc nhân thêm một giá trị $r \in \mathbb{R}$ cũng chỉ làm thay đổi giá trị biên độ của âm tổng hợp, cho dù pha có bị thay đổi một góc $k\pi$. Nhưng ở ``mask'' số phức, mô hình được tùy ý lựa chọn giá trị điều chỉnh cho cả biên độ lẫn tần số của âm, từ đó có thể cho chất lượng âm thanh tốt hơn so với ``mask'' số thực. Dưới đây là minh họa bằng công thức cho ý tưởng của cách tiếp cận dùng mask số phức lên \spectrogram{}, với $M_k(\omega) = \polarcomplex{r}{\phi}$ là ``mask'' số phức mà chúng tôi đề cập, $Y_k(\omega) = \polarcomplex{r_\omega}{\phi_\omega}$ là âm nhiễu đầu vào
+		
+			\begin{equation*}
+				\hat{X}_k(\omega) = M_k(\omega) Y_k(\omega) = \polarcomplex{r r_\omega}{(\phi_\omega + \phi)}.
+			\end{equation*}
+		
+		Dễ thấy so với mô hình sử dụng ``mask'' số thực, mô hình sử dụng ``mask'' số phức cho phép biến đổi cả biên độ lẫn pha của âm nhiễu để lọc triệt để âm nhiễu còn tồn tại bên trong giọng nói. Đây cũng là ``mask'' được sử dụng các mô hình đạt được các thứ hạng cao trong các cuộc thi (FullSubNet đạt hạng 2 và DCCRN đạt hạng 3 trong cuộc thi Deep Noise Suppression \cite{dns}). Nhưng rõ ràng để có thể học được sự biến đổi về cả biên độ lẫn pha, mô hình sẽ có cấu trúc tương đối phức tạp hơn so với mô hình sử dụng ``mask'' số thực, chi phí tính toán (được thể hiện thông qua số lượng tham số trong mô hình) cũng tăng lên đáng kể so với mô hình sử dụng ``mask'' số thực.
+		
+		%Nhưng đi kèm với sự linh hoạt này là lượng tham số cần thiết để mô hình có thể học được cách tạo ra một mask số phức lớn hơn khá nhiều so với mask số thực, chưa kể lượng tính toán cũng tăng lên đáng kể do các phép cộng hay nhân trên số phức khá là tốn nhiều chi phí về tài nguyên. Nhưng dù cho vậy cũng không thể phủ định đây là một hướng tiếp cận hợp lý cho bài toán này. Dưới đây chúng tôi sẽ giới thiệu về các hướng tiếp cận theo hướng mask số phức tiêu biểu mà chúng tôi đã tìm hiểu được.
+	
+		% mask phức
+		
+		Mô hình sử dụng ``mask'' số phức mà chúng tôi tìm hiểu là mô hình \textbf{Fullband and Subband Fusion Model (FullSubNet)}. Phát triển dựa trên nền tảng của mô hình Sub-band \cite{subbandmodel}, FullSubNet lọc nhiễu thông qua hai bước: \textit{tổng hợp thông tin từ miền tần số thời gian sử dụng tất cả các dãy tần số} và \textit{lọc nhiễu sử dụng các thông tin đã được tổng hợp}. \figref{rl::fullsubnet_arch} miêu tả kiến trúc của mô hình này. Để hiểu rõ hơn cấu tạo cũng như chức năng của các bước, chúng tôi sẽ giới thiệu mô hình làm tiền đề cho FullSubNet là mô hình Subband.
+		
+				\begin{figure}[h]
+					\centering
+					\includegraphics[width=120mm]{\rlimg{fullsubnet_model.png}}
+					\srccaption{Kiến trúc của mô hình Fullband and Subband Fusion Model}{\citesrc{fullsubnet}}
+				\label{rl::fullsubnet_arch}
+				\end{figure}
+			
+			%\subsubsection*{Sub-band model}
+				
+				\subsub{Subband Model} Với các cách tiếp cận phổ biến hiện giờ, hầu hết các mô hình đều sử dụng lớp LSTM với dữ liệu đầu vào là toàn bộ tần số tại một thời điểm, nhưng cách với cách học như vậy lượng tham số đầu vào sẽ trở nên rất lớn, với động lực như vậy, tác giả đã sử dụng một phần cục bộ dữ liệu của tần số thay vì toàn bộ dữ liệu tần số trong một khung thời gian của miền tần số thời gian. Việc thay đổi từ sự phụ thuộc toàn cục sang cục bộ làm giảm lượng tham số của LSTM đầu vào trong mô hình ở \figref{rl::subband_arch}.
+				
+				Để rõ ràng hơn, chúng tôi định nghĩa $X_k(\omega_i)$ là giá trị tại khung thời gian thứ $k$ của sóng mang bước sóng $\omega_i$ lên giọng nói sạch, $Y_k(\omega_i)$ tương tự là giá trị tại khung thời gian $k$ của sóng có bước sóng $\omega_i$ nhưng là của âm đã pha nhiễu, và $N_k(\omega_i)$ là dữ liệu của âm nhiễu. Do sự quan hệ tuyến tính trong biến đổi Fourier, chúng tôi dễ dàng có được biểu thức
+				
+					\begin{equation*}
+						Y_k(\omega_i) = X_k(\omega_i) + N_k(\omega_i),
+					\end{equation*}
+					
+				\noindent và một mô hình $f$ sử dụng toàn bộ dữ liệu tại khung thời gian $k$ này, thì kết quả trả về sẽ là
+				
+					\begin{equation*}
+						\hat{X}_k(\omega_i) = f(|Y_k|) \times X_k(\omega_i),
+					\end{equation*}
+					
+				\noindent với $|Y_k|$ là vector chứa biên độ của tất cả các giá trị phức tại khung thời gian thứ $k$ trong \spectrogram{}. Nhưng vì tác giả trong \cite{subbandmodel} đề xuất sử dụng thay vì toàn bộ băng tần số như vậy rất khó có thể xác định quan hệ giữa các vùng tần số với nhau cũng như để xác định được nhiễu, họ sử dụng một dữ liệu thay thế
+				
+					\begin{equation*}
+						\hat{X}_k(\omega_i) = f(D_k(\omega_i, m)) \times X_k(\omega_i),
+					\end{equation*}
+					
+				\noindent với 
+					
+					\begin{equation*}
+						D_k(\omega_i, m) = (|Y_k(\omega_{i - m})|, \dots, |Y_k(\omega_{i - 1})|, |Y_k(\omega_i)|, |Y_k(\omega_{i + 1})|, \dots, |Y_k(\omega_{i + m})|) \in \mathbb{R}^{2m + 1}
+					\end{equation*}
+					
+				\noindent là một phần bao gồm $m$ giá trị bước sóng kề cận với bước sóng trung tâm $\omega_i$.
+				
+				Rõ ràng với cách định nghĩa như vậy, mô hình có nhiều dữ liệu hơn để có thể học được các quan hệ giữa các vùng tần số với nhau. Đây chính là điểm cốt lõi của mô hình này, thay đổi dạng dữ liệu đầu vào của mô hình để giúp mô hình có nhiều thông tin hơn về âm thanh đầu vào.
+				
+					\begin{figure}[h]
+						\centering
+						\includegraphics[width=100mm]{\rlimg{subband_model.png}}
+						\srccaption{Kiến trúc của mô hình Subband}{\citesrc{subbandmodel}}
+						\label{rl::subband_arch}
+					\end{figure}
+				
+				Kết quả đầu ra của mô hình này cũng là một ``mask'' số phức với hai phần thực và ảo được dự đoán riêng biệt, nhân ``mask'' này với \spectrogram{} ban đầu, thu lại được chính là một \spectrogram{} sạch đã được lọc nhiễu.
+				
+			\subsub{Fullband and Subband Fusion Model} Ở mô hình FullSubNet, phần biến đổi tần số, gom cụm các tần số lại được thể hiện ở Sub-band Units trong \figref{rl::fullsubnet_arch}, đó chính là phần chuyển đổi từ $Y_k$ sang $D_k(\omega_i, m)$ như chúng tôi đã đề cập. Phần tổng hợp thông tin thông qua sự tổng hợp \spectrogram{} $G_{full}$ được sử dụng thông qua hai lớp LSTM để tạo thành lớp tần số mới tại lớp Reshape, sau đó được tổng hợp với kết quả của Sub-band Units để tạo thành đầu vào cho mô hình Subband $G_{sub}$. Nhưng nhược điểm lớn nhất theo chúng tôi thấy của mô hình này đó là số lượng tham số lớn (khoảng 5 triệu tham số) và không phù hợp cho việc chạy trong thời gian thực trên các máy tính có tài nguyên hạn chế, dù rằng chất lượng âm thanh đầu ra bởi mô hình này hơn hẳn các mô hình khác mà chúng tôi khảo sát (dựa vào các điểm metrics được công bố) nhưng sau khi kiểm thử mô hình được huấn luyện sẵn, chúng tôi lại thu được kết quả khá thất vọng (\tableref{re::competitors_metrics}). %Và do đó, chúng tôi tìm hiểu tới mô hình thứ 2, trong các mô hình sử dụng mask số phức để lọc nhiễu.
+		
+		
+		%\subsubsection*{Deep Complex Convolution RNN}
+		
+			
+
+\section{Đề xuất hàm mất mát và mô hình} \label{section::relatedworks::propose}
+
+	Với mục tiêu dùng mô hình có kiến trúc đơn giản hơn, tiết kiệm chi phí tính toán và quan trọng nhất đối với một ứng dụng thời gian thực mà chất lượng âm thanh vẫn đảm bảo không bị suy giảm so với mô hình gốc ban đầu (thông qua các điểm metrics đạt được ở các \tableref{re::compare_models}, \tableref{re::compare_models_multilingual}, \tableref{re::compare_models_prebuilt} và \tableref{re::svc_latency_detail}), để đạt được các điều trên, chúng tôi đề xuất cải tiến hàm mất mát để sử dụng huấn luyện mô hình của mình.
+	
+	\subsection{Hàm mất mát đề xuất}
+		
+		Xuất phát từ thực tế các mô hình mà chúng tôi thực nghiệm, hiện tượng bị khuyết âm thanh, nhiễu vẫn còn tồn tại ở những vùng xung quanh âm chính mà không bị loại bỏ hoàn toàn (điều này được đánh giá thông qua điểm BAK của metric DNSMOS và được chúng tôi phân tích ở \figref{rl::noise_still_presents}). Chúng tôi đề xuất cải tiến giúp mô hình tăng cường khả năng lọc nhiễu, nhưng nhiễu có biên độ dù không lớn thì vẫn sẽ bị loại bỏ triệt để. Trước hết, ta sẽ tìm hiểu một số hàm mất mát thông dụng sẽ được sử dụng trong phần này nhằm kết hợp để tạo nên hàm mất mát đề xuất.
+		
+			\subsub{Signal Distortion Rate} Signal Distortion Rate (tạm dịch là độ gián đoạn dữ liệu, SDR) còn được gọi là độ gián đoạn dữ liệu và được định nghĩa như sau
+				
+					\begin{equation}
+						\name{SDR}(x, \hat{x}) = 10\log_{10} \bigg (\frac{\norm{x}^2_2}{\norm{x - \hat{x}}^2_2} \bigg ).
+						\label{rl::sdr_formula}
+					\end{equation}
+				
+				Công thức này đo cường độ của nhiễu còn tồn tại trong giọng nói sau khi lọc $(x - \hat{x})$ so với giọng nói sạch $x$ thông qua công thức tính $\name{SNR}$ \formularef{rl::snr_formula}. Sự khác biệt giữa $x$ và $\hat{x}$ càng lớn thì phần bên trong hàm $\log$ có giá trị càng gần về $0$, và do đó giá trị $\name{SDR}$ thu được sẽ dần tiến tới $-\infty$. Trong trường hợp ngược lại, khi $\hat{x}$ dần tiến tới $x$ làm cho phần bên trong hàm $\log$ tiến dần tới $+\infty$ và như vậy kéo theo giá trị của $\name{SDR}$ cũng sẽ lớn lên theo. Dễ thấy, công thức của $\name{SDR}$ có thể được chuyển đổi sang công thức của $\name{SNR}$ bởi hệ thức sau
+				
+					\begin{equation}
+						\name{SNR}(x, y) = 10 \log_{10} \bigg ( \frac{\norm{x}^2_2}{\norm{y - x}^2_2} \bigg ) = 10 \log_{10} \bigg ( \frac{\norm{x}^2_2}{\norm{n}^2_2} \bigg ),
+						\label{rl::snr_formula}
+					\end{equation}
+				
+				\noindent trong đó $x$ là giọng nói sạch, $y$ là giọng đã trộn nhiễu, $n$ là âm nhiễu. 
+				
+				Nhưng bản thân $\name{SDR}$ vẫn còn tồn tại một số vấn đề, một vấn đề nghiêm trọng nhất có khả năng ảnh hưởng tới chất lượng của mô hình khi sử dụng hàm này đó là việc giọng nói bị nhân thêm cho một hằng số sau khi lọc nhiễu. Như đã đề cập, mục tiêu bài toán của chúng ta là đi ước lượng lại giọng nói ban đầu từ giọng nói đã bị trộn nhiễu. Vậy nên trường hợp giọng nói bị nhân thêm một hằng số sau khi lọc nhiễu (tức là $\hat{x} = \mu x$ với $\mu \in \mathbb{R}^+$) là hoàn toàn có thể xảy ra. Nhưng việc giọng nói bị nhân hay không giọng nói mới là thứ quan trọng, tức là giá trị biên độ của chúng là không quan trọng. Do đó giá trị mà ta kì vọng mà $\name{SDR}$ trả về sẽ tiến đến $+\infty$ nhưng khi tính toán, ta lại có
+				
+					\begin{align*}
+						\name{SDR}(x, \hat{x})	& =  10\log_{10} \bigg (\frac{\norm{x}^2_2}{\norm{x - \hat{x}}^2_2} \bigg ) \\
+												& =  10\log_{10} \bigg (\frac{\norm{x}^2_2}{\norm{x - \mu x}^2_2} \bigg ) \\
+												& =  10\log_{10} \bigg (\frac{1}{\norm{1 - \mu}^2_2} \bigg ). \numberedeq
+					\end{align*}
+				
+				Rõ ràng giá trị này phụ thuộc vào hằng số $\mu$, nghĩa rằng hai giọng nói này dù là chung một giọng nói gốc nhưng chỉ cần biên độ nhân thêm một hằng số lại thì chúng không giống nhau và đây không phải điều mà chúng ta kì vọng. Hàm $\name{SDR}$ đang đánh giá sai trường hợp này, và đó cũng chính là lý do mà ta tìm hiểu hàm mất mát tiếp theo, Scale Invariant SDR, để khắc phục tình trạng trên.
+		
+			\subsub{Scale Invariant SDR} Vấn đề lớn nhất của $\name{SDR}$ đó chính là dù $\hat{x} = \mu x$ với $\mu \in \mathbb{R}^+$ đi chăng nữa thì $\name{SDR}$ vẫn mang xác định hai âm trên là khác biệt, nhưng rõ ràng việc nhân thêm một hằng số vào giọng nói không ảnh hưởng nhiều tới giá trị thu được vì vấn đề chính cần quan tâm ở đây là nhiễu có được loại bỏ đi hay không chứ không phải là giọng nói được nhân thêm bao nhiêu lần. Để giải quyết việc này, Scale Invariant SDR \cite{sisdr}, bổ sung thêm một thành phần khiến cho giá trị của mất mát không còn phụ thuộc vào biên độ của giọng sạch và giọng nói dự đoán nữa. Về mặt toán học, $\name{SI-SDR}$ được định nghĩa như sau
+				
+					\begin{equation}
+						\name{SI-SDR}(x, \hat{x}) = 10\log_{10} \bigg (\frac{\norm{\alpha x}^2_2}{\norm{\alpha x - \hat{x}}^2_2} \bigg ),
+						\label{rl::si_sdr_formula}
+					\end{equation}
+				
+				\noindent với $\alpha = \underset{\alpha}{\argmin} \norm{\alpha x - \hat{x}}^2_2$. 
+				
+				Bằng cách lấy đạo hàm và tính cực trị theo $\alpha$, ta thu được
+				
+					\begin{equation}
+						\frac{d}{d\alpha} \norm{\alpha x - \hat{x}}^2_2 = 2 (\alpha x - \hat{x})^T x = 0,
+					\end{equation}
+					
+				\noindent ta có thể giải ra được giá trị của $\alpha$ là
+				
+					\begin{equation}
+						\alpha = \frac{\hat{x}^T x}{\norm{x}^2_2}.
+					\end{equation}
+					
+				%Như vậy, thay $\alpha$ vào công thức \formularef{rl::si_sdr_formula}, thu lại được biểu thức tính $\name{SI-SDR}$ hoàn chỉnh
+				
+				%	\begin{equation}
+				%		\name{SI-SDR}(x, \hat{x}) = 10\log_{10} \bigg (\frac{\norm{\frac{\hat{x}^T x}{\norm{x}^2_2} x}^2_2}{\norm{\frac{\hat{x}^T x}{\norm{x}^2_2} x - \hat{x}}^2}_2 \bigg ).
+				%		\label{rl::si_sdr_formula_final}
+				%	\end{equation}
+				
+				Để kiểm chứng tính hiệu quả của hàm $\name{SI-SDR}$, sinh viên thực hiện tiến hành phân tích $\alpha$ cho trường hợp giọng nói bị nhân lên sau khi lọc nhiễu như đã nói ở trên để thu được
+				
+					\begin{align*}
+						\alpha	& =  \frac{\hat{x}^T x}{\norm{x}^2_2} \\
+								& =  \frac{\norm{\hat{x}}_2 \norm{x}_2 \cos(\angle \hat{x}, x)}{\norm{x}^2_2}\\
+								& =  \frac{\norm{\hat{x}}_2 \cos(\angle \hat{x}, x)}{\norm{x}_2}. \numberedeq
+					\end{align*}
+				
+				Khi nhân hệ số này với $x$, giá trị của $x$ lúc này được chuẩn hóa sau khi chia cho $\norm{x}_2$, nhân lên một lượng bằng với $\norm{\hat{x}}_2 \times \cos(\angle \hat{x}, x)$. Và giá trị hằng số nhân này phụ thuộc vào $\norm{\hat{x}}_2$ cho nên dù cho giá trị đó tăng lên chừng nào thì $x$ cũng sẽ được tăng lên một lượng tương ứng. 
+				
+				Để rõ hơn làm thế nào mà $\name{SI-SDR}$ khắc phục tình trạng $\hat{x} = \mu x$ ta đã thấy ở trên, ta sẽ phân tích cách mà $\name{SI-SDR}$ đánh giá trường hợp này. Trước hết, ta có giá trị $\alpha$ như sau
+				
+					\begin{align*}
+						\alpha 	& =  \frac{\norm{\hat{x}}_2 \cos(\angle \hat{x}, x)}{\norm{x}_2}\\
+								& =  \frac{\mu \norm{x}_2 \times 1}{\norm{x}_2} \\
+								& =  \mu. \numberedeq
+					\end{align*}
+				
+				Lúc này, do $\hat{x}$ chỉ là $x$ được nhân thêm một lượng $\mu$ dương nên chỉ số $\alpha$ mà ta tính được bằng đúng giá trị $\mu$ này. Thay tất cả vào công thức của $\name{SI-SDR}$, ta thu được giá trị hàm này như sau
+				
+					\begin{align*}
+						\name{SI-SDR}(x, \hat{x})	& =  10\log_{10} \bigg (\frac{\norm{\alpha x}^2_2}{\norm{\alpha x - \hat{x}}^2_2} \bigg ) \\
+													& =  10\log_{10} \bigg (\frac{\norm{\mu x}^2_2}{\norm{\mu x - \mu x}^2_2} \bigg ) \\
+													& =  10\log_{10} \bigg (\frac{\norm{\mu x}^2_2}{\norm{0}^2_2} \bigg ) \\
+													& =  +\infty. \numberedeq
+					\end{align*}
+				
+				Lúc này $\name{SI-SDR}$ đã đánh giá đúng bản chất nhiễu bên trong hai giọng nói $x$ và $\hat{x}$ là rất nhỏ so với âm thanh sạch, đây cũng là một ví dụ cho thấy hàm $\name{SI-SDR}$ có khả năng đánh giá linh hoạt hơn $\name{SDR}$ trong trường hợp âm thanh ở những vùng biên độ khác nhau.
+			
+			\subsub{Đề xuất cải tiến hàm mất mát} Từ các quan sát về mặt dữ liệu, các tần số quan trọng mang thông tin giọng nói có biên độ trả về bởi biến đổi Fourier cao (phần màu vàng trong \figref{rl::clean_speech}) và những phần kém quan trọng hơn không mang nhiều thông tin mà chỉ đơn thuần tạo nên âm điệu của giọng nói. Đối với nhiễu, tuy sự biến đổi về mặt tần số cấu tạo theo thời gian diễn ra liên tục nhưng sự tương đồng về các tần số cấu tạo này với các tần số cấu tạo của giọng nói là khá cách biệt (bằng việc so sánh hai \spectrogram{} ở \figref{rl::clean_speech} và \figref{rl::noise_sound}). Các mô hình thường được huấn luyện bằng các hàm mất mát phổ biến như \name{SDR} và \name{SI-SDR} cho kết quả nhiều nhiễu vẫn còn tồn đọng lại bên trong giọng nói sau khi lọc. Và đối với một số trường hợp nhiễu quá lớn sẽ gây ra tình trạng mất giọng nói. Những điều này có thể được thấy rõ thông qua điểm SIG của metric DNSMOS, metric STOI và PESQ.
+				
+					\begin{figure}[h]
+						\centering
+						\begin{subfigure}{.5\textwidth}
+							\centering
+							\includegraphics[width=70mm]{\rlimg{clean_voice.png}}
+							\caption{\spectrogram{} của giọng nói sạch}
+							\label{rl::clean_speech}
+						\end{subfigure}%
+						\begin{subfigure}{.5\textwidth}
+							\centering
+							\includegraphics[width=70mm]{\rlimg{baby_noise.png}}
+							\caption{\spectrogram{} của âm nhiễu}
+							\label{rl::noise_sound}
+						\end{subfigure}
+					\caption{Ý tưởng hình thành hàm tăng cường mất mát}
+					\end{figure}
+				
+					\begin{figure}[h]
+						\centering
+						\begin{subfigure}{.5\textwidth}
+							\centering
+							\includegraphics[width=70mm]{\rlimg{noise_still_presents_1.png}}
+						\end{subfigure}%
+						\begin{subfigure}{.5\textwidth}
+							\centering
+							\includegraphics[width=70mm]{\rlimg{noise_still_presents_2.png}}
+						\end{subfigure}
+						
+						\caption{Nhiễu vẫn còn tồn tại bên trong \spectrogram{} âm sạch mà không bị lọc đi hoàn toàn (phần được khoanh trong hình chữ nhật màu trắng)}
+						\label{rl::noise_still_presents}
+					\end{figure}
+				
+				Để khắc phục các hạn chế này, chúng tôi đề xuất một hàm mất mát cải tiến được định nghĩa như sau
+				
+					\begin{equation}
+						L(x, \hat{x}, n) = L_{main}(x, \hat{x}) ((1 + \alpha L_1(x, \hat{x})) - \beta |L_2(\hat{x}, n)|),
+						\label{rl::enhanced_cosine_formula}
+					\end{equation}
+				
+				\noindent với $L_{main}$ có thể là một trong các hàm mất mát thường dùng như \name{SNR}, \name{SI-SDR}; còn $L_1$ và $L_2$ lần lượt được định nghĩa bởi
+				
+					\begin{align*}
+						L_1(x, \hat{x})	& =  \cos(\angle X, \hat{X}) \\
+										& =  \frac{FLAT(|X|)^T FLAT(|\hat{X}|)}{\norm{FLAT(|X|)}_2 \norm{FLAT(|\hat{X}|)}_2}, \numberedeq
+						\label{rl::l1_formula}
+					\end{align*}
+					
+					\begin{align*}
+						L_2(\hat{x}, n)	& =  \cos(\angle \hat{X}, N) \\
+										& =  \frac{FLAT(|\hat{X}|)^T FLAT(|N|)}{\norm{FLAT(|\hat{X}|)}_2 \norm{FLAT(|N|)}_2}, \numberedeq
+						\label{rl::l2_formula}
+					\end{align*}
+				
+				\noindent trong đó 
+					
+					\begin{itemize}
+						\item $X, \hat{X}, N$ lần lượt là biến đổi Fourier thời gian ngắn của $x, \hat{x}$ và $n$.
+						\item Phép duỗi $FLAT(x)$ dùng để chuyển $x$ từ miền $\mathbb{R}^{T \times F}$ sang thành miền $\mathbb{R}^{TF}$.
+						\item Phép $|\cdot|$ trong công thức \formularef{rl::l1_formula} và \formularef{rl::l2_formula} là thể hiện cho phép lấy module cho từng số phức bên trong ma trận $X, \hat{X}$ hay $N$.
+					\end{itemize}
+				
+				Hai hàm tăng cường $L_1$ và $L_2$ được thực hiện dựa trên các ý tưởng về quan hệ giữa giọng nói dự đoán được với giọng nói sạch và nhiễu. Hàm $L_1$ chính là độ đo tương tự cosine giữa giọng nói dự đoán và giọng nói sạch, theo công thức \formularef{rl::l1_formula}. Các giá trị mà tại đó biến đổi Fourier cao (hay các thành phần thông tin mà chúng tôi muốn giữ lại) sẽ chiếm ưu thế trong phần tổng phía trên tử và ngược lại các thành phần nhỏ hơn sẽ không có nhiều đóng góp vào giá trị này.
+				
+				Tương tự với $L_1$, tuy nhiên với $L_2$ do đây là độ tương tự cosine giữa giọng nói dự đoán với nhiễu có trong giọng nói ghi nhận, nên giá trị này cần phải được tối thiểu hóa về $0$. Các giá trị $\alpha, \beta \in \mathbb{R}^+$ là các giá trị thực nghiệm được chúng tôi thử nghiệm trên các lần huấn luyện mô hình, các giá trị này đạt hiệu quả ở $\alpha = 1.0$, $\beta = 2.0$ đối với các mô hình Post và $\alpha = 0.7$, $\beta = 2.0$ đối với các mô hình còn lại.
+				
+				Tuy nhiên, để có thể tìm hiểu sâu hơn về khả năng tối ưu của hàm mất mát cải tiến này, chúng tôi xem xét đạo hàm của chúng theo $\hat{x}$. Ta không xét đạo hàm theo tham số của mô hình, vì tuy với các hàm mất mát khác nhau nhưng đạo hàm của chúng theo tham số $\theta$ luôn có dạng
+				
+					\begin{equation*}
+						\frac{d}{d \theta} L = \frac{d}{d \hat{x}} L \frac{d}{d \theta} \hat{x},
+					\end{equation*}
+				
+				\noindent với $\hat{x}$ được xem là đầu ra của mô hình. Do đó, với $L_{main}$ là hàm \name{SI-SDR} được sử dụng để huấn luyện, chúng tôi xét đạo hàm của toàn bộ hàm mát mát theo $\hat{x}$ thay vì bộ tham số $\theta$. Ta có
+				
+					\begin{align*}
+						\frac{d}{d \hat{x}} L_{main}(x, \hat{x})	& = \frac{d}{d \hat{x}} \bigg( 10\log_{10} \bigg( \frac{\norm{\gamma x}^2_2}{\norm{\gamma x - \hat{x}}^2_2} \bigg) \bigg) \\
+								& = \frac{20}{\ln(10)} \frac{\norm{\gamma x - \hat{x}}^2_2}{\norm{\gamma x}^2_2} \frac{\norm{\gamma x}^2_2}{\norm{\gamma x - \hat{x}}^4_2} (\gamma x - \hat{x}) \\
+								& = \frac{20}{\ln(10)} \frac{(\gamma x - \hat{x})}{\norm{\gamma x - \hat{x}}^2_2}.
+					\end{align*}
+				
+				Mặt khác
+				
+					\begin{align*}
+						\bignorm{\frac{d}{d \hat{x}} L_{main}(x, \hat{x})}_2	& = \bignorm{\frac{20}{\ln(10)} \frac{(\gamma x - \hat{x})}{\norm{\gamma x - \hat{x}}^2_2}}_2 \\
+								& \le C_m \frac{1}{\norm{\gamma x - \hat{x}}_2}. \numberedeq
+						\label{rl::lmain_complexity}
+					\end{align*}
+				
+				Và hơn nữa
+				
+					\begin{align*}
+						\frac{d}{d \hat{x}} \hat{X}(\omega, \tau)	& = \frac{d}{d \hat{x}} \bigg( \int_{-\infty}^{+\infty} w(t - \tau) \hat{x}(t) \polarcomplex{}{-\omega t} dt \bigg) \\
+													& = \int_{-\infty}^{+\infty} w(t - \tau) \frac{d}{d \hat{x}} (\hat{x}(t)) \polarcomplex{}{-\omega t} dt \\
+													& = \int_{-\infty}^{+\infty} w(t - \tau) \polarcomplex{}{-\omega t} dt \\
+													& = C,
+					\end{align*}
+				
+				\noindent với $C$ là một hằng số theo $\omega$ và $\tau$, nên từ đó đạo hàm của toàn bộ \spectrogram{} theo $\hat{x}$ sẽ được biểu diễn như sau
+				
+					\begin{align*}
+						\frac{d}{d \hat{x}} \hat{X}	& = \int_{\omega} \int_{\tau} \frac{d}{d \hat{x}} \hat{X}(\omega, \tau) d\omega d\tau \\
+							& = \int_{\omega} \int_{\tau} C d\omega d\tau \\
+							& = C. \numberedeq
+						\label{rl::spectrogram_derivative}
+					\end{align*}
+				
+				Như vậy đạo hàm trên toàn bộ \spectrogram{} theo $\hat{x}$ sẽ cho ta một hằng số.
+				
+				Gọi
+				
+					\begin{equation}
+						L_e = ((1 + \alpha L_1) - \beta |L_2|),
+						\label{rl::enhanced_loss_formula}
+					\end{equation}
+				
+				\noindent ta có
+				
+					\begin{align*}
+						\frac{d}{d \hat{x}} L_e	& = \alpha \frac{d}{d \hat{x}} L_1 - \beta s(L_2) \frac{d}{d \hat{x}} L_2 \\
+							%& = \alpha \sum \bigg( \frac{|X|}{\norm{|X|}_2} \frac{d}{d \hat{x}} \frac{|\hat{X}|}{\norm{|\hat{X}|}_2} \bigg) - \beta s(L_2) \sum \bigg( \frac{|N|}{\norm{|N|}_2} \frac{d}{d \hat{x}} \frac{|\hat{X}|}{\norm{|\hat{X}|}_2} \bigg) \\
+							& = \sum \bigg( \alpha \frac{|X|}{\norm{|X|}_2} - \beta s(L_2) \frac{|N|}{\norm{|N|}_2} \bigg) \frac{d}{d \hat{x}} \frac{|\hat{X}|}{\norm{|\hat{X}|}_2}, \numberedeq
+						\label{rl::enhanced_loss_init_derivative}
+					\end{align*}
+				
+				\noindent với
+				
+					\begin{equation}
+						s(x) = \begin{cases}
+							1,	& \ifc{} x \ge 0, \\
+							-1,	& \ifc{} x < 0.
+						\end{cases}
+					\end{equation}
+				
+				Ta khai triển tiếp tục đạo hàm của hàm tăng cường mất mát
+				
+					\begin{align*}
+						\frac{d}{d \hat{x}} \frac{|\hat{X}|}{\norm{|\hat{X}|}_2}	& = \bigg( \frac{1}{\norm{|\hat{X}|}_2} - \frac{|\hat{X}|^2}{\norm{|\hat{X}|}^3_2} \bigg) \frac{d}{d \hat{x}} |\hat{X}| \\
+							%& = \bigg( \frac{1}{\norm{|\hat{X}|}_2} - \frac{|\hat{X}|^2}{\norm{|\hat{X}|}^3_2} \bigg) \frac{\hat{X}}{|\hat{X}|} \frac{d}{d \hat{x}} \hat{X} \\
+							& = C \bigg( \frac{1}{\norm{|\hat{X}|}_2} - \frac{|\hat{X}|^2}{\norm{|\hat{X}|}^3_2} \bigg) \frac{\hat{X}}{|\hat{X}|},
+					\end{align*}
+				
+				\noindent và lấy chuẩn Euclid của đạo hàm
+				
+					\begin{align*}
+						\bignorm{\frac{d}{d \hat{x}} L_e}_2	& = \bignorm{\sum \bigg( \alpha \frac{|X|}{\norm{|X|}_2} - \beta s(L_2) \frac{|N|}{\norm{|N|}_2} \bigg) \frac{d}{d \hat{x}} \frac{|\hat{X}|}{\norm{|\hat{X}|}_2}}_2 \\
+									& \le C_1 \bignorm{\frac{d}{d \hat{x}} \frac{|\hat{X}|}{\norm{|\hat{X}|}_2}}_2 \\
+									& = C_1 C_2 \bignorm{\bigg( \frac{1}{\norm{|\hat{X}|}_2} - \frac{|\hat{X}|^2}{\norm{|\hat{X}|}^3_2} \bigg) \frac{\hat{X}}{|\hat{X}|}}_2 \\
+									& \le C_1 C_2 C_3 \bignorm{\frac{1}{\norm{|\hat{X}|}_2} - \frac{|\hat{X}|^2}{\norm{|\hat{X}|}^3_2}}_2 \\
+									& \le C_1 C_2 C_3 \bigg( \bignorm{\frac{1}{\norm{|\hat{X}|}_2}}_2 + \bignorm{\frac{|\hat{X}|^2}{\norm{|\hat{X}|}^3_2}}_2 \bigg) \\
+									& \le C_1 C_2 C_3 \bigg( \bignorm{\frac{1}{\norm{|\hat{X}|}_2}}_2 + \bignorm{\frac{\norm{\hat{X}}^2_2}{\norm{|\hat{X}|}^3_2}}_2 \bigg) \\
+									& \le C_e \frac{1}{\norm{|\hat{X}|}_2}. \numberedeq
+					\end{align*}
+				
+				Chúng tôi gộp hai đạo hàm của hàm mất mát chính $L_{main}$ và hàm cải tiến do chúng tôi đề xuất $L_e$, từ đó thu được
+				
+					\begin{align*}
+						\bignorm{\frac{d}{d \hat{x}} (L_{main} L_e)}_2	& \le \norm{L_{main}}_2 \bignorm{\frac{d}{d \hat{x}} L_e}_2 + \norm{L_e}_2 \bignorm{\frac{d}{d \hat{x}} L_{main}}_2. \numberedeq
+					\end{align*}
+				
+				Thay các đạo hàm được tính toán ở trên thay vào công thức trên, ta thu được
+				
+					\begin{align*}
+						\bignorm{\frac{d}{d \hat{x}} (L_{main} L_e)}_2	& \le \norm{L_{main}}_2 \bignorm{\frac{d}{d \hat{x}} L_e}_2 + \norm{L_e}_2 \bignorm{\frac{d}{d \hat{x}} L_{main}}_2 \\
+								& \le C_e \log \bigg( \frac{1}{\norm{\alpha x - \hat{x}}^2_2} \bigg) \frac{1}{\norm{|\hat{X}|}_2} + C_m \norm{L_e}_2 \frac{1}{\norm{\alpha x - \hat{x}}_2}.
+					\end{align*}
+				
+				Vì $\norm{L_e}_2 \le (1 + \alpha)$, do đó
+				
+					\begin{align*}
+						\bignorm{\frac{d}{d \hat{x}} (L_{main} L_e)}_2 & \le C_e \log \bigg( \frac{1}{\norm{\alpha x - \hat{x}}^2_2} \bigg) \frac{1}{\norm{|\hat{X}|}_2} + C_m \norm{L_e}_2 \frac{1}{\norm{\alpha x - \hat{x}}_2} \\
+								& \le C_e \log \bigg( \frac{1}{\norm{\alpha x - \hat{x}}^2_2} \bigg) \frac{1}{\norm{|\hat{X}|}_2} + C_m (1 + \alpha) \frac{1}{\norm{\alpha x - \hat{x}}_2}. \numberedeq
+							\label{rl::gradient_big_O_init}
+					\end{align*}
+				
+				Ta lại có
+				
+					\begin{align*}
+						\norm{|\hat{X}|}^2_2	& = \int_{-\infty}^{+\infty} \int_{-\infty}^{+\infty} \int_{-\infty}^{+\infty} |\polarcomplex{w(t - \tau) \hat{x}(t)}{-\omega t}|^2 dt d\tau d\omega \\
+												& = \int_{-\infty}^{+\infty} d\omega \int_{-\infty}^{+\infty} \int_{-\infty}^{+\infty} |w(t - \tau) \hat{x}(t)|^2 dt d\tau \\
+												& \le \int_{-\infty}^{+\infty} d\omega \int_{-\infty}^{+\infty} \int_{-\infty}^{+\infty} |w(t - \tau)|^2 |\hat{x}(t)|^2 dt d\tau \\
+												& = C_\omega C_w \norm{\hat{x}}^2_2, \numberedeq
+					\end{align*}
+				
+				\noindent nếu lấy căn hai vế của bất đẳng thức, ta thu được
+				
+					\begin{equation}
+						\norm{|\hat{X}|}_2 \le C_\omega C_w \norm{\hat{x}}_2.
+					\end{equation}
+				
+				Ta cũng thu được các kết quả tương tự kết quả tương tự với các cặp \spectrogram{} và dữ liệu miền thời gian khác. Thay kết quả vừa tìm được này vào \formularef{rl::gradient_big_O_init}, gọi $N'$ là \spectrogram{} của âm nhiễu còn lại sau khi lọc, ta có
+				
+					\begin{align*}
+						\bignorm{\frac{d}{d \hat{x}} (L_{main} L_e)}_2	& \le C_e \log \bigg( \frac{1}{\norm{\gamma x - \hat{x}}^2_2} \bigg) \frac{1}{\norm{|\hat{X}|}_2} + C_m (1 + \alpha) \frac{1}{\norm{\gamma x - \hat{x}}_2} \\
+								& \le C_e \log \bigg( \frac{1}{\norm{N'}^2_2} \bigg) \frac{1}{\norm{|\gamma X + N'|}_2} + C_m (1 + \alpha) \frac{1}{\norm{N'}_2}. \numberedeq
+						\label{rl::loss_gradient_form}
+					\end{align*}
+				
+				Từ công thức \formularef{rl::loss_gradient_form}, ta thấy rằng có hai trường hợp đạo hàm lấn át (một trong hai đạo hàm rất lớn so với đạo hàm còn lại). Trường hợp đầu tiên xảy ra khi giá trị chuẩn Euclid của $N'$ rất lớn so với giá trị chuẩn Euclid của $X$ tức là mô hình đang ở những epochs đầu trong quá trình huấn luyện, giá trị chuẩn Euclid của \spectrogram{} nhiễu $N'$ lúc này tiệm cận đến vô cùng. Do đó, đạo hàm tổng lúc này sẽ là
+				
+					\begin{align*}
+						\bignorm{\frac{d}{d \hat{x}} (L_{main} L_e)}_2	& \le C_e \log \bigg( \frac{1}{\norm{N'}^2_2} \bigg) \frac{1}{\norm{|\gamma X + N'|}_2} + C_m (1 + \alpha) \frac{1}{\norm{N'}_2} \\
+								& \le C_e \log \bigg( \frac{1}{\norm{N'}^2_2} \bigg) \frac{1}{\norm{|N'|}_2} + C_m (1 + \alpha) \frac{1}{\norm{N'}_2} \\
+								& \approx C_e \log \bigg( \frac{1}{\norm{N'}^2_2} \bigg) \frac{1}{\norm{|N'|}_2}.
+					\end{align*}
+				
+				Khi đó, đạo hàm sẽ gần như chỉ phụ thuộc vào hàm mất mát tăng cường của ta mà lấn át đi giá trị của đạo hàm từ $L_{main}$.
+				
+				Tuy nhiên, trong trường hợp ngược lại, tức giá trị chuẩn Euclid của $N'$ lúc này rất nhỏ so với chuẩn Euclid $X$ hay giá trị chuẩn Euclid của $N'$ lúc này sẽ tiệm cận về $0$ và mô hình đang ở những epochs sau của quá trình huấn luyện, lúc này ta lại có
+				
+					\begin{align*}
+						\bignorm{\frac{d}{d \hat{x}} (L_{main} L_e)}_2	& \le C_e \log \bigg( \frac{1}{\norm{N'}^2_2} \bigg) \frac{1}{\norm{|\gamma X + N'|}_2} + C_m (1 + \alpha) \frac{1}{\norm{N'}_2} \\
+								& \le C_e \log \bigg( \frac{1}{\norm{N'}^2_2} \bigg) \frac{1}{\norm{|\gamma X|}_2} + C_m (1 + \alpha) \frac{1}{\norm{N'}_2} \\
+								& \approx C_m (1 + \alpha) \frac{1}{\norm{N'}_2}.
+					\end{align*}
+				
+				Tức là với những epochs sau, đạo hàm của hàm cải tiến không còn lấn át nữa mà ngược lại, nó bị hàm $L_{main}$ lấn át đi. Điều này được chúng tôi quan sát bằng thực nghiệm, ở một vài epoch đầu, mô hình hội tụ với giá trị cosine $L_1$ rất nhanh về một giá trị (chúng tôi quan sát được giá trị này thường là 0.9) trước khi chậm lại và tăng dần dần lên giá trị tối đa (0.98) ở tất cả các epochs sau đó trong quá trình huấn luyện.
+				
+				Vậy qua những phân tích vừa rồi, việc sử dụng hàm tăng cường mất mát của chúng tôi sẽ khiến quá trình huấn luyện được chia làm hai giai đoạn tương ứng với hai trường hợp $L_e$ lấn át $L_{main}$ và $L_{main}$ lấn át $L_e$. Kết quả và quá trình chuẩn bị cho huấn luyện cũng như kiểm thử của luận văn này được trình bày trong \chapterref{chapter::results}.
+				
+	
+	\subsection{Mô hình đề xuất}\label{subsection::relatedworks::proposed_model}
+	
+		Sau khi đã khảo sát một số mô hình trong cuộc thi Deep Noise Suppression \cite{dns} của Microsoft, tuy các mô hình sử dụng ``mask'' số phức lớn như DCCRN \cite{dccrn} và FullSubNet \cite{fullsubnet}, điểm metrics được công bố cao hơn hẳn các mô hình nhỏ sử dụng ``mask'' số thực như DTLN \cite{dtln} nhưng chúng tôi tìm thấy được ở các mô hình này một điểm chung. Tất cả các mô hình mà chúng tôi tham khảo được đều sử dụng hai lớp LSTM (hoặc RNN) chồng lên nhau như một bộ lọc nhiễu chính.
+		
+		Ở DTLN, hai lớp LSTM chồng lên nhau được sử dụng trong cả hai phần của mô hình, tương tự cho FullSubNet, hai LSTM được đặt ở phần mạng Subband. Đối với DCCRN, với cách tiếp cận từ UNet, sau khi qua các lớp Encoder (một tập hợp các lớp tích chập 2 chiều) vẫn là hai lớp RNN được sử dụng để dự đoán ra ``mask'' số phức lọc nhiễu. Do đó, ý tưởng về hai lớp LSTM chồng lên nhau cũng chính là khởi nguồn cho mô hình đề xuất của chúng tôi.
+		
+			\begin{table}[h]
+				\centering
+				\begin{tabular}{c c}
+					\hline
+					\textbf{Tiêu chí}	& \textbf{Mục tiêu}	\\
+					\hline
+					Tham số				& < 700000 \\
+					Thời gian chạy		& < 8ms \\
+					\hline
+				\end{tabular}
+				\caption{Bảng các tiêu chí để thiết kế mạng học sâu}
+				\label{rl::req}
+			\end{table}
+		
+		\subsub{Phiên bản 1: Mô hình sơ khởi} Với các yêu cầu được nêu trong \tableref{rl::req}, điều rõ ràng là ngoài vấn đề về độ hiệu quả của mô hình chúng tôi cần phải đảm bảo cả vấn đề về số lượng tham số và độ trễ của mô hình, ngoài ra nguồn tài nguyên được sử dụng để huấn luyện mô hình cũng cần phải được cân nhắc. Như đã đề cập ở phần trước, đây là một mô hình sử dụng ``mask'' số thực, tuy kết quả của mô hình này so với các mô hình ``mask'' số phức khác không được tốt lắm nhưng kết quả của mô hình này lại tốt hơn hẳn so với các mô hình khác khi đem đi kiểm thử trên bộ dữ liệu của chúng tôi (\tableref{re::compare_models}). Hơn nữa lượng tham số nhỏ hơn khá nhiều so với hai mô hình ``mask'' số phức khác được chúng tôi tìm hiểu là FullSubNet và DCCRN. Do đó, DTLN là mô hình khởi đầu trong luận văn này.
+			
+				\begin{figure}[h]
+					\centering
+					\begin{subfigure}{.5\textwidth}
+						\centering
+						\includegraphics[width=70mm]{\rlimg{dtln_reduced_freq_cutoff_1.png}}
+					\end{subfigure}%
+					\begin{subfigure}{.5\textwidth}
+						\centering
+						\includegraphics[width=70mm]{\rlimg{dtln_reduced_freq_cutoff_2.png}}
+					\end{subfigure}
+					
+					\caption{Một số kết quả được kết quả huấn luyện của mô hình DTLN thu gọn bị cắt một nửa tần số, nhiễu vẫn còn khá nhiều trong \spectrogram{} sau khi đã lọc}
+				\end{figure}
+			
+			Bị ràng buộc bởi các yêu cầu về thời gian thực và cả nguồn tài nguyên huấn luyện, chúng tôi bắt đầu từ việc cắt giảm tham số của mô hình DTLN. Việc cắt giảm tham số được bắt nguồn từ bộ phận lọc nhiễu, 4 lớp LSTM 128 units, 2 lớp tích chập 1 chiều lần lượt có kích thước 128 và 512. Chúng tôi bắt đầu cắt giảm lượng tham số bên trong LSTM. Các lớp LSTM sau khi được cắt giảm đạt kết quả tốt nhất ở 64 units, 2 lớp tích chập cũng được chúng tôi tinh chỉnh xuống còn 64 và 256. Việc cắt giảm này cho kết quả lượng tham số mô hình được giảm xuống 3 lần (vào khoảng 363.000 tham số). Nhưng việc cắt giảm này cũng để lại một số hậu quả, vì lớp tích chập 1 chiều sau cùng chỉ có kích thước 256 nên khi qua giải thuật Overlap Add, các giá trị tần số bị cắt ngắn đi một nửa (tần số lấy mẫu của chúng tôi là 16000 mẫu/s nên giới hạn tần số Nyquist sẽ nằm ở 8000 Hz, sau khi cắt giảm nó chỉ còn là 4000 Hz).
+			
+			Để kiểm thử chất lượng mô hình này ngoài việc sử dụng metrics để kiểm thử, chúng tôi còn sử dụng con người để kiểm thử các kết quả mô hình\footnote{Kiểm thử tại  \url{https://colab.research.google.com/drive/1Z8Gv2V71yNUhmHVm4Rf-X9fle0xbtZzm}}. Nhưng các phản hồi về cho chúng tôi rằng chất lượng lọc nhiễu còn khá kém, tiếng rè của các âm sau khi lọc, và chính những hạn chế này của mô hình DTLN thu gọn đã giúp chúng tôi tìm kiếm ra được mô hình sơ khởi của mình.
+			
+				\begin{figure}[h]
+					\centering
+					\begin{subfigure}{.5\textwidth}
+						\centering
+						\includegraphics[width=70mm]{\rlimg{post_fist_result_1.png}}
+					\end{subfigure}%
+					\begin{subfigure}{.5\textwidth}
+						\centering
+						\includegraphics[width=70mm]{\rlimg{post_fist_result_2.png}}
+					\end{subfigure}
+					
+					\caption{Một số kết quả được kết quả huấn luyện của mô hình Post, kết quả được cải thiện đáng kể so với mô hình DTLN thu gọn}
+				\end{figure}
+			
+				\begin{figure}[h]
+					\centering
+					\begin{subfigure}{.5\textwidth}
+						\centering
+						\includegraphics[width=70mm]{\rlimg{dtln_post_combined_result_1.png}}
+					\end{subfigure}%
+					\begin{subfigure}{.5\textwidth}
+						\centering
+						\includegraphics[width=70mm]{\rlimg{dtln_post_combined_result_2.png}}
+					\end{subfigure}
+					
+					\caption{Một số kết quả được kết quả huấn luyện của mô hình kết hợp giữa DTLN thu gọn và Post}
+				\end{figure}
+			
+			Với mục tiêu ban đầu là cải thiện chất lượng của đầu ra mô hình DTLN thu gọn, chúng tôi đề xuất mô hình \textbf{Post}. Bằng nhiều thử nghiệm, chúng tôi nhận thấy rằng kiến trúc LSTM chồng, cho phép truyền trạng thái từ LSTM trước sang cho LSTM sau và có một lớp Dense xen giữa hai lớp LSTM này đem lại kết quả khả quan nhất. 
+			
+			Kết quả là mô hình Post lúc này còn cho kết quả tương đương (trên bộ kiểm thử của tập Edinburgh \cite{edata}) với cả mô hình DTLN dù lượng tham số chỉ bằng 1/5 và cấu trúc mô hình cũng đơn giản hơn rất nhiều. 
+			
+			\tableref{rl::post_init} mô tả cấu trúc mạng Post, lớp LSTM đầu (lớp thứ 2) ngoài việc trả về kết quả còn trả về thêm cả các trạng thái sau khi chạy. Các trạng thái này được chuyển tới lớp LSTM thứ 2 (lớp thứ 4) và được sử dụng để lọc lại một lần nữa trước khi qua lớp Dense và trả về ``mask'' số thực cho \spectrogram{} ban đầu.
+			
+				\begin{table}
+					\centering
+					\begin{tabular}{c l c l}
+						\hline
+								& \textbf{Lớp}		& \textbf{Lượng tham số}		& \textbf{Kích thước đầu ra} \\
+						\hline
+						1		& Input				&								& (N $\times$ T $\times$ 257) \\
+						2		& InstantNorm		&	514							& (N $\times$ T $\times$ 257) \\
+						3		& LSTM 64 Tanh		&	82432						& (N $\times$ T $\times$ 64), (N $\times$ 64), (N $\times$ 64) \\
+						4		& Dense 128 Tanh	&	8320						& (N $\times$ T $\times$ 128) \\
+						5		& LSTM 64 Tanh		&	49408						& (N $\times$ T $\times$ 64) \\
+						6		& Dense 257 Tanh	&	16705						& (N $\times$ T $\times$ 257) \\
+						\hline
+						Tổng	& 					&	157379						& \\
+						\hline
+					\end{tabular}
+					\caption{Cấu trúc của mô hình Post sơ khởi}
+					\label{rl::post_init}
+				\end{table}
+			
+		
+		\subsub{Phiên bản 2: Lookahead} Được khá nhiều bài báo khác sử dụng \cite{fullsubnet, subbandmodel}, lookahead cho phép sử dụng nhiều khung thời gian để dự đoán cho thời gian hiện tại. Tuy việc này sẽ làm tăng lượng tham số đầu vào và tăng độ trễ (vì sử dụng các khung thời gian sau đó để dự đoán cho khung hiện tại) của mô hình lên, tuy nhiên cách làm này đem lại kết quả rất tốt (\tableref{re::compare_models}).
+		
+		Theo như chúng tôi quan sát được từ dữ liệu, các tần số biến đổi âm thanh trong \spectrogram{} không thay đổi một cách đột ngột (từ tần số thấp lên một tần số nào đó cao hơn ngay lập tức hoặc ngược lại) mà chúng luôn có sự thay đổi một cách từ từ và đều đặn như được thể hiện trong \figref{rl::freq_change}.
+			
+				\begin{figure}[h]
+					\centering
+					\begin{subfigure}{.5\textwidth}
+						\centering
+						\includegraphics[width=70mm]{\rlimg{lookahead_freq_change_illus_1.png}}
+					\end{subfigure}%
+					\begin{subfigure}{.5\textwidth}
+						\centering
+						\includegraphics[width=70mm]{\rlimg{lookahead_freq_change_illus_2.png}}
+					\end{subfigure}
+					
+					\caption{Tần số thay đổi dần dần theo thời gian, tuy biên độ có lúc mạnh lúc nhẹ nhưng tần số vẫn thay đổi đều đặn không bị đột ngột cho đến khi kết thúc}
+				\label{rl::freq_change}
+				\end{figure}
+			
+			Lấy ý tưởng từ quan sát sự thay đổi này, lookahead tận dụng các khung phía sau (trong trường hợp chúng tôi sử dụng là cả phía trước khung hiện tại) để dự đoán ra kết quả cho khung hiện tại. Để minh họa cho ý tưởng này, chúng tôi diễn tả như trong \figref{rl::lookahead_idea}. Giả định rằng ta đang có hai dữ liệu tần số tại khung thứ $t - 1$ và khung thứ $t + 1$ (các phần được tô màu đỏ), rõ ràng theo những quan sát từ dữ liệu mà chúng tôi đã đề cập, khung thứ $t$ được dự đoán (phần được tô xám) sao cho nó sẽ làm cho tần số cấu tạo biến đổi đều đặn và không bị gián đoạn đột ngột.
+			
+				\begin{figure}[h]
+					\centering
+					\begin{subfigure}{.5\textwidth}
+						\centering
+						\includegraphics[width=70mm]{\rlimg{lookahead_idea_mid.png}}
+					\caption{Lookahead giữa (mid lookahead)}
+					\end{subfigure}%
+					\begin{subfigure}{.5\textwidth}
+						\centering
+						\includegraphics[width=70mm]{\rlimg{lookahead_idea_left.png}}
+					\caption{Lookahead trái (left lookahead)}
+					\end{subfigure}
+				
+					\caption{Ý tưởng sử dụng lookahead để dự đoán kết quả hiện tại của chúng tôi}
+					\label{rl::lookahead_idea}
+				\end{figure}
+			
+			Việc sử dụng lookahead vào trong mô hình Post của chúng tôi sẽ làm thay đổi cấu trúc của mô hình lại như trong \tableref{rl::post_lookahead}. Số lượng tham số trong mô hình của chúng tôi lúc này khoảng 288000 tham số, các tham số lúc này tập trung chủ yếu ở lớp LSTM thứ nhất (khoảng 214016 tham số) chiếm khoảng 74\% lượng tham số trong mạng, điều này gây ra sự bất cân đối giữa các lớp. Cũng ở cải tiến này, chúng tôi bắt đầu phân hóa chức năng của các lớp trong mô hình. Cụ thể:
+			
+				\begin{enumerate}[1.]
+					\item \enumentry{Mã hóa dữ liệu:} Ở bước này, mô hình cố gắng học cách để mã hóa dữ liệu, như đã nêu trong \tableref{rl::post_lookahead} dữ liệu đầu vào được nối từ 3 vectors lấy từ \spectrum{} của 3 khung kề cận nhau để làm dữ liệu đầu vào cho bộ phận lọc nhiễu chính.
+					
+					\item \enumentry{Bộ lọc nhiễu chính:} Bộ lọc nhiễu này thực chất chính là mô hình Post nguyên nguyên bản của chúng tôi được nêu trong \tableref{rl::post_init}, dữ liệu từ bộ phận mã hóa được đưa vào bộ phận này để dự đoán ra ``mask'' số thực cho \spectrogram{} đầu vào.
+				\end{enumerate}
+			
+				\begin{table}
+					\centering
+					\begin{tabular}{c l c l}
+						\hline
+								& \textbf{Lớp}		& \textbf{Lượng tham số}		& \textbf{Kích thước đầu ra} \\
+						\hline
+						1		& Input				&								& (N $\times$ T $\times$ 257) \\
+						2		& InstantNorm		&	514							& (N $\times$ T $\times$ 257) \\
+						3		& ZeroPadding 0, 2	&								& (N $\times$ (T + 2) $\times$ 257) \\
+						4		& Framing 3, 1		&								& (N $\times$ T $\times$ 3 $\times$ 257) \\
+						5		& Concat			&								& (N $\times$ T $\times$ 771) \\
+						6		& LSTM 64 Tanh		&	214016						& (N $\times$ T $\times$ 64), (N $\times$ 64), (N $\times$ 64) \\
+						7		& Dense 128 Tanh	&	8320						& (N $\times$ T $\times$ 128) \\
+						8		& LSTM 64 Tanh		&	49408						& (N $\times$ T $\times$ 64) \\
+						9		& Dense 257 Tanh	&	16705						& (N $\times$ T $\times$ 257) \\
+						\hline
+						Tổng	& 					&	288963						& \\
+						\hline
+					\end{tabular}
+					\caption{Cấu trúc của mô hình Post sử dụng lookahead}
+				\label{rl::post_lookahead}
+				\end{table}
+				
+		
+		\subsub{Phiên bản 3: Cải tiến Lookahead} Một vấn đề đối với mô hình sử dụng lookahead đó chính là kích thước dữ liệu đầu vào sẽ tăng tuyến tính theo lượng khung thời gian nhìn được và lượng tham số cũng như độ trễ của mô hình cũng từ đó mà tăng theo.
+		
+			Ở phần cải tiến thứ hai, chúng tôi đã cho thấy kiến trúc mô hình sử dụng lookahead, tuy chỉ là sử dụng ba khung thời gian (2 khung sau và 1 khung ở hiện tại). Nhưng tại lớp LSTM đầu vào, lượng tham số tăng lên rất nhiều, vì vậy, nếu chúng tôi muốn sử dụng lookahead hiệu quả hơn đòi hỏi chúng tôi cần một cơ chế để có thể vừa thu gọn lượng tham số vừa có thể đảm bảo các thông tin đầu vào mô hình. Với những yêu cầu này, chúng tôi đề xuất ra một cơ chế \textit{nén dữ liệu} sử dụng mạng tích chập.
+			
+			Như ở phần trước chúng tôi đã có giới thiệu, mô hình chúng tôi cơ bản sẽ được chia làm hai phần: \textit{Nén dữ liệu} và \textit{Bộ lọc nhiễu chính}. Trong phần này, các cải tiến của chúng tôi sẽ tập trung vào phần nén dữ liệu. Mục tiêu lần này của chúng tôi là lookahead trong năm khung thay vì chỉ ba như ở cải tiến hai và cắt giảm lượng tham số sẽ được sử dụng trong mô hình. Vì lookahead trong năm khung sẽ sẽ làm cho dữ liệu đầu vào tăng lên rất nhiều (kích thước của đầu vào mô hình lúc này sẽ là (N $\times$ T $\times$ 1285)) và làm cho kích thước của LSTM đầu vào lúc này cũng tăng lên theo (theo chúng tôi ước lượng, lớp LSTM đầu vào sẽ có khoảng 345600 tham số). Để làm điều này, trước hết chúng tôi chia đầu vào thành các khoảng năm khung thời gian trùng lắp nhau (1 khung phía trước và 3 khung phía sau khung hiện tại). Sau đó chúng tôi cho tập hợp dữ liệu này qua một số lớp tích chập sử dụng hàm kích hoạt tuyến tính và lần lượt đi qua các bước masking để nén dữ liệu và cuối cùng là trả về kết quả cho bộ lọc nhiễu. Chi tiết các lớp được chúng tôi liệt kê ở \tableref{rl::post_lookahead_compress_mechanism}.
+			
+				\begin{table}
+					\centering
+					\begin{tabular}{c l c l}
+						\hline
+						& \textbf{Lớp}		& \textbf{Lượng tham số}		& \textbf{Kích thước đầu ra} \\
+						\hline
+						1		& Input						&								& (N $\times$ T $\times$ 257) \\
+						2		& ZeroPadding 1, 3			&								& (N $\times$ (T + 4) $\times$ 257) \\
+						3		& Framing 5, 1				&								& (N $\times$ T $\times$ 5 $\times$ 257) \\
+						4		& Expand Dims				&								& (N $\times$ T $\times$ 5 $\times$ 257 $\times$ 1) \\
+						5		& Conv2D 32 (3 $\times$ 3) Linear	&	320							& (N $\times$ T $\times$ 3 $\times$ 255 $\times$ 32) \\
+						6		& Conv2D 32 (3 $\times$ 3)	Linear	&	9248						& (N $\times$ T $\times$ 1 $\times$ 253 $\times$ 32) \\
+						7		& Reduce Dims				&		x						& (N $\times$ T $\times$ 253 $\times$ 32) \\
+						8		& Framing 4, 4				&								& (N $\times$ T $\times$ 63 $\times$ 4 $\times$ 32) \\
+						9		& Reshape					&								& (N $\times$ T $\times$ 63 $\times$ 32 $\times$ 4) \\
+						10		& Masking					&	20							& (N $\times$ T $\times$ 63 $\times$ 32 $\times$ 4) \\
+						11		& Summing					&								& (N $\times$ T $\times$ 63 $\times$ 32) \\
+						12		& Dense 4 Tanh				&	132							& (N $\times$ T $\times$ 63 $\times$ 4) \\
+						13		& Concat					&								& (N $\times$ T $\times$ 252) \\
+						\hline
+						Tổng	& 							&	9720						& \\
+						\hline
+					\end{tabular}
+					\caption{Cấu trúc của bộ nén dữ liệu ở cải tiến thứ 3}
+					\label{rl::post_lookahead_compress_mechanism}
+				\end{table}
+			
+			Từ dữ liệu đầu vào, để đảm bảo mô hình sẽ sử dụng một khung trước và ba khung sau để dự đoán khung thời gian hiện tại, chúng tôi mở rộng biên của đoạn âm thanh đầu vào bằng cách bù không nhờ đó mà dữ liệu đầu vào chúng tôi từ $T$ sẽ được mở rộng lên thành $T + 4$ khung thời gian. Sau khi đã bù không và chắc chắn rằng mô hình sẽ sử dụng năm khung liên tục để dự đoán khung hiện tại, chúng tôi tiến hành cắt $T + 4$ khung thời gian này ra thành từng cụm năm khung liên tục nhau, sau mỗi lần cắt, chúng tôi dịch lên một khung và lại tiếp tục lấy năm khung đó làm thành một cụm và cứ như vậy, chúng tôi có được $T$ cụm dữ liệu đầu vào có kích thước (5 $\times$ 257). Sau đó chúng tôi thực hiện hai lần tích chập với kernel (3 $\times$ 3) lên cụm dữ liệu này, sở dĩ chúng tôi sử dụng hai lần tích chập với kernel (3 $\times$ 3) mà lại không sử dụng một lần tích chập kernel (5 $\times$ 5) là vì một phần là do giới hạn về phần cứng của chúng tôi không cho phép và một phần khác cũng là để tận dụng tính chất được miêu tả trong \figref{rl::conv_attr} của tích chập. Việc sử dụng hai lớp kernel chồng lên nhau giúp chúng tôi có thể phát hiện nhiều khuôn mẫu (pattern) của cùng một loại kernel trên hình đầu vào.
+				
+				\begin{table}
+					\centering
+					\begin{tabular}{c l c l}
+						\hline
+						& \textbf{Lớp}		& \textbf{Lượng tham số}		& \textbf{Kích thước đầu ra} \\
+						\hline
+						1		& Input						&								& (N $\times$ T $\times$ 257) \\
+						2		& ZeroPadding 1, 3			&								& (N $\times$ (T + 4) $\times$ 257) \\
+						3		& Framing 5, 1				&								& (N $\times$ T $\times$ 5 $\times$ 257) \\
+						4		& Expand Dims				&								& (N $\times$ T $\times$ 5 $\times$ 257 $\times$ 1) \\
+						5		& Conv2D 32 (3 $\times$ 3) Linear	&	320							& (N $\times$ T $\times$ 3 $\times$ 255 $\times$ 32) \\
+						6		& Conv2D 32 (3 $\times$ 3)	Linear	&	9248						& (N $\times$ T $\times$ 1 $\times$ 253 $\times$ 32) \\
+						7		& Reduce Dims				&								& (N $\times$ T $\times$ 253 $\times$ 32) \\
+						8		& Framing 4, 4				&								& (N $\times$ T $\times$ 63 $\times$ 4 $\times$ 32) \\
+						9		& Reshape					&								& (N $\times$ T $\times$ 63 $\times$ 32 $\times$ 4) \\
+						10		& Masking					&	20							& (N $\times$ T $\times$ 63 $\times$ 32 $\times$ 4) \\
+						11		& Summing					&								& (N $\times$ T $\times$ 63 $\times$ 32) \\
+						12		& Dense 4 Tanh				&	132							& (N $\times$ T $\times$ 63 $\times$ 4) \\
+						13		& Concat					&								& (N $\times$ T $\times$ 252) \\
+						14		& LSTM 64 Tanh				&	81152						& (N $\times$ T $\times$ 64), (N $\times$ 64), (N $\times$ 64) \\
+						15		& Dense 128 Tanh			&	8320						& (N $\times$ T $\times$ 128) \\
+						16		& LSTM 64 Tanh				&	49408						& (N $\times$ T $\times$ 64) \\
+						17		& Dense 257 Tanh			&	16705						& (N $\times$ T $\times$ 257) \\
+						\hline
+						Tổng	& 							&	165305						& \\
+						\hline
+					\end{tabular}
+					\caption{Cấu trúc của mô hình Post sử dụng bộ nén dữ liệu cải tiến}
+					\label{rl::post_lookahead_enhanced_final}
+				\end{table}
+			
+			
+				\begin{figure}[h]
+					\centering
+					\begin{subfigure}{.5\textwidth}
+						\centering
+						\includegraphics[width=70mm]{\rlimg{conv_ex1.png}}
+					\end{subfigure}%
+					\begin{subfigure}{.5\textwidth}
+						\centering
+						\includegraphics[width=70mm]{\rlimg{conv_ex2.png}}
+					\end{subfigure}
+					
+					\caption{Minh họa tính chất của tích chập khi sử dụng kernel 2 lên kết quả tích chập của kernel 1 lên hình đầu vào sẽ cho phép phát hiện ra nhiều khuôn mẫu tương tự nhau}
+					\label{rl::conv_attr}
+				\end{figure}
+			
+			Tận dụng tính chất này của tích chập và đặc tính của âm thanh là một số tần số thường có sự biến đổi đồng thời với nhau tạo nên các cạnh rõ nét thể hiện lên \spectrogram{}, từ đó tổng hợp ra các đặc tính đặc trưng trong bốn khung thời gian liên tiếp nhau (giữa các cụm bốn khung này không có overlap) thông qua masking và summing như trong \tableref{rl::post_lookahead_compress_mechanism}. Cuối cùng, dữ liệu thông qua một lớp biến đổi và trả về cho bộ lọc nhiễu chính.
+			
+			Như vậy sau ba lần cải tiến, chúng tôi đã có được mô hình lọc nhiễu mới trong luận văn tốt nghiệp này. Tuy nhiên trong quá trình hiện thực vào ứng dụng việc truyền trạng thái ở lớp LSTM thứ nhất và thứ hai không đem lại nhiều hiệu quả, do các đầu vào dưới dạng một stream liên tục và các đầu vào này thường rất ngắn (khoảng 64ms cho mỗi lần chạy). Vì vậy để khắc phục tình trạng này, chúng tôi quyết định tách mô hình được cải tiến nêu ở \tableref{rl::post_lookahead_enhanced_final} ra thành hai loại: \textit{Mô hình lọc nhiễu tĩnh} và \textit{Mô hình lọc nhiễu động}. Mô hình lọc nhiễu tĩnh vẫn giữ nguyên cấu trúc của mô hình Post ở Phiên bản 3, chỉ có mô hình lọc nhiễu động sẽ được loại bỏ các trạng thái liên kết từ LSTM thứ nhất sang LSTM thứ hai và giữ nguyên các lớp còn lại. Sự khác biệt giữa hai loại mô hình này được nêu trong \tableref{rl::static} và \tableref{rl::dynamic}.
+			
+				\begin{table}
+					\centering
+					\begin{tabular}{c l c l}
+						\hline
+						& \textbf{Lớp}		& \textbf{Lượng tham số}		& \textbf{Kích thước đầu ra} \\
+						\hline
+						1		& Input						&								& (N $\times$ T $\times$ 257) \\
+						2		& Bộ nén dữ liệu			&	9720						& (N $\times$ T $\times$ 252) \\
+						3		& LSTM 64 Tanh				&	81152						& (N $\times$ T $\times$ 64), (N $\times$ 64), (N $\times$ 64) \\
+						4		& Dense 128 Tanh			&	8320						& (N $\times$ T $\times$ 128) \\
+						5		& LSTM 64 Tanh				&	49408						& (N $\times$ T $\times$ 64) \\
+						6		& Dense 257 Tanh			&	16705						& (N $\times$ T $\times$ 257) \\
+						\hline
+						Tổng	& 							&	165305						& \\
+						\hline
+					\end{tabular}
+					\caption{Cấu trúc của mô hình lọc nhiễu tĩnh}
+				\label{rl::static}
+				\end{table}
+			
+				\begin{table}
+					\centering
+					\begin{tabular}{c l c l}
+						\hline
+						& \textbf{Lớp}		& \textbf{Lượng tham số}		& \textbf{Kích thước đầu ra} \\
+						\hline
+						1		& Input						&								& (N $\times$ T $\times$ 257) \\
+						2		& Bộ nén dữ liệu			&	9720						& (N $\times$ T $\times$ 252) \\
+						3		& LSTM 64 Tanh				&	81152						& (N $\times$ T $\times$ 64) \\
+						4		& Dense 128 Tanh			&	8320						& (N $\times$ T $\times$ 128) \\
+						5		& LSTM 64 Tanh				&	49408						& (N $\times$ T $\times$ 64) \\
+						6		& Dense 257 Tanh			&	16705						& (N $\times$ T $\times$ 257) \\
+						\hline
+						Tổng	& 							&	165305						& \\
+						\hline
+					\end{tabular}
+					\caption{Cấu trúc của mô hình lọc nhiễu động}
+				\label{rl::dynamic}
+				\end{table}
+			
+			Tuy các theo các cách tiếp cận của chúng tôi đề xuất đều sử dụng ``mask'' số thực, nhưng chúng tôi vẫn cân nhắc sử dụng ``mask'' số phức trong các thử nghiệm của mô hình. Các mô hình Post số phức có cấu tạo tương tự như các mô hình được đề xuất ở trên nhưng các lớp tính toán được thay thành các lớp được hiện thực dưới cơ chế phức được đề xuất bởi \cite{dccrn}. Tuy nhiên, số lượng tham số và thời gian tính toán của mô hình bị tăng lên rất nhiều (các lớp LSTM phức được cấu tạo từ hai LSTM thực vậy nên lượng tham số sẽ bị tăng lên hai lần), với mô hình Post Phiên bản 2 được hiện thực ``mask'' phức, lượng tham số tăng lên xấp xỉ 700000 tham số cho ba lookahead. Do đó, chúng tôi quyết định không hiện thực mô hình Post Phiên bản 3 dùng ``mask'' số phức để làm mô hình chính cho ứng dụng.

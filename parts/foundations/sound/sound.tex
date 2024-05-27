@@ -1,0 +1,653 @@
+\newcommand{\soundimg}[1]{parts/foundations/sound/img/#1}
+\setupfont{13pt}
+
+\chapter{Âm học}\label{chapter::sound}
+	Trong phần này, ta tìm hiểu về âm thanh, cấu tạo của âm thanh và các hình thức biểu diễn của nó. Bên cạnh đó, ta cũng sẽ đề cập các khái niệm nền tảng của âm thanh như tần số cảm nhận và độ to để từ đó đề cập tới các metrics thông dụng sẽ được sử dụng trong luận văn này.
+
+\section{Âm thanh}
+	
+	\textbf{Sóng âm} hay \textbf{âm thanh} về bản chất là một sóng dao động cơ cưỡng bức của các phần tử không khí va chạm vào nhau, xô đẩy tạo nên sự thay đổi về mặt mật độ phần tử, từ đó gây ra hiện tượng lan truyền của sóng âm. Vậy để bắt đầu, ta sẽ tìm hiểu các khái niệm liên quan đến \textbf{sóng âm}.
+	
+	\subsection{Sự hình thành sóng âm}\label{subsection::sound::def}
+		
+		\definition{Sóng âm} được biểu diễn bao gồm ba thành phần chính bao gồm: \textit{biên độ $A$}, \textit{tốc độ góc $\omega$} và \textit{pha ban đầu $\phi$}. Một sóng đơn giản nhất có thể kể đến đó là sóng cosine trong dao động điều hòa $A\cos(\omega t + \phi)$. Biên độ càng lớn, các phần tử không khí dao động càng mạnh tạo nên sự cách biệt giữa các vùng có mật độ không khí thưa và các vùng có mật độ có không khí dày, làm đồ thị sóng âm có biên độ lớn hơn là khi biên độ sóng phát ra từ nguồn thấp.
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=150mm]{\soundimg{wavesound.png}}
+				\caption{Biểu đồ sóng âm thể hiện mật độ không khí thay đổi như thế nào trong quá trình truyền âm thanh}
+			\end{figure}
+	
+		% Vì có bản chất là một dao động cơ học như vậy, nên hầu hết sóng âm đều có thể được biểu diễn dưới dạng số phức, như chúng tôi đã có đề cập ở chương số phức, công thức của Fourier bản thân nó là một biểu diễn của một dao động điều hòa. Và biến đổi Fourier chính là công cụ để chúng tôi có thể biến đổi hầu hết các loại sóng về dạng tổng của các sóng điều hòa này.
+		
+		Tương tự như biên độ, tốc độ góc cũng đóng một vai trò rất quan trọng trong sự hình thành của sóng âm. Các âm có tốc độ góc lớn (tương ứng với tần số dao động lớn vì hai đại lượng này quan hệ tỉ lệ thuận với nhau thông qua công thức $\omega = 2\pi f$ với $f$ là tần số) tương ứng với sự dao động nhanh hơn của các phần tử không khí do đó làm cho âm nghe có vẻ cao hơn những âm dao động ở tốc độ góc thấp. Đại lượng cuối cùng quy định tính chất của âm thanh đó chính là góc ban đầu của âm thanh. 
+		
+		Sóng âm thanh mà chúng tôi vừa đề cập là một \definition{sóng âm đơn (pure tone)}, nhưng thực tế, sóng âm thanh mà mọi người nghe được mỗi ngày phức tạp hơn rất nhiều. Các \definition{sóng âm phức tạp (complex tone)} được xem là tổng hợp của rất nhiều sóng âm đơn, sự tổng hợp này có thể được giữ nguyên (trong trường hợp âm thanh ít biến đổi) và cũng có thể biến đổi liên tục (trong trường hợp giọng nói) phụ thuộc vào bản chất của âm thanh này. Tai người từ lâu trong xử lý tín hiệu âm thanh đã luôn là một chuẩn mực để đem đi so sánh với các mô hình và metrics được sử dụng, với lý do này, ta sẽ phân tích cách mà tai người tiếp nhận âm thanh và sự liên hệ với biến đổi Fourier như đã được đề cập đề cập ở \chapterref{chapter::signal_processing}.
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=90mm]{\soundimg{human_ear.png}}
+				\caption{Cấu tạo của tai người}
+				%
+			\end{figure}
+	
+		Trước tiên, âm thanh sau khi được nguồn âm phát ra, lan truyền đi trong không khí và tới được tai ngoài và từ đó, các phần tử không khí tiếp tục truyền đi bên trong ống tai và va chạm vào màng nhĩ làm cho màng nhĩ dao động. Các dao động từ màng nhĩ làm dao động các xương nhỏ Incus, các xương này dao động và truyền dao động đó qua một ổ chứa dịch đặc là Cochlea. Đây cũng chính là nơi mà sự tương đồng trong cơ chế của biến đổi Fourier được thể hiện. Ổ dịch này được kết nối trực tiếp với dây thần kinh thính giác, và trong môi trường chất lỏng như vậy, các âm có tần số thấp chỉ có khả năng truyền đi trong một khoảng rất ngắn nhưng các âm với tần số cao thì lại khác, các âm này có thể truyền đi rất xa trong môi trường lỏng. Các sóng có tần số cao sẽ đạt tới các dây thần kinh cảm nhận ở sâu bên trong Cochlea, trong khi các sóng có tần số thấp hơn sẽ chỉ đạt tới dây thần kinh cảm nhận ở gần hơn. Thông qua việc tiếp nhận âm thanh như vậy, Cochlea đóng vai trò như một bộ biến đổi Fourier sinh học phân tách sóng âm nhận được từ nguồn âm thành rất nhiều những sóng đơn với tần số khác nhau có biên độ khác nhau. Đó cũng chính cách mà con người cảm nhận được âm thanh.
+	
+	\subsection{Các biểu diễn của âm thanh}
+	
+		Ở dạng cơ bản, sóng âm là một hàm theo thời gian $f(t)$ và đây cũng chính là dạng biểu diễn đầu tiên của sóng âm - biểu diễn trong miền thời gian. Ở miền này, sóng âm được thể hiện dưới dạng một biểu đồ sóng theo thời gian được gọi là \definition{\waveform{}}. \figref{sound::waveform} minh họa cho một ví dụ của âm thanh biểu diễn dưới dạng này.
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=120mm]{\soundimg{waveform.png}}
+				\caption{Waveform của câu \textit{``eat your raisins out-doors on the porch steps''}}
+			\label{sound::waveform}
+			\end{figure}
+		
+		Như ở \subsectionref{subsection::sound::def}, ta đã tìm hiểu rằng mỗi sóng âm phức tạp (complex tone) luôn là một tập hợp của rất nhiều sóng âm khác
+		
+			\begin{equation*}
+				f(t) = \sum_j r_j \cos(\omega_j + \phi_j),
+			\end{equation*}
+			
+		\noindent tuy nhiên, sóng âm hiện tại vẫn đang ở dạng trộn lẫn vào nhau, ở dạng thời gian để có thể xác định có những tần số nào đang tồn tại bên trong âm thanh tổng hợp là rất khó. Do đó ta tới với cách biểu diễn tiếp theo của sóng âm, biểu diễn theo tần số. Biểu diễn này chính là biên độ của tâm vật thể tạo bởi $\polarcomplex{f(t)}{-\omega t}$. Thể hiện các biên độ này trên một khoảng $\omega$ đủ lớn, kết quả là ta thu được biểu diễn của âm thanh theo miền tần số. Biểu đồ đó được gọi là \definition{\spectrum{}}. \figref{sound::spectrum} minh họa cho sự biến đổi qua lại giữa hai miền tần số và thời gian thông qua biến đổi Fourier thuận và nghịch.
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=120mm]{\soundimg{spectrum_freq.jpg}}
+				\caption{Spectrum minh họa biểu diễn âm thanh trên miền tần số}
+			\label{sound::spectrum}
+			\end{figure}
+		
+		Nhưng dễ thấy, bản chất giọng nói không hề có sự ổn định về mặt tần số cấu tạo theo thời gian. Một giọng nói hoàn toàn có thể bị thay đổi, làm giọng cao hơn, trầm đi, các yếu tố này đều chịu sự ảnh hưởng của người nói và thông tin họ muốn truyền tải tại thời điểm đó. Biến đổi Fourier thông thường không chú trọng vào đặc điểm này, biến đổi Fourier xét cấu tạo của âm thanh trên toàn bộ miền thời gian do đó sẽ làm mất đi bản chất biến đổi liên tục của tần số cấu tạo giọng nói. Để khắc phục điều này, thay vì sử dụng biến đổi Fourier trên toàn bộ $f(t)$, ta sẽ sử dụng phép biến đổi Fourier lên một khoảng thời gian nhỏ trong $f(t)$ và đó cũng chính là cách biểu diễn thứ ba của âm thanh. Miền tần số thời gian, miền này được đặc trưng bởi \definition{\spectrogram{}}.
+		
+			\begin{figure}[h]
+				\centering
+				\begin{subfigure}{0.5\textwidth}
+					\includegraphics[width=80mm]{\soundimg{clean_spectrogram.png}}
+					\caption{Spectrogram của giọng nói sạch}
+				\end{subfigure}%
+				\begin{subfigure}{0.5\textwidth}
+					\includegraphics[width=80mm]{\soundimg{noisy_spectrogram.png}}
+					\caption{Spectrogram của giọng nói có chứa nhiễu}
+				\end{subfigure}
+				\caption{Spectrogram minh họa biểu diễn âm thanh trên miền tần số thời gian}
+				\label{sound::spectrogram}
+			\end{figure}
+		
+		Thông qua \figref{sound::spectrogram}, các tính chất biến đổi của biên độ tần số cấu tạo theo thời gian được thể hiện khá rõ, \spectrogram{} biểu diễn âm thanh khá tốt và có nhiều thông tin hơn về giọng nói cũng như âm nhiễu được pha vào nó, điều này cho phép mô hình tự do hơn trong việc lựa chọn các thuộc tính cần thiết để loại bỏ nhiễu ra khỏi âm thanh này. Đây cũng chính là cách biểu diễn mà sinh viên thực hiện lựa chọn làm dữ liệu đầu vào để huấn luyện mô hình. Ngoài ra cũng có rất nhiều cách biểu diễn khác, một số cho phép mô hình tự chọn cách biểu diễn của riêng mình, một số thì tự quy định ra những thuộc tính có hình dạng đặc biệt như trong biến đổi wavelet hoặc biến đổi Laplace.
+		
+	\subsection{Dãy khoảng tám và dãy khoảng tám lẻ} %{Octave bands và fractional octave bands}
+	
+		Trong lý thuyết nhạc, khi một khoảng tần số đại diện cho sự di chuyển của tần số một nốt lên một tần số khác gấp đôi nó, ví dụ như từ cao độ nốt Đồ lên nốt Đố, khoảng cách cao độ giữa hai nốt này được gọi là một khung nhạc hay \definition{một khoảng tám (octave)}. \definition{Dãy khoảng tám (octave band)} là một tập hợp các khoảng tám như vậy liền kề nhau xuyên suốt khoảng tần số nghe được từ 20 Hz tới 20000 Hz. Trong mỗi khoảng tám, luôn có một tần số trung tâm được gọi là $f_c$, các tần số biên $f_{low}$ và $f_{high}$ đại diện cho tần số biên dưới và tần số biên trên có thể được tính xấp xỉ theo công thức \formularef{sound::octave_boundary}.
+		
+			\begin{equation}
+				f_c = \sqrt{2} f_{low} = \frac{f_{high}}{\sqrt{2}}.
+				\label{sound::octave_boundary}
+			\end{equation}
+		
+		Được quy định theo chuẩn ANSI S1.11 \cite{ansi_s1.11}, mỗi tần số trung tâm $f_c$ trong dãy khoảng tám thứ $x$ có thể được tính toán xấp xỉ bằng công thức
+		
+			\begin{equation}
+				f_c = G^{\frac{x - 30}{b}} \times 1000,
+				\label{sound::fc_base2}
+			\end{equation}
+		
+		\noindent với 
+		
+			\begin{itemize}
+				\item $b$ là số tần số lấy trong một dãy khoảng tám, đối với trường hợp $b=1$, dãy khoảng tám được xét là tần số trung tâm của một khoảng tám, $b=2$ là của nửa khoảng tám (half octave) và $b=3$ đối với trường hợp của một phần ba khoảng tám (one-third octave).
+				\item $G$ là một hằng số tùy thuộc vào hệ đang xét, đối với công thức trên của chúng tôi, hệ cơ số 2 đang được xét do đó $G$ trong trường hợp này mang giá trị $G = G_2 = 2$ và đối với trường hợp của cơ số 10, $G$ sẽ mang giá trị $G_{10} = 10^{0.3}$.
+			\end{itemize}
+		
+		Vì hệ cơ số 10 thường được sử dụng hơn nên ta sẽ tiến hành đưa ra công thức của hệ cơ số 10 từ công thức \formularef{sound::fc_base2},
+		
+			\begin{align*}
+				f_c	& = G_2^{\frac{x - 30}{b}} \times 1000 \\
+					& \approx G_{10}^{\frac{x - 30}{b}} \times 10^3 \\
+					& = 10^{0.3 \frac{x - 30}{b} + 3}. \numberedeq
+				\label{sound::fc_base10}
+			\end{align*}
+		
+		Đối với trường hợp $b=3$, công thức tần số trung tâm của một phần ba dãy khoảng tám (one-third octave band) theo hệ cơ số 10 trở thành
+		
+			\begin{equation}
+				f_c = 10^{0.1x},
+			\end{equation}
+		
+		\noindent đơn giản hơn rất nhiều so với việc tính toán với hệ cơ số 2. Tuy vậy về kết quả xấp xỉ của $f_c$, hai công thức \formularef{sound::fc_base2} và \formularef{sound::fc_base10} là giống hệt nhau. Các octave bands này được sử dụng phổ biến và là tiền đề cho các lý thuyết về độ cảm nhận âm thanh của tai người, đóng vai trò quan trọng trong các metrics của chúng tôi sử dụng.
+		
+	\subsection{Tần số cảm nhận}
+	
+		Nhờ vào cơ chế nghe ở tai mà con người có khả năng nhận biết âm thanh và hiểu được nó. Nhưng sự nhạy cảm của tai người đối với các loại âm thanh khác nhau lại tuân theo quy luật phi tuyến. Quy luật phi tuyến này được biết tới như là \definition{tần số cảm nhận}. Tần số cảm nhận có khá nhiều loại, nhưng trong luận văn này, chúng tôi sẽ đề cập tới hai loại tần số được sử dụng trong luận văn là tần số Mel và tần số Bark. Tùy thuộc vào loại tần số cảm nhận mà chúng tôi đang sử dụng, sẽ có những quy luật để tổng hợp các trọng số trong một khoảng về một giá trị tại một tần số đại diện nhất định, giá trị tần số đại diện này được gọi là một băng tần hay một band.
+		
+		\subsub{Tần số Mel} Tần số Mel \cite{mel_freq} đặc trưng cho sự nhạy cảm của tai trước một âm thanh có tần số bất kì $f$, sự nhạy cảm này có thể được tính toán bằng
+			
+				\begin{equation}
+					m(f) = 1127\ln\bigg(1 + \frac{f}{700}\bigg).
+				\end{equation}
+			
+			Càng lên cao, các khoảng Mel cố định sẽ dẫn tới các khoảng dài hơn trên thang tần số Hz, để thuận tiện trong việc hiện thực tổng hợp tần số trong các khoảng tần số Mel, sự biến đổi này có thể được quy đổi thành một tập hợp các bộ lọc được gọi là \definition{Mel filter bank}. Như trong \figref{sound::mel_filterbank}, các hình tam giác đó đại diện cho những khoảng tần số (phần cạnh đáy tam giác) được quy về chung một giá trị trong tần số Mel (đỉnh của tam giác). Các giá trị tam giác này ứng với sự tổng hợp biên độ của các tần số nằm trong vùng tam giác với trọng số tương ứng để tạo thành giá trị biên độ cho tần số Mel được quy đổi.
+			
+				\begin{figure}[h]
+					\centering
+					\includegraphics[width=120mm]{\soundimg{mel_freq.png}}
+					\caption{Biểu đồ biểu diễn tần số Mel theo tần số Hz}
+				\end{figure}
+			
+				\begin{figure}[h]
+					\centering
+					\includegraphics[width=120mm]{\soundimg{mel_filterbank.jpg}}
+					\caption{Mel filterbank}
+				\label{sound::mel_filterbank}
+				\end{figure}
+				
+		\subsub{Tần số Bark} Tần số Bark \cite{psychoacoustics} có thể được xem như một phiên bản khác của tần số Mel. Tần số Bark có thể được chuyển đổi từ tần số Hz theo công thức sau
+			
+				\begin{equation}
+					b = 6\sinh^{-1} \bigg( \frac{f}{600} \bigg),
+				\end{equation}
+				
+			\noindent với $f$ là tần số ở Hz và $b$ là tần số Bark.
+			
+			Cũng như Mel, trong thực tế, chúng tôi không sử dụng trực tiếp công thức quy đổi Hz về Bark mà thay vào đó sinh viên thực hiện sẽ sử dụng một tập hợp các bộ lọc và thông qua các bộ lọc này tổng hợp các tần số từ một khoảng tần số Hz ứng với một mức nghe tương ứng. Do có mặt hình học khá tương tự như tần số Mel, mà Bark cũng sẽ có những tính chất tương tự. \figref{sound::bark_scale} thể hiện sự biến đổi giữa Hz và Bark cũng như bộ lọc Bark filter bank.
+			
+				\begin{figure}[h]
+					\centering
+					\includegraphics[width=120mm]{\soundimg{bark_scale.png}}
+					\caption{Tần số Bark và Bark filterbank}
+				\label{sound::bark_scale}
+				\end{figure}
+			
+	\subsection{Thang đo độ to của âm thanh}\label{subsection::sound::loudness}
+	
+		Xuất phát từ câu hỏi \textit{``Mọi người sẽ đánh giá độ to như thế nào khi ta hỏi họ đánh giá bằng một thang đo định lượng thay vì sử dụng các tính từ?''}, trong \cite{measurement_loudness} do Stevens đặt ra, rất nhiều bài báo khác được phát triển dựa trên nền tảng về ``độ to'' này như Zwicker \cite{loudness_model, psychoacoustics}, Stevens \cite{loudness_complex}, Lochner \cite{func_near_threshold}, ... Độ to của âm thanh và cách con người cảm nhận nó lần đầu được định lượng hóa về một thang đo chuẩn năm 1936 bởi Stevens \cite{scale_sone}. Trước bài báo này, một thang đo khác dùng để xét về \definition{mức độ to} của âm đơn vị \definition{phon} được đề xuất. Thang đo phon có thể được diễn tả như sau.
+		
+		Với $G(I, f)$ là hàm độ to (lúc này họ vẫn chưa tìm được định nghĩa của hàm tính độ to này) được sử dụng dựa trên cường độ âm $I$ và tần số $f$. Vậy, mức độ to $L$ của âm đang xét được định nghĩa là
+		
+			\begin{equation}
+				G(I, f) = G(L, 1000),
+			\end{equation}
+		
+		\noindent hay mức độ to của âm này là mức cường độ âm mà tại đó âm thuần (pure tone) có tần số 1000 Hz nghe ``cũng to'' như âm đang được xét (cường độ âm của ta đang xét tính theo đơn vị dB được lấy theo giá trị cường độ âm thật $I_r$ theo công thức $10 \log_{10} (I_r/I_0)$ với $I_0 = 10^{-12} W/m^2$). Mỗi phon được quy định là mức độ to của âm thuần 1000 Hz với cường độ âm là 1 dB, nhờ đó mà mức độ to cũng có thể được hiểu là cường độ âm $I$ của âm đang được xét. Cũng từ khái niệm này, họ cũng đề ra khái niệm về \definition{đường mức cùng độ to (equal loudness contour)}, đường này có công thức tổng quát được thể hiện như công thức sau, với $\forall I \in \mathbb{R}, f \in \mathbb{R}^+$ cho trước
+		
+			\begin{equation}
+				G(I, f) = G(L, 1000).
+				\label{sound::equal_loundess_contour_formula}
+			\end{equation}
+		
+		\figref{sound::equal_loudness_contour_fig} thể hiện đường mức (cùng độ to) được tìm ra từ thực nghiệm. Ở các tần số thấp, đường mức (cùng độ to) này có dạng giống như hàm mũ nhưng khi ở các tần số cao hơn, đặc biệt là ở điểm nhạy cảm của tai tại khoảng từ 2 tới 5 kHz, đường độ to có xu hướng giảm mạnh trở lại trước khi tăng lên tại giới hạn ngưỡng nghe 20 kHz. Các đường mức (cùng độ to) ở \figref{sound::equal_loudness_contour_fig} được thực nghiệm trong điều kiện tiêu chuẩn khi đo đạc đô to, âm thanh được truyền từ khoảng cách 1 mét trước đường trung trực của đường thẳng được nối từ hai tai của người được đo.
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=120mm]{\soundimg{equal_loudness_contour.PNG}}
+				\srccaption{Đường mức cùng độ to trong môi trường định hướng}{\citesrc{psychoacoustics}}
+				\label{sound::equal_loudness_contour_fig}
+			\end{figure}
+		
+		Tuy nhiên trong môi trường mở, nơi mà âm thanh tiến tới tai từ mọi hướng (diffuse sound field), độ to của âm tại các tần số lớn bị biến đổi so với đường cùng biên độ được trình bày trong \figref{sound::equal_loudness_contour_fig}. Sự biến đổi độ to của các âm được thể hiện trong \figref{sound::loudness_attenuation_diffuse}. Kết hợp đường mức (cùng độ to) và đường biến thiên độ to được nêu, dễ dàng suy ra được đường mức (cùng độ to) cho môi trường mở này.
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=120mm]{\soundimg{loudness_attenuation.PNG}}
+				\srccaption{Sự biến thiên độ to theo tần số trong môi trường mở}{\citesrc{psychoacoustics}}
+				\label{sound::loudness_attenuation_diffuse}
+			\end{figure}
+		
+		\definition{Thang đo độ to} được đề xuất bởi Stevens \cite{scale_sone} năm 1936 theo đơn vị \definition{sone} được định nghĩa như sau
+		
+			\begin{equation}
+				G(40, 1000) = 1.
+			\end{equation}
+		
+		Mỗi sone được xem độ to của âm 40 dB với tần số 1000 Hz. Với sự quy chuẩn này, các công trình khác bắt đầu được thực hiện. Trong \cite{measurement_loudness}, Stevens đề xuất một hàm xấp xỉ độ to của âm thuần với tần số 1000 Hz với cường độ âm $I > 40$ dB như sau
+		
+			\begin{equation}
+				G(I, 1000) = 0.06 I_r^{0.3},
+				\label{sound::loudness_>_40}
+			\end{equation}
+		
+		\noindent hay
+		
+			\begin{equation}
+				\log_{10}(G(I, 1000)) = 0.3 L - 1.2.
+				\label{sound::log_loudness_>_40}
+			\end{equation}
+		
+		Công thức này sau đó, thông qua một thử nghiệm về việc tăng giảm âm lên xấp xỉ hai lần âm thuần 1000 Hz đang được nghe. Sau Steven, Zwicker \cite{psychoacoustics} cũng thực hiện lại thử nghiệm này và cùng thể hiện xấp xỉ chung một kết quả. Những người thực hiện cho thấy một quy luật được thể hiện trong \figref{sound::loudness:matching_test}. Ở khoảng $I \in [0, 40)$ dB, mức tăng cường độ âm tăng mạnh nhưng sau khi vượt ngưỡng 40 dB, các người thực hiện cho thấy mức tăng ổn định ở 10 dB thì sẽ cho kết quả độ to tăng lên hai lần, qua thực nghiệm trên Zwicker nêu trong \cite{psychoacoustics}, công thức độ to với $I > 40$ dB sẽ có thể được xấp xỉ bằng
+		
+			\begin{equation}
+				G(I, 1000) = 2^{(L - 40)/10} \approx 0.06 I_r^{0.3}
+			\end{equation}
+		
+		Công thức của Zwicker hoàn toàn có thể được xấp xỉ công thức của Stevens thông qua $L \approx \log_{10}(I)$ từ đó xác nhận nhận định của Stevens của độ to của âm thuần với cường độ âm lớn hơn 40 dB.
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=100mm]{\soundimg{loudness_matching_test.PNG}}
+				\srccaption{Biểu đồ biến đổi của tăng giảm cường độ để âm nghe được tăng xấp xỉ 2 lần âm ban đầu}{\citesrc{psychoacoustics}}
+				\label{sound::loudness:matching_test}
+			\end{figure}
+		
+		Nhưng việc đánh giá độ to của âm thuần 1000 Hz với cường độ âm trong khoảng $[0, 40)$ dB vẫn chưa thể đạt tới kết luận. Theo \cite{func_near_threshold}, có rất nhiều dạng hàm số biến thể của công thức \formularef{sound::loudness_>_40} được đề xuất. Cuối cùng, sử dụng các nghiên cứu của Zwicker, ISO đặt ra tiêu chuẩn để tính toán độ to của âm thuần 1000 Hz được quy định trong ISO 532-1 \cite{iso_532}, một hàm phân nhánh được sử dụng
+		
+			\begin{equation}
+				G(I, 1000) = 
+					\begin{cases}
+						2^{(L - 40)/10},			& \ifc{} L > 40dB, \\
+						(L/40 - 0.0005)^{2.86},		& \ifc{} L \le 40dB.
+					\end{cases}
+			\end{equation}
+		
+		Tuy nhiên, như vậy vẫn chưa đủ, trong thực tế, âm thanh được cấu tạo từ rất nhiều sóng thuần với nhau. Rõ ràng công thức của Zwicker và Stevens chỉ mới thỏa mãn một phần của vấn đề. Xuất phát từ điều này, Stevens \cite{loudness_complex} đã đề xuất ra một hàm tổng hợp độ to từ các độ to đơn lẻ của các âm thuần. Theo Stevens, hai âm thuần phát ra riêng biệt sẽ luôn có độ to lớn hơn khi chúng được phát chung với nhau, ông gọi hiện tượng này là \definition{suy giảm kích thích (inhibition stimulus)}. Công thức của ông do vậy cũng được định nghĩa như sau
+		
+			\begin{equation}
+				S = S_{max} - k (\sum S_i - S_{max}),
+				\label{sound::stevens_loudness_summation}
+			\end{equation}
+		
+		%\noindent với $S_i$ đại diện cho độ to đơn lẻ trên từng octave band (đôi khi cũng dược sử dụng trên half octave band và one third octave band), $k$ là hệ số thực nghiệm, tùy thuộc vào loại octave band nào đang được sử dụng mà $k$ sẽ có các giá trị khác nhau (đối với octave band, half octave band và one third octave band, $k$ lần lượt là $0.3$, $0.2$ và $0.13$), $S_{max}$ là độ to của octave band có độ to lớn nhất.
+		
+		\noindent với
+		
+			\begin{itemize}
+				\item $S_{max}$ là độ to lớn nhất có giá trị là $S_{max} = \max{S_i}$.
+				\item $S_i$ là độ to riêng của từng octave band (đôi khi cũng được sử dụng trên half octave band và one third octave band).
+				\item $k$ là hằng số phụ thuộc vào loại băng tần đang xét (octave band, half octave band và one third octave band, $k$ lần lượt là $0.3$, $0.2$ và $0.13$).
+			\end{itemize}
+		
+		Tuy nhiên, với Zwicker, ông lại tiếp cận theo một hướng khác được đề xuất trong \cite{psychoacoustics, loudness_model}. Các kích thích trong tai khi nghe sẽ tỉ lệ với độ to mà con người cảm nhận, xuất phát từ điều này, Zwicker xây dựng công thức tính toán độ to được tổng hợp dựa trên các độ kích thích (excitation level). Bắt đầu từ công thức của đạo hàm của hai vế công thức \formularef{sound::log_loudness_>_40}, chúng tôi gọi $N = G(L, 1000)$ đại diện cho độ to của âm,
+		
+			\begin{align*}
+				d(\log_{10} N) 					& = d(k' \log_{10} I)\\
+				\frac{d N}{N}					& = k' \frac{d I}{I} \\
+				\approx \frac{\Delta N}{N}		& = k' \frac{\Delta I}{I}. \numberedeq
+				\label{sound::derivative_loudness}
+			\end{align*}
+		
+		Sử dụng dạng được nêu trong công thức \formularef{sound::derivative_loudness}, Zwicker đề xuất một khái niệm về độ to được sử dụng trên mức độ kích thích của một khung tần số trong tần số cảm nhận Bark, $N$ lúc này được ông đổi lại thành $N'$ và gọi là \definition{độ to cụ thể (specific loudness)}. Vậy sau khi đã chuyển đổi dạng của công thức \formularef{sound::derivative_loudness} sang độ to cụ thể, biểu thức mới lúc này được đề xuất như sau
+		
+			\begin{equation}
+				\frac{\Delta N'}{N' + N'_{gr}} = k \frac{\Delta E}{E + E_{gr}},
+			\end{equation}
+		
+		\noindent với $N'_{gr}$ và $E_{gr}$ tương ứng với độ to và mức độ kích thích tại ngưỡng nghe của tai người. Như vậy, lấy lại tích phân và chuyển về dạng hàm số mũ thu được công thức của độ to chi tiết này theo mức độ cảm ứng
+		
+			\begin{equation}
+				(N' + N'_{gr}) = C (E + E_{gr})^k.
+			\end{equation}
+		
+		Tiếp tục sử dụng điều kiện tại ngưỡng nghe, khi đó cả $N'$ và $E$ đều là $0$ nên có
+		
+			\begin{equation*}
+				N'_{gr} = C E_{gr}^k,
+			\end{equation*}
+		
+		\noindent hay
+		
+			\begin{equation}
+				C = \frac{N'_{gr}}{E_{gr}^k}.
+			\end{equation}
+		
+		Do vậy công thức của độ to chi tiết $N'$ lúc này được tính bằng
+		
+			\begin{equation*}
+				N' + N'_{gr} = \frac{N'_{gr}}{E_{gr}^k} (E_{gr} + E)^k,
+			\end{equation*}
+		
+		\noindent hay
+		
+			\begin{equation*}
+				\frac{N'}{N'_{gr}} = \bigg( \frac{E}{E_{gr}} + 1 \bigg)^k - 1.
+			\end{equation*}
+		
+		Từ đó suy ra
+		
+			\begin{equation}
+				N' = N'_{gr} \bigg( \bigg( \frac{E}{E_{gr}} + 1 \bigg)^k - 1 \bigg),
+				\label{sound::specific_loudness_formula}
+			\end{equation}
+		
+		\noindent với các hệ số $N'_{gr}$, $E_{gr}$ đều được đo tùy thuộc vào loại môi trường đang được xét, $k$ được cố định ở $0.23$ và được xác định bằng thực nghiệm.
+		
+		Cuối cùng, độ to tổng thể của toàn bộ âm thanh sẽ là tích phân trên toàn bộ miền tần số Bark (chỉ xét tần số trong khoảng 20 - 20000 Hz, tương đương với 24 băng tần trong Bark) được định nghĩa bởi
+		
+			\begin{equation}
+				N = \int_{f \in f_{\text{Bark}}} N' df.
+				\label{sound::zwicker_loudness_formula}
+			\end{equation}
+
+\section{Đánh giá chất lượng âm thanh}
+	
+	Ở phần này, chúng tôi sẽ đề cập tới một số khái niệm được sử dụng phổ biến trong đánh giá chất lượng âm thanh bao gồm: \textit{thang đo đánh giá chất lượng MOS} \cite{mos}, \textit{metric đo khả năng thấu hiểu của một đoạn âm thanh STOI} \cite{stoi}, \textit{mức cảm nhận âm thanh PESQ} \cite{pesq} và \textit{metric mô phỏng lại đánh giá của người sử dụng} \cite{dnsmos} \cite{dnsmos_p835}. Trước tiên để hiểu thêm về mục đích của các độ đo nêu trên, chúng tôi sẽ đề cập tới những yếu tố có thể làm ảnh hưởng tới chất lượng âm thanh.
+
+	\subsection{Các nhân tố ảnh hưởng tới chất lượng âm thanh}
+		
+		Trong thực tế, có rất nhiều yếu tố có thể ảnh hưởng tới chất lượng âm thanh nói chung, trong phần này để có thể đi sát với đề tài mà chúng tôi thực hiện, chúng tôi sẽ đề cập tới các yếu tố ảnh hưởng tới chất lượng âm thanh được lưu trữ trong máy tính. Âm thanh được lưu trữ trong máy tính tất cả đều ở dạng các điểm mẫu rời rạc được lấy mẫu với tần số lấy mẫu $f_0$ từ âm thanh thực tế thông qua các phương tiện ghi như microphone, ..., sau đó lưu xuống đĩa cứng máy tính dưới dạng một mảng số thực. Từ file dữ liệu được ghi nhận trên đĩa cứng này, máy tính xấp xỉ lại hàm cần phát thông qua nội suy giữa hai điểm mẫu kề cận từ đó xấp xỉ lại âm thanh gốc ban đầu.
+		
+		Trước khi tiến hành xử lý, âm thanh được ghi nhận ở dạng các số 32 bits (hoặc 8, 16, 64 bits), quá trình chuyển tín hiệu từ dạng liên tục trước khi được ghi nhận sang dạng rời rạc sau khi đã được lưu trữ trong máy tính được gọi là phép \definition{Quantization} hay phép \definition{Định lượng}.
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=120mm]{\soundimg{quantization.jpg}}
+				\caption{Quá trình định lượng tín hiệu}
+			\label{sound::quantization}
+			\end{figure}
+		
+		Tại mỗi thời điểm $t$, $f(t)$ lấy một trong các giá trị được chia sẵn thành các ngưỡng nhị phân như \figref{sound::quantization} làm quy đổi cho $f(t)$ sang thành miền rời rạc, từ đó dữ liệu này được lưu xuống file dưới đĩa cứng và cũng là dữ liệu được sử dụng để xấp xỉ $f(t)$ ban đầu. Trong phần lớn các kiểu định lượng được sử dụng hiện nay, dữ liệu được sử dụng là một số thực 32 hoặc 64 bits (cũng có thể là 8 hoặc 16 bits) tùy vào độ phân giải được quy định, các tín hiệu âm thanh cũng được mã hóa dưới dạng này. Quá trình định lượng rõ ràng có tạo ra một sự suy giảm trong chất lượng và sự ảnh hưởng của nó cũng bị phụ thuộc vào tần số lấy mẫu $f_0$. Vấn đề chất lượng bị suy giảm trong quá trình rời rạc hóa như trên được tổng quát lên thành vấn đề rời rạc hóa dữ liệu, trong một số bài báo họ gọi đây là sự suy giảm chất lượng do codecs.
+		
+		Đó là một trong các yếu tố xuất hiện bên trong hệ thống máy tính, ngoài ra còn có rất nhiều yếu tố khác nữa như thông tin bị mất mát trong quá trình truyền đi, lỗi xuất hiện khi thu âm từ microphone, ... nhưng chung quy lại chúng là những lỗi mất mát không thể tránh được. Ngoài những lỗi nêu trên, trên thực tế, các yếu tố ảnh hưởng tới chất lượng âm thanh nhiều nhất có lẽ là tiếng ồn. Để có thể đánh giá được sự ảnh hưởng của các yếu tố bên trong và các yếu tố bên ngoài, một đại lượng đã được đề xuất ra để lượng hóa cho sự ảnh hưởng của các yếu tố trên lên giọng nói. Đại lượng đó được gọi là \textbf{Mean Option Score} (tạm dịch là thang đo chất lượng).
+		
+	\subsection{Thang đo Mean Opinion Score}
+		
+		\textit{``Trung bình một người sẽ đánh giá đoạn âm thanh được cho như thế nào?''}. Đây cũng chính là nguồn khởi xướng cho một thang đo tiêu chuẩn của chất lượng âm thanh. \definition{Mean Opinion Score} \cite{mos} được chia làm 5 mức tiêu chuẩn được trình bày trong \tableref{sound::mos_table}.
+		
+			\begin{table}[h]
+				\centering
+				\begin{tabular}{c r r}
+					\hline
+					\textbf{Mức}	& \textbf{Chất lượng giọng nói} & \textbf{Mức độ nhiễu} \\
+					\hline
+					5				& Rất tốt						& Không thể nhận biết \\
+					4				& Tốt							& Có thể nhận biết nhưng không gây khó chịu \\
+					3				& Bình thường					& Có thể nhận biết, hơi gây khó chịu \\
+					2				& Tệ							& Nhiễu lấn át giọng nói, gây khó chịu \\
+					1				& Rất tệ						& Nhiễu mạnh không nghe được nội dung, gây khó chịu mạnh \\
+					\hline
+				\end{tabular}
+			\srccaption{Bảng thang đo Mean Opinion Score (MOS)}{\citesrc{mos}}
+			\label{sound::mos_table}
+			\end{table}
+		
+		Các phương pháp kiểm tra chất lượng âm thanh sử dụng thang đo MOS này được chia thành hai loại: \textit{đánh giá chủ quan (subjective listening test)} và \textit{đánh giá khách quan (objective quality measure)}. 
+		
+		\subsub{Đánh giá chủ quan} Trong cách đánh giá chủ quan, con người được xem là tiêu chuẩn để đánh giá âm thanh. Việc thực hiện đánh giá chủ quan thường phải tuân theo khá nhiều quy chuẩn để tránh đi các yếu tố như tình trạng sức khỏe của người tham giá đánh giá, chất lượng môi trường, thiết bị phần cứng, ... ảnh hưởng lên kết quả đánh giá. Các tiêu chuẩn và một số cách để đánh giá các tiêu chuẩn này được khuyến nghị trong ITU P.808 \cite{itu_p808} và ITU P.835 \cite{itu_p835}. Sử dụng các kết quả thu được sau các lần đánh giá, một số metrics dùng để xấp xỉ lại đánh giá của con người cũng được áp dụng \cite{dnsmos, dnsmos_p835}. 
+		
+		\subsub{Đánh giá khách quan} Với cách đánh giá khách quan, con người không trực tiếp tham gia vào quá trình đánh giá chất lượng âm thanh, thay vào đó các giải thuật hoặc các phép kiểm thử của thống kê sẽ làm việc này. Việc đánh giá một cách chủ quan như vậy tránh đi sự bias trong quá trình đánh giá của con người làm cho kết quả này đáng tin cậy hơn đồng thời cũng đỡ tiêu tốn tài nguyên về thời gian cũng như tiền bạc phải bỏ ra trong quá trình kiểm tra.
+		
+		Dưới đây, chúng tôi sẽ trình bày hai cách đánh giá theo hướng đánh giá khách quan được sử dụng trong luận văn này là Short-time Objective InteLigibility Measurement (STOI) \cite{stoi} và Perceptual Evaluation of Speech Quality (PESQ) \cite{pesq}. Để có một cái nhìn toàn diện hơn về kết quả của mô hình, chúng tôi cũng sử dụng một metric khác tiếp cận theo hướng đánh giá chủ quan và được xem như một trong các metrics chính trong cuộc thi DNS \cite{dns} của Microsoft là A Non-Intrusive Perceptual Objective Speech Quality Metric (DNSMOS) \cite{dnsmos, dnsmos_p835}.
+	
+	\subsection{Short-time Objective InteLigibility Measurement}
+		
+		\definition{Short-time Objective InteLigibility Measurement (tạm dịch là độ đo thấu hiểu, STOI)} \cite{stoi} là metrics được tính toán trên miền tần số thời gian của hai âm được cho trước, ta lần lượt gọi hai âm này là $x(t)$ và $\hat{x}(t)$ để đại diện âm sạch (referenced sound) và âm được xử lý (degraded sound). Trước khi trình bày vào metric chính, ta sẽ tìm hiểu về một số khái niệm có liên quan được sử dụng trong metric này.
+		
+		%\subsubsection*{Octave band}
+		%	Theo lý thuyết nhạc, một octave ứng với khung tần số phủ hết lên trên toàn bộ 1 khung nhạc (từ Đồ lên Đố hay tương tự với các nốt khác). Các tần số nằm giữa của 1 khung nhạc tuân theo biến đổi $2^f$ nên một khung nhạc hay một octave thứ $j$ có tần số giữa $f_c$ được tính theo công thức dưới đây
+			
+		%		\begin{equation}
+		%			f_c = 10^3 2^{j/3}
+		%		\label{sound::1/3_octave}
+		%		\end{equation}
+			
+		%	Từ tần số giữa $f_c$, có thể tính được tần số giới hạn dưới $f_{low} = \frac{f_c}{\sqrt{2}}$ và tần số giới hạn trên của octave thứ $j$ này $f_{high} = f_c \sqrt{2}$. Bộ octave này cũng được gọi là one-third octave band (băng tần số 1/3) do số mũ trong cách tính tần số trung tâm của công thức là $1/3$.
+			
+		\subsub{Độ đo tương tự Pearson} Độ đo tương tự Pearson của hai vector $a = (a_1, \dots, a_n) \in \mathbb{R}^n$ và $b = (b_1, \dots, b_n) \in \mathbb{R}^n$ được định nghĩa như sau
+			
+				\begin{equation}
+					r = \frac{\sum_{i=0}^n(a_i - \bar{a})(b_i - \bar{b})}{\sqrt{\sum_{i=0}^n(a_i - \bar{a})^2 \sum_{i=0}^n(b_i - \bar{b})^2}},
+				\end{equation}
+			
+			\noindent với $\bar{a} = \sum_{i=1}^n a_i / n$ và $\bar{b} = \sum_{i=1}^n b_i / n$.
+			
+			Xem hai vector trên là một chuỗi các giá trị của một biến ngẫu nhiên nào đó được ghi nhận lại, độ đo Pearson có thể được hiểu như sự biến thiên của hai biến ngẫu nhiên có phân phối có trung bình thống kê là $0$ và độ lệch chuẩn $\sigma$ bằng $1$. Cụ thể
+			
+				\begin{align*}
+					r 	& = \frac{\sum_{i=0}^n(a_i - \bar{a})(b_i - \bar{b})}{\sqrt{\sum_{i=0}^n(a_i - \bar{a})^2 \sum_{i=0}^n(b_i - \bar{b})^2}} \\
+						& = \frac{n}{n} \frac{\sum_{i=0}^n(a_i - \bar{a})(b_i - \bar{b})}{\sqrt{\sum_{i=0}^n(a_i - \bar{a})^2 \sum_{i=0}^n(b_i - \bar{b})^2}} \\
+						& = \frac{1}{n} \sum_{i=0}^n \bigg( \frac{a_i - \bar{a}}{\sigma_a} \bigg) \bigg( \frac{b_i - \bar{b}}{\sigma_b} \bigg) \\
+						& = \frac{1}{n} \sum_{i=0}^n \text{z-score}(a_i) \text{z-score}(b_i). \numberedeq
+					\label{sound::pearson_formula}
+				\end{align*}
+			
+			Hàm z-score có thể được xem là một cách chuẩn hóa phân phối về trung bình thống kê $0$ và độ lệch chuẩn là $1$. Để xem xét tại sao hàm z-score lại làm được điều này, ta xét một ví dụ với $x \in \mathbb{R}^n$ như sau.
+			
+			Lần lượt gọi $\bar{x}'$ và $\sigma_{x'}$ là trung bình thống kê và độ lệch chuẩn mới của $x$ sau khi qua z-score, lúc này từ định nghĩa ta đã có
+			
+				\begin{equation}
+					x' = \text{z-score}(x) = \frac{x - \bar{x}}{\sigma_x}.
+				\label{sound::zscore_formula}
+				\end{equation}
+			
+			Từ công thức tính toán trung bình thống kê của $x'$, ta thu được
+				
+				\begin{equation*}
+					\begin{aligned}
+						\bar{x}' 	& = \frac{1}{n} \sum_{i=0}^n x' = \frac{1}{\sigma_x} (\bar{x} - \bar{x}) = 0.
+									%& = \frac{1}{n\sigma_x} \sum_{i=0}^n (x - \bar{x}) \\
+									%& = \frac{1}{\sigma_x} (\bar{x} - \bar{x}) \\
+									%& = 0.
+					\end{aligned}
+				\end{equation*}
+			
+				\begin{equation*}
+					\begin{aligned}
+						\sigma_{x'} & = \sqrt{\frac{\sum_{i=0}^n (x' - \bar{x}')^2}{n}} = \sqrt{\frac{\sum_{i=0}^n x'^2}{n}} \\
+									& = \sqrt{\frac{\sum_{i=0}^n (\frac{x - \bar{x}}{\sigma_x})^2}{n}} = \sqrt{\frac{\sum_{i=0}^n (x - \bar{x})^2}{n} \frac{1}{\sigma_x^2}} \\
+									& = \sqrt{\frac{\sigma_x^2}{\sigma_x^2}} = 1.
+					\end{aligned}
+				\end{equation*}
+			
+			Như vậy, sau khi $x$ được chuẩn hóa bằng z-score, trung bình thống kê và độ lệch chuẩn của $x'$ sẽ lần lượt là $0$ và $1$. Điều này đưa lại lợi ích rất lớn cho việc so sánh hai biến ngẫu nhiên, vì công thức này sẽ đo giá trị tích vô hướng giữa hai biến đã được chuẩn hóa này.
+		
+		\subsub{Short-time Objective InteLigibility Measurement} Trong STOI, sau khi dữ liệu âm thanh được chuyển sang miền tần số thời gian bằng biến đổi Fourier thời gian ngắn, các vùng biên độ trong cùng một khung sẽ được tổng hợp lại theo công thức dưới đây
+			
+				\begin{equation}
+					X_j(m) = \sqrt{\sum_{k = f_{low}(j)}^{f_{high}(j)} |F_k(m)|^2},
+				\end{equation}
+				
+			\noindent với $f_{low}(j)$ và $f_{high}(j)$ lần lượt là ngưỡng dưới và ngưỡng trên của dãy khoảng tám thứ $j$, $F_k(m)$ là giá trị thứ $k$ trong \spectrum{} của $f(t)$ ở khung thời gian thứ $m$. Bằng cách chuyển từ \spectrogram{} của tần số thông thường sang \spectrogram{} của tần số cảm nhận, tác giả giả lập lại cơ chế nghe của tai người từ đó tính ra sự tương quan giữa hai giá trị. Bước tiếp theo sẽ đi tính độ đo tương tự Pearson lên hai miền giá trị tần số thời gian vừa thu được
+			
+				\begin{equation}
+					d_j = \frac{\sum_{i=0}^n (X_j(i) - \bar{X_j})(Y_j(i) - Y_j(i))}{\sqrt{\sum_{i=0}^n (X_j(i) - \bar{X_j})^2 \sum_{i=0}^n(Y_j(i) - \bar{Y_j})^2}}.
+				\label{sound::stoi_dj}
+				\end{equation}
+			
+			Từ công thức \formularef{sound::stoi_dj} thu được một giá trị nằm trong khoảng $[-1, 1]$ đại diện cho sự tương đồng trong khả năng thấu hiểu tần số của tai người tại dãy khoảng tám thứ $j$, trung bình tất cả kết quả theo thời gian, kết quả cuối cùng chính là độ đo của STOI - đại diện cho toàn bộ khả năng thấu hiểu của tai người trên giữa hai tín hiệu, và đó cũng là lý do đây là độ đo mà chúng tôi sẽ sử dụng để đo khả năng thấu hiểu của tín hiệu được đầu ra bởi mô hình.
+		
+	\subsection{Perceptual Evaluation of Speech Quality}
+	
+		% Chapter 11, Speech enhancement, Philipos Loizou
+		%Để đánh giá về chất lượng âm thanh được trả về bởi mô hình, chúng tôi sử dụng metrics thứ 2 là Perceptual Evaluation of Speech Quality (PESQ) \cite{pesq}. Được ra đời dưới như cầu về đánh giá chất lượng âm thanh được truyền đi trong các cuộc gọi hội thoại Voice-over-IP (VoIP), PESQ cho thấy sự tương quan trong đánh giá với chất lượng được người dùng ghi nhận tới 0.92 \cite{pesq}, và cũng nhờ vào sự tương quan trong đánh giá của metrics và chất lượng thực tế cao như vậy mà PESQ dần trở nên phổ biến trong đánh giá chất lượng giọng nói ở cả nghiên cứu và trong công nghiệp. Chất lượng âm thanh có thể bị ảnh hưởng khác nhiều trong quá trình truyền đi thông qua network, các sự kiện ngoài ý muốn như mạng bị gián đoạn, các gói thông tin gửi đi bị mất mát cũng làm ảnh hưởng tới chất lượng âm thanh. Chung quy lại, có thể hiểu đánh giá chất lượng âm thanh là đánh giá sự ồn, rè, các tiếng sột soạt có thể xảy ra khi các gói thông tin bị mất mát,... Dưới động lực từ những yêu cầu đó, ý tưởng chính của PESQ là chất lượng của giọng nói phụ thuộc vào âm thanh cấu tạo nên nó, nhưng sự suy giảm âm thanh trong PESQ được chia thành 2 trường hợp: \textbf{dưới mức mong đợi} và \textbf{trên mức mong đợi}.
+		
+		%Để rõ hơn về 2 trường hợp mà chúng tôi vừa đề cập bên trên, chúng tôi sẽ giải thích 2 trường hợp này. Đầu tiên, chúng tôi nói âm thanh bị thay đổi, spectrum bị thay đổi nhưng cái gì trong spectrum này thay đổi, đó chính là mức ảnh hưởng của âm dưới mức được truyền đi ban đầu. Khi một âm thanh được truyền đi một cách hoàn chỉnh y hệt như âm đầu, các mức biên độ bên trong spectrum của âm thanh được truyền đi sẽ giống hệt như âm thanh mong đợi ở phía bên kia cuộc gọi, nhưng nếu một trong các gói tin chứa thông tin về âm thanh trong cuộc gọi này bị mất mát hay thay đổi trong quá trình gọi? Điều này sẽ làm cho spectrum của 2 tín hiệu âm thanh này trở nên khác biệt. Hình \ref{sound::pesq_spectrum_diff} minh họa cho ý tưởng về sự sai khác trong spectrum của 2 âm thanh. Sự khác biệt có thể theo 2 chiều hướng, tăng lên hoặc giảm xuống và đó cũng chính là 2 trường hợp mà âm thanh bị thay đổi chúng tôi đã nói ở trên.
+		
+		%	\begin{figure}[h]
+		%		\centering
+		%		\begin{subfigure}{0.5\textwidth}
+		%			\centering
+		%			\includegraphics[width=80mm]{\soundimg{clean_spectrum_pesq.png}}
+		%			\caption{Spectrum của âm thanh được truyền đi}
+		%		\end{subfigure}%
+		%		\begin{subfigure}{0.5\textwidth}
+		%			\centering
+		%			\includegraphics[width=80mm]{\soundimg{noisy_spectrum_pesq.png}}
+		%			\caption{Spectrum của âm thanh nhận được}
+		%		\end{subfigure}
+			
+		%		\begin{subfigure}{0.5\textwidth}
+		%			\centering
+		%			\includegraphics[width=80mm]{\soundimg{spectrum_diff.png}}
+		%			\caption{Khác biệt giữa 2 spectrum}
+		%		\end{subfigure}
+		%	\caption{Âm thanh gốc sau khi được truyền đi trên internet bị xen nhiễu và mất mát thông tin dẫn tới sự khác biệt được thể hiện trên 2 spectrum, phần bị mất mát (màu xanh) được suy diễn là do hiện tượng mất gói trong quá trình truyền nhận, phần bị thêm vào (màu đỏ) được suy diễn là do nhiễu xuất hiện}
+		%	\label{sound::pesq_spectrum_diff}
+		%	\end{figure}
+		
+		%Hai trường hợp này có thể được hiểu như sự tồn tại các nhiễu xuất hiện trong quá trình truyền âm (ở trường hợp biên độ âm ở spectrum nhận được cao hơn âm truyền đi) và ngược lại, các âm thanh này đang bị mất mát một số mẫu trong quá trình truyền. Công thức cuối cùng của PESQ được tính toán dựa vào đánh giá 2 trường hợp này được đặt ra như sau:
+		
+		%	\begin{equation}
+		%		PESQ(x, \hat{x}) = 4.5 - 0.1 \times d_{sym} - 0.0309 \times d_{asym}
+		%	\label{sound::pesq_formula}
+		%	\end{equation}
+		
+		% Với $d_{sym}$ và $d_{asym}$ được tính toán như sau
+		
+		%	\begin{equation*}
+		%		d_{sym} = \sqrt{\sum_{i \in \{j | X_j - \hat{X}_j \ge 0\}} (X_i - \hat{X}_i)^2}
+		%	\end{equation*}
+			
+		%	\begin{equation*}
+		%		d_{asym} = \sqrt{\sum_{i \in \{j | X_j - \hat{X}_j < 0\}} (X_i - \hat{X}_i)^2}
+		%	\end{equation*}
+		
+		% Với $x, \hat{x}$ lần lượt là âm thanh gốc và âm thanh nhận được, $X, \hat{X}$ tương ứng là spectrum của 2 âm thanh vừa rồi. PESQ có trị số nằm trong khoảng $[-0.5, 4.5]$, nhưng hầu hết trong các ứng dụng đo đạc sử dụng PESQ trị số này nằm trong khoảng $[1, 4.5]$, ứng với thang đo MOS mà chúng tôi đã đề cập ở trên. Trong luận văn này, độ đo PESQ sẽ được chúng tôi sử dụng như một trong các metrics chính để đánh giá chất lượng âm thanh trả về bởi mô hình.
+		
+		Để có thể đánh giá được đúng chất lượng của âm thanh được trả về bởi mô hình, ngoài STOI để đánh giá khả năng nghe được, chúng tôi sử dụng một metric khác để đánh giá chất lượng của âm thanh. Metric này được gọi là \textbf{Perceptual Evaluation of Speech Quality (tạm dịch là độ đo chất lượng, PESQ)} \cite{pesq}. Được ra đời dưới như cầu về đánh giá chất lượng âm thanh được truyền đi trong các cuộc gọi hội thoại Voice-over-IP (VoIP), PESQ cho thấy sự tương quan trong đánh giá với chất lượng được người dùng ghi nhận tới 0.92 \cite{pesq}. Và cũng nhờ vào sự tương quan trong đánh giá của metric và chất lượng thực tế cao như vậy mà PESQ dần trở nên phổ biến trong đánh giá chất lượng giọng nói ở cả nghiên cứu và trong công nghiệp trong một thời gian dài cho tới khi các phương pháp đánh giá chủ quan được ứng dụng.
+		%Trong thực tế, chất lượng âm thanh có thể bị ảnh hưởng khác nhiều trong quá trình truyền đi thông qua mạng, các sự kiện ngoài ý muốn như mạng bị gián đoạn, các gói thông tin gửi đi bị mất mát cũng làm ảnh hưởng tới chất lượng âm thanh. Chung quy lại, có thể hiểu đánh giá chất lượng âm thanh là đánh giá sự ồn, rè, các tiếng sột soạt có thể xảy ra khi các gói thông tin bị mất mát, \dots
+		
+		PESQ bắt đầu được sử dụng như một chuẩn trong ITU-T P.862 được dùng để đánh giá chất lượng âm thanh được truyền đi trong mạng. Trong môi trường mạng, giọng nói người sử dụng nghe được thường bị ảnh hưởng bởi nhiều yếu tố, như bộ codecs của giọng nói, các nhiễu điện tử xuất hiện trong quá trình truyền tải, nhưng hầu hết các yếu tố này chỉ làm xuất hiện tiếng rè và hầu hết sẽ không có sự biến đổi liên tục về tần số cấu tạo theo thời gian. Nhận thấy điều này, trong PESQ, mô hình tính toán độ to chịu giả định rằng các nhiễu này tương tự nhiễu trắng (còn được gọi là white noise, Zwicker gọi các nhiễu này là nhiễu kích thích đều - uniform excitation noise) từ đó thu được công thức chuyển đổi từ Bark \spectrogram{} sang \spectrogram{} độ to. Chúng tôi sẽ giải thích kĩ hơn giả định này trong từng bước xử lý của PESQ.
+		
+		%Sự thay đổi lúc truyền dẫn tín hiệu này sẽ làm thay đổi cường độ các tần số cấu tạo bên trong spectrum của tín hiệu, tuy nhiên như đã trình bày ở phần Âm Học, không phải âm ở tần số nào tai người cũng có sự cảm nhận như nhau, tai thường nhạy cảm với các âm ở tần số thấp hơn là các âm ở tần số cao. PESQ xem xét tới sự khác biệt về cảm nhận này và mô phỏng lại việc đó thông qua chuyển đổi Spectrogram từ tần số thông thường Hz sang tần số cảm nhận Bark.
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=120mm]{\soundimg{PESQ_sys.PNG}}
+				\srccaption{Mô hình khối của PESQ bao gồm có bốn giai đoạn: \textit{tiền xử lý (qua một bộ lọc tiêu chuẩn để quy chuẩn âm)}, \textit{căn chỉnh âm thanh (do sự truyền đi trong môi trường mạng, các gói tin sẽ mất một thời gian mới đến đích, việc căn chỉnh là để tránh sự chênh lệch này làm ảnh hưởng tới việc đánh giá chất lượng)}, \textit{biến đổi âm (Bark Spectrogram được tính toán và chuẩn hóa ở bước này)} và \textit{tính toán độ gián đoạn}}{\citesrc{pesq}}
+			\label{sound::pesq_sys}
+			\end{figure}
+		
+		\figref{sound::pesq_sys} mô tả lại mô hình khối của PESQ. Bắt đầu từ cùng một nguồn phát, âm đã qua xử lý bởi hệ thống $\hat{x}(t)$ và âm sạch $x(t)$ lần lượt đi qua các bước tiền xử lý, căn chỉnh âm thanh, biến đổi âm và tính toán gián đoạn, cuối cùng các thông số về sự gián đoạn lấy trung bình theo thời gian giữa hai âm sẽ được qua một hàm tuyến tính để trả về kết quả dự đoán của PESQ. Chúng tôi liệt kê các bước này như sau:
+		
+			\begin{enumerate}[1.]
+				\item \textit{Tiền xử lý:} Trong bước này, âm thanh sẽ được đi qua một bộ lọc tương tự như bộ lọc thấp (bộ lọc chỉ cho các tần số thấp hơn đã định đi qua) được sử dụng trong truyền tín hiệu điện thoại, sau đó các âm này được chuẩn hóa lại và đẩy tới bước tiếp theo.
+				
+				\item \textit{Căn chỉnh âm thanh:} Âm thanh sau khi đã được chuẩn hóa bởi bước \textit{Tiền xử lý} sẽ được đưa sang để tiến hành tính toán độ trễ. Độ trễ giữa hai âm có thể được ước lượng bằng cách chia các đoạn âm thanh trên thành những khung thời gian ngắn hơn và tính toán sự tương quan theo thời gian giữa các khung này trong hai âm với nhau các đoạn, độ trễ sau đó được chuyển tiếp để tính toán phân chia hai âm trên thành các khung giọng nói tương ứng giữa hai âm (chiều dài các khung này thường vào khoảng 32ms).
+				
+				\item \textit{Biến đổi âm thanh:} Âm thanh đã được cắt ra thành các khung sẽ được biến đổi Fourier thành \spectrogram{} ở tần số Hz với chiều dài khung thời gian là 32ms và 50\% overlap giữa các khung, sau đó được chuyển về tần số cảm nhận Bark thành Bark \spectrogram{} (ứng với $x(t)$ và $\hat{x}(t)$ là $B_x(b)$ và $B_{\hat{x}}(b)$, $b$ đại diện cho băng tần Bark thứ $b$). Sau đó, \spectrogram{} độ to được tính toán dựa trên các băng tần Bark theo công thức của Zwicker \cite{speech_enhancement}
+					
+					\begin{equation}
+						S_k(b) = C \bigg( \frac{P_0(b)}{2} \bigg)^{0.23} \bigg( \bigg( 0.5 + 0.5\frac{B_k(b)}{P_0(b)} \bigg)^{0.23} - 1 \bigg),
+					\end{equation}
+					
+				\noindent với $k \in {x, \hat{x}}$. Các Spectrogram độ to này cùng với Bark Spectrogram sẽ được chuyển đến bước tiếp theo. Công thức chuyển đổi độ to trên có nguồn gốc từ một công thức được thực nghiệm của Zwicker \cite{psychoacoustics}. Công thức gốc này được định nghĩa như sau
+				
+					\begin{equation}
+						N_k = C \bigg( \frac{E_{TQ}}{E_0} \bigg)^{0.23} \bigg( \bigg( 0.5 + 0.5\frac{E_k}{E_0} \bigg)^{0.23} - 1 \bigg),
+					\end{equation}
+					
+				\noindent với $N_k$ được gọi là độ to cụ thể (được chúng tôi trình bày ở \subsectionref{subsection::sound::loudness}) và $E_k$ là mức kích thích của âm tại khung thứ $k$, $E_{TQ}$ là mức kích thích của âm vừa đúng tại ngưỡng nghe của tai người, $E_0$ là mức kích thích của âm với cường độ âm $I_0=10^{-12} W/m^2$. Bằng thực nghiệm, Zwicker cũng phát hiện được \textit{``Với nhiễu kích thích đều, chỉ có những sự kích thích chính được xảy ra do đó sẽ thu được đồ thị kích ứng giống như bên trái \figref{sound::uen_attr}''} \cite{psychoacoustics}. Thông qua thử nghiệm này, rõ ràng tỉ lệ giữa $E_k / E_0$ sẽ tương ứng với $B_k(b) / P_0(b)$ với $P_0(b)$ là giá trị của tần số Bark thứ $b$ tính tại cường độ âm $I_0$. Nhờ đó mà PESQ có thể dựa vào giả định này chuyển hóa mô hình độ to được đề xuất vào các tính toán tiếp theo.
+				
+					\begin{figure}[h]
+						\centering
+						\includegraphics[width=120mm]{\soundimg{uen_attr.PNG}}
+						\srccaption{Liên hệ giữa độ kích ứng và Bark, bên trái thể hiện Bark Spectrum, ở giữa thể hiện cho độ kích ứng được thử nghiệm ra, cuối dùng là độ to được tính toán dựa trên tích phân của độ kích ứng theo từng Bark}{\citesrc{psychoacoustics}}
+						\label{sound::uen_attr}
+					\end{figure}
+				
+				\item \textit{Tính toán gián đoạn:} Tại bước này, các gián đoạn sẽ được xử lý ở đây trước khi được tổng hợp lại và tính ra kết quả dự đoán. Độ gián đoạn $D(b)$ được chia làm hai loại: \textit{gián đoạn dương} (tương ứng $S_{\hat{x}}(b) > S_x(b)$) và \textit{gián đoạn âm} (tương ứng $S_{\hat{x}}(b) < S_x(b)$). Để có sự linh hoạt hơn trong tính toán kết quả cuối, tác giả chọn một ngưỡng gián đoạn nhất định để xác định sự gián đoạn có đang xảy ra hay không, trong tài liệu \cite{speech_enhancement}, họ sử dụng
+				
+					\begin{equation}
+						T(b) = 0.25 \times \min(S_x(b), S_{\hat{x}}(b)).
+					\end{equation}
+					
+				Vậy $D(b)$ được định nghĩa như sau
+				
+					\begin{equation*}
+						D(b) = 	\begin{cases}
+									(S_x(b) - S_{\hat{x}}(b)) - T(b),	& \ifc{} S_x(b) - S_{\hat{x}}(b) > T(b), \\
+									0,									& \ifc{} | S_x(b) - S_{\hat{x}}(b) | \le T(b), \\
+									(S_x(b) - S_{\hat{x}}(b)) + T(b),	& \ifc{} S_x(b) - S_{\hat{x}}(b) < -T(b).
+								\end{cases}
+					\end{equation*}
+				
+				Trong tài liệu tham khảo \cite{speech_enhancement}, tác giả chia gián đoạn ra làm hai loại: \textit{đối xứng} $D_{sym}(b)$ và \textit{bất đối xứng} $D_{asym}(b)$. Hai loại này lần lượt được tính như sau
+				
+					\begin{align*}
+						D_{sym}(b)	& = \bigg( \sum_{b=1}^{N_b} W_b \bigg)^{1/2} \bigg( \bigg(\sum_{b=1}^{N_b} (|D(b)| W_b)^2 \bigg) \bigg)^{1/2}, \\
+						D_{asym}(b)	& = C(b) D(b),
+					\end{align*}
+				
+				\noindent với $W_b$ là trọng số của băng tần Bark thứ $b$, $C(b)$ là hệ số bất đối xứng được tính toán như sau
+				
+					\begin{align*}
+						C(b) =	\begin{cases}
+							0,															& ( \frac{B_{\hat{x}}(b) + 50}{B_x(b) + 50} )^{1.2} < 3, \\
+							12,															& ( \frac{B_{\hat{x}}(b) + 50}{B_x(b) + 50} )^{1.2} > 12, \\
+							( \frac{B_{\hat{x}}(b) + 50}{B_x(b) + 50} )^{1.2},			& \otherwise.
+						\end{cases}
+					\end{align*}
+				
+				Cả hai loại gián đoạn này sau đó sẽ được tổng hợp theo 20 khung thời gian (khoảng 320ms do có 50\% overlap giữa các khung), việc tổng hợp này sẽ trả về kết quả $D_{sym}(k)$ và $D_{asym}(k)$ với $k$ tương ứng với lần tổng hợp 20 khung thứ $k$. 
+				
+				Kết quả cuối cùng của hai độ gián đoạn $d_{sym}$ và $d_{asym}$ được tính toán như trung bình theo chuẩn 2 của $D_{sym}(k)$ và $D_{asym}(k)$ trên tất cả các khung thời gian $k$
+				
+					\begin{align*}
+						d_{sym}		& = \bigg( \frac{\sum_{k} (D_{sym}(k) t_k)^2}{\sum_{k} t_k^2} \bigg), \\
+						d_{asym}	& = \bigg( \frac{\sum_{k} (D_{asym}(k) t_k)^2}{\sum_{k} t_k^2} \bigg).
+					\end{align*}
+				
+				Cuối cùng, kết quả của PESQ sẽ được tổng hợp như một hàm tuyến tính của hai độ gián đoạn nêu trên
+				
+					\begin{equation}
+						\text{PESQ} = 4.5 - 0.1 d_{sym} - 0.0309 d_{asym}.
+					\label{sound::pesq_formula}
+					\end{equation}
+			\end{enumerate}
+		
+		
+		PESQ được tính theo công thức \formularef{sound::pesq_formula} có giá trị trong khoảng $[-0.5, 4.5]$ nhưng thường, kết quả của phép tính toán này thường rơi vào khoảng $[1, 4.5]$ tương ứng với thang đo MOS. Tuy nhiên, trong \cite{speech_enhancement}, tác giả cũng có đề cập tới một số phương pháp để chuyển đổi giữa giá trị của PESQ trong công thức \formularef{sound::pesq_formula} (còn gọi là giá trị PESQ nguyên bản) để cho kết quả dự đoán chính xác hơn trên thang đo MOS. Hai phép chuyển đổi này được định nghĩa như công thức \formularef{sound::wbpesq} và \formularef{sound::nbpesq}, hai công thức này còn có tên gọi tương ứng là \definition{Wideband PESQ (WBPESQ)} \cite{itu_p862.2} và \definition{Narrowband PESQ (NBPESQ)} \cite{itu_p862.1}.
+		
+			\begin{equation}
+				\text{WBPESQ} = 0.999 + \frac{4}{1 + e^{-1.3669 \text{ PESQ } + 3.8224}},
+			\label{sound::wbpesq}
+			\end{equation}
+		
+			\begin{equation}
+				\text{NBPESQ} = 0.999 + \frac{4}{1 + e^{-1.4945 \text{ PESQ } + 4.6607}}.
+			\label{sound::nbpesq}
+			\end{equation}
+		
+		Dễ thấy, bị giới hạn bởi bản thân giả định được đặt ra khi mô hình hóa lại độ to của âm đầu vào, PESQ khá kém nhạy cảm với các loại nhiễu không tương tự nhiễu trắng. Với các loại nhiễu này, chỉ số được PESQ dự đoán ra khá kém hiệu quả và đôi khi không phản ánh đúng chất lượng thực sự của âm thanh sau khi lọc. Đây cũng chính là một trong các khó khăn của sinh viên thực hiện khi thực hiện đề tài này.
+	
+	\subsection{A Non-Intrusive Perceptual Objective Speech Quality Metric}
+	
+		%Tuy STOI và PESQ đã cho chúng tôi một cái nhìn khá đầy đủ về đoạn âm thanh mà model chúng tôi đã lọc được, tuy nhiên việc đánh giá khách quan này vẫn còn tồn tại một số hạn chế. STOI có thể mô phỏng lại cơ chế nghe của tai người từ đó ước lượng khả năng nghe theo thời gian của âm thanh sạch so với âm thanh sau khi lọc, PESQ cũng có thể ước lượng được chất lượng của âm thanh sau khi lọc bằng cách phân tích độ gián đoạn theo thời gian. Tuy là vậy nhưng điều này vẫn chưa đủ, chúng tôi vẫn không thể thực sự đánh giá được chất lượng lọc nhiễu của chúng tôi như thế nào? giọng nó sau khi lọc nhiễu liệu có bị ảnh hưởng hay không hay đơn giản chỉ là nếu như một người nghe được đoạn âm thanh của chúng tôi, họ sẽ đánh giá đoạn âm thanh đó như thế nào? Tất cả những điều này dẫn chúng tôi đến một metric mới được gọi là DNSMOS \cite{dnsmos} \cite{dnsmos_p835}.
+		
+		Tuy STOI và PESQ đã cho ta thấy một cái nhìn khá hoàn chỉnh về giọng nói sau khi lọc bởi mô hình của mình, tuy nhiên cái nhìn này vẫn chưa thực sự phản ánh đúng với chất lượng thực sự của mô hình. Tuy STOI cho ta thấy được cảm nhận của tai khi nghe nhưng cũng chính vì cơ chế sử dụng độ đo tương tự Pearson, các thành phần có biên độ nhỏ hầu hết sẽ không đóng góp gì vào giá trị của STOI do đó các nhiễu nhỏ thông thường sẽ bị bỏ qua, PESQ lại bị hạn chế khả năng dự đoán bởi giả định nhiễu có trong giọng nói nhiễu là kích thích đều. Các hạn chế này khiến cho việc đánh giá mô hình của chúng tôi gặp nhiều khó khăn và cũng chính từ các hạn chế này, chúng tôi tìm hiểu một metric được áp dụng để mô phỏng lại sự đánh giá của con người với cách tiếp cận chủ quan. Metric mà chúng tôi muốn nói tới là \definition{DNSMOS} \cite{dnsmos, dnsmos_p835}.
+		
+		DNSMOS được chia làm hai loại phụ thuộc vào mục tiêu đánh giá của ta như thế nào, đối với bản DNSMOS được đề xuất trong \cite{dnsmos}, mục tiêu đánh giá là tổng thể toàn bộ đoạn âm thanh theo chuẩn ITU-T P.808 \cite{itu_p808}, nhưng đối với bản DNSMOS được đề xuất trong \cite{dnsmos_p835}, mục tiêu trả về đa dạng hơn bao gồm SIG (chất lượng giọng nói), BAK (chất lượng lọc nhiễu) và OVR (chất lượng tổng quan của đoạn âm thanh). Mục tiêu trả về này được quy định theo chuẩn của ITU-T P.835 \cite{itu_p835} vậy nên bản DNSMOS này còn được biết tới với cái tên DNSMOS P.835. Đây cũng là bản DNSMOS mà sinh viên thực hiện dùng để đánh giá mô hình của mình.
+		
+			\begin{figure}[h]
+				\centering
+				\begin{subfigure}{.5\textwidth}
+					\includegraphics[width=70mm]{\soundimg{itu_p808_form_1.png}}
+				\end{subfigure}%
+				\begin{subfigure}{.5\textwidth}
+					\includegraphics[width=70mm]{\soundimg{itu_p808_form_2.png}}
+				\end{subfigure}
+				\srccaption{Khảo sát được tham khảo từ ITU-T P.808}{\citesrc{itu_p808}}
+			\end{figure}
+		
+		DNSMOS P.835 tiếp cận việc đánh giá âm thanh theo góc nhìn học sâu, họ sử dụng một mạng tích chập để học ra các tham số dự đoán cho ba đầu ra SIG, BAK và OVR (đối với chuẩn mô hình theo chuẩn ITU-T P.808 thì chỉ có OVR được dự đoán). Để có thể huấn luyện được mô hình này họ tiến hành khảo sát và tiến hành thu thập dữ liệu. Khảo sát này được ITU đề xuất trong \cite{itu_p808} bao gồm hình thức khảo sát, cách thức tiến hành khảo sát, chọn đối tượng, các biểu mẫu khảo sát và cả những phần thưởng khuyến khích nên được sử dụng.
+		
+			%\begin{table}
+			%	\centering
+			%	\begin{tabular}{c l l}
+			%		\hline
+			%		& \textbf{Lớp}				& \textbf{Kích thước đầu ra} \\
+			%		\hline
+			%		1	& Input 					& 900 x 161 x 1)\\
+			%		2	& Conv 128 (3 x 3) ReLU 	& 900 x 161 x 128 \\
+			%		2	& Conv 64 (3 x 3) ReLU 		& 900 x 161 x 64 \\
+			%		2	& Conv 64 (3 x 3) ReLU 		& 900 x 161 x 64 \\
+			%		2	& Conv 32 (3 x 3) ReLU 		& 900 x 161 x 32 \\
+			%		2	& MaxPool (2x2) 			& 450 x 80 x 32 \\
+			%		2	& Conv 32 (3 x 3) ReLU 		& 450 x 80 x 32 \\
+			%		2	& MaxPool (2x2) 			& 225 x 40 x 32 \\
+			%		2	& Conv 32 (3 x 3) ReLU 		& 225 x 40 x 32 \\
+			%		2	& MaxPool (2x2) 			& 112 x 20 x 32 \\
+			%		2	& Conv 64 (3 x 3) ReLU 		& 112 x 20 x 64 \\
+			%		2	& GlobalMaxPool 			& 1 x 64 \\
+			%		2	& Dense 128 ReLU 			& 1 x 128 \\
+			%		2	& Dense 64 ReLU 			& 1 x 64 \\
+			%		2	& Dense 3 ReLU 				& 1 x 3 \\
+			%		\hline
+			%	\end{tabular}
+			%	\caption{Mô hình được sử dụng trong DNSMOS P835}
+			%	\label{sound::dnsmos_p835_model}
+			%\end{table}
+		
+		Sử dụng các dữ liệu thu được từ khảo sát, mô hình được đề xuất trong \cite{dnsmos} và \cite{dnsmos_p835} được dùng để dự đoán đánh giá của người nghe. Đối với chuẩn ITU-T P.808, mô hình dự đoán một chỉ số đầu ra đại diện cho chất lượng tổng thể của đoạn âm thanh đầu vào, và đối với chuẩn ITU-T P.835, dự đoán được chia ra làm ba loại tương ứng với ba loại được khuyến nghị bởi ITU. DNSMOS được sử dụng chủ yếu trong đánh giá mô hình cho cuộc thi Deep Noise Suppression (DNS) \cite{dns} của Microsoft để xấp xỉ lại đánh giá của người sử dụng nghe đoạn âm thanh được xử lý qua mô hình.
+		
+	
+% \section{Tần số Nyquist và hiện tượng aliasing}

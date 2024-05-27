@@ -1,0 +1,439 @@
+\newcommand{\deimg}[1]{parts/design/img/#1}
+\setupfont{13pt}
+
+\chapter{Phân tích thiết kế hệ thống}\label{chapter::design}
+	
+	Trong chương này, chúng tôi sẽ trình bày về thiết kế của ứng dụng sử dụng các mô hình lọc nhiễu của chúng tôi. Ứng dụng của chúng tôi được chia làm hai phần: \textit{Lọc nhiễu tĩnh} và \textit{Lọc nhiễu động}. Phần lọc nhiễu tĩnh có chức năng lọc các file âm thanh được người dùng đưa vào hoặc từ dữ liệu được ghi âm lại thông qua giao diện ứng dụng chính. Trong khi đó, phần lọc nhiễu động được thiết kế như một ứng dụng độc lập khỏi ứng dụng chính, là một dịch vụ của hệ điều hành có chức năng lấy dữ liệu từ microphone thật rồi lọc nhiễu và sau đó đưa lại vào microphone ảo thông qua cơ chế quản lý driver của hệ điều hành.
+
+	\section{Yêu cầu hệ thống}
+		
+		Dựa vào các đặc điểm về dữ liệu, chúng tôi chia dữ liệu đầu vào của hệ thống thành hai loại:
+		
+		\begin{enumerate}[1.]
+			\item \enumentry{Dữ liệu tĩnh:} Dạng dữ liệu này được lưu trữ vĩnh viễn trên đĩa cứng hoặc tạm thời trên RAM thông qua cơ chế ghi âm của ứng dụng. Dữ liệu tĩnh không biến đổi theo thời gian, nếu một đoạn âm thanh đã được ghi âm hoặc đã được ghi xuống đĩa cứng thì chúng sẽ luôn nằm ở đó cho đến khi bị xóa đi, hoặc ứng dụng bị đóng. Vậy nên dễ thấy, đối với dữ liệu này, chất lượng lọc nhiễu là yếu tố quan trọng nhất, thời gian chạy mô hình để lọc nhiễu có thể lớn và không có sự ràng buộc cho thời gian chạy này.
+			\item \enumentry{Dữ liệu động:} Trái với dữ liệu tĩnh, dữ liệu động là một luồng âm thanh liên tục được chuyển từ microphone tới hệ thống lọc nhiễu và việc lọc nhiễu được thực hiện trong thời gian thực. Vậy nên ngoài việc đảm bảo rằng mô hình chúng tôi phải trả về giọng nói đã được lọc nhiễu có chất lượng tốt, ta còn phải đảm bảo rằng mô hình này cũng có khả năng hoạt động trong thời gian thực và không tiêu tốn quá nhiều tài nguyên của người dùng. Đây cũng chính là các ràng buộc của dữ liệu đặt ra cho mô hình để từ đó các điều kiện ràng buộc về lượng tham số cũng như thời gian chạy như trong \tableref{rl::req} được đặt ra ở \chapterref{chapter::relatedworks}.
+		\end{enumerate}
+		
+		Thông qua các nhìn nhận về đặc điểm của từng loại dữ liệu, ta có một số ràng buộc đối với từng loại hệ thống được nêu trong \tableref{design::sys_data_req}.
+		
+			\begin{table}[h]
+				\centering
+				\begin{tabular}{c c c}
+					\hline
+					\textbf{Yêu cầu}	& \textbf{Lọc nhiễu tĩnh}	& \textbf{Lọc nhiễu động} \\
+					\hline
+					Chất lượng			& Tốt						& Tốt \\
+					Độ trễ				& Thấp						& Có thể cao \\
+					\hline
+				\end{tabular}
+				\caption{Mô tả yêu cầu về mặt dữ liệu của hệ thống}
+				\label{design::sys_data_req}
+			\end{table}
+		
+		%Đối với hệ thống lọc nhiễu tĩnh, như đã nêu trong phần xác định đặc điểm dữ liệu, các dữ liệu loại này thường nằm ở file hoặc là đoạn ghi âm được lưu cố định trên bộ nhớ, vậy nên độ trễ của mô hình có thể cao nhưng chất lượng âm thanh sau khi lọc nhiễu phải được đảm bảo, giọng nói phải được mô hình bảo toàn hết mức có thể nhưng vẫn phải đảm bảo rằng các tiếng ồn phần lớn sẽ được loại bỏ. Mặt khác, đối với hệ thống lọc nhiễu động, dữ liệu cần phải lọc nhiễu là một luồng liên tục từ microphone thật, do vậy ngoài vấn đề về chất lượng, độ trễ của mô hình là yếu tố quan trọng quyết định bởi nếu độ trễ mô hình vượt quá một mức nhất định tình trạng dồn hàng đợi đầu vào sẽ diễn ra từ đó gây ra hiện tượng tràn bộ nhớ, giọng nói sẽ không giữ được sự ổn định gây khó chịu cho người dùng.
+		
+		Từ các yếu tố được nêu ra ở trên, chúng tôi có thể lần lượt đặt ra các yêu cầu phi chức năng cho từng hệ thống từ đó đề xuất ra các thiết kế phù hợp. Chi tiết các yêu cầu phi chức năng được chúng tôi nêu ở \tableref{design::non_functional_req_shared} và \tableref{design::non_functional_req_excluded}.
+		
+			\begin{table}[h]
+				\centering
+				\begin{tabular}{c p{120mm}}
+					\hline
+					& \multicolumn{1}{c}{\textbf{Lọc nhiễu tĩnh và Lọc nhiễu động}} \\
+					\hline
+					1	& Lượng tiêu thụ CPU không vượt quá 25\% (khoảng 1 core đối với CPU 4 cores) \\
+					2	& Lượng RAM tiêu thụ dưới 4GB \\
+					3	& Âm thanh sau khi lọc không còn hoặc ít nhiễu so với ban đầu \\
+					\hline
+				\end{tabular}
+				\caption{Yêu cầu phi chức năng chung đối với cả hai hệ thống}
+				\label{design::non_functional_req_shared}
+			\end{table}
+		
+			\begin{table}[h]
+				\centering
+				\begin{tabular}{c p{60mm} p{60mm}}
+					\hline
+					& \multicolumn{1}{c}{\textbf{Lọc nhiễu tĩnh}}	& \multicolumn{1}{c}{\textbf{Lọc nhiễu động}} \\
+					\hline
+					4	& Cho phép lọc nhiễu trên các file có thời gian dài tới khoảng 20 phút 	& Khung lọc nhiễu cố định 64ms \\
+					5	& Độ trễ được phép cao		& Độ trễ mô hình phải thấp (nhỏ hơn thời gian chuyển khung là 8ms) \\
+					\hline
+				\end{tabular}
+				\caption{Yêu cầu phi chức năng riêng biệt cho từng hệ thống}
+				\label{design::non_functional_req_excluded}
+			\end{table}
+		
+		 Trong \tableref{design::non_functional_req_shared}, chúng tôi đặt ra các yêu cầu chung cho cả hai hệ thống lọc nhiễu, từ các khảo sát của chúng tôi, chúng tôi nhận thấy các laptop thông thường có số lượng core trong CPU vào khoảng 4 cores (đối với dòng Intel i5) và lượng RAM tập trung nhiều khoảng 4GB, vậy nên chúng tôi chọn đây là hệ thống sẽ được nhắm đến để hiện thực trong luận văn này. Ngoài hai yếu tố về CPU và RAM, chúng tôi đặt ra một yếu tố về chất lượng âm thanh sau khi lọc đối với cả hai hệ thống lọc nhiễu. Trong \tableref{design::non_functional_req_excluded}, chúng tôi đặt ra các yêu cầu riêng cho từng loại hệ thống thông qua các đặc điểm của từng loại dữ liệu. Từ các yêu cầu phi chức năng này, chúng tôi đặt ra các yêu cầu chức năng khác đối với hệ thống được nêu trong \tableref{design::functional_req}.
+			
+			\begin{table}[h]
+				\centering
+				\begin{tabular}{c p{60mm} p{60mm}}
+					\hline
+					& \multicolumn{1}{c}{\textbf{Lọc nhiễu tĩnh}}		& \multicolumn{1}{c}{\textbf{Lọc nhiễu động}} \\
+					\hline
+					1	& Hỗ trợ đọc âm thanh từ file					& Hỗ trợ chế độ lọc và không lọc nhiễu \\
+					2	& Hỗ trợ ghi âm từ microphone					& \\
+					3	& Hỗ trợ xuất âm thanh đã lọc					& \\
+					4	& Hỗ trợ hiển thị âm thanh						& \\
+					5	& Cho phép điều khiển hệ thống lọc nhiễu động	& \\
+					\hline
+				\end{tabular}
+				\caption{Yêu cầu chức năng đối với hệ thống}
+				\label{design::functional_req}
+			\end{table}
+		
+	\section{Hệ thống lọc nhiễu tĩnh}
+		
+		Trước hết chúng tôi sẽ nêu một số usecases của hệ thống lọc nhiễu tĩnh. Hệ thống lọc nhiễu tĩnh là một hệ thống được sử dụng thông qua giao diện của ứng dụng chính. Do vậy các usecases mà chúng tôi nêu lên ở đây sẽ ảnh hưởng trực tiếp tới việc thiết kế cũng như hiện thực ứng dụng chính này. Các usecases chính trong hệ thống lọc nhiễu tĩnh bao gồm \labelref{Usecase}{design::static_usecase_1}, \labelref{Usecase}{design::static_usecase_2}, \labelref{Usecase}{design::static_usecase_3} và \labelref{Usecase}{design::static_usecase_4}.
+			
+			\begin{table}[h]
+				\centering
+				\renewcommand{\tablename}{Usecase}
+				\begin{tabular}{p{35mm} p{90mm}}
+					\hline
+					\textbf{Tên usecase}		& \textit{Load file âm thanh} \\
+					\hline
+					\textbf{Người thực hiện}	& Người dùng \\
+					\textbf{Mô tả}				& Người dùng load file âm thanh cần lọc vào hệ thống \\
+					\textbf{Tiền điều kiện} 	& Không đang ghi âm hay đang load đoạn âm thanh khác \\
+					\textbf{Hậu điều kiện}		& File được load lên và hiển thị ra màn hình \\
+					\textbf{Luồng chạy}			& 	\begin{enumerate}[1.]
+														\item Ở giao diện chính, người dùng nhấn nút ``Import''
+														\item Cửa sổ mở file hiện lên, người dùng chọn 1 file cần load
+														\item Task load file được tạo ra và thực thi
+														\item Hiển thị âm thanh được load ra màn hình
+													\end{enumerate}	\\
+					\hline
+				\end{tabular}
+			\caption{Usecase load file âm thanh của hệ thống lọc nhiễu tĩnh}
+			\label{design::static_usecase_1}
+			\end{table}
+		
+			\begin{table}[h]
+				\centering
+				\renewcommand{\tablename}{Usecase}
+				\begin{tabular}{p{35mm} p{90mm}}
+					\hline
+					\textbf{Tên usecase}		& \textit{Ghi âm} \\
+					\hline
+					\textbf{Người thực hiện}	& Người dùng \\
+					\textbf{Mô tả}				& Người dùng sử dụng hệ thống để ghi âm \\
+					\textbf{Tiền điều kiện} 	& Không đang ghi âm hay đang load đoạn âm thanh khác, luôn có ít nhất một microphone \\
+					\textbf{Hậu điều kiện}		& Âm thanh được ghi và hiển thị ra màn hình \\
+					\textbf{Luồng chạy}			& 	\begin{enumerate}[1.]
+														\item Ở giao diện chính, người dùng nhấn nút ``Recording''
+														\item Cửa sổ ghi âm hiện lên, người dùng tiến hành ghi âm
+														\item Hiển thị âm thanh được load ra màn hình
+													\end{enumerate}	\\
+					\hline
+				\end{tabular}
+			\caption{Usecase ghi âm của hệ thống lọc nhiễu tĩnh}
+			\label{design::static_usecase_2}
+			\end{table}
+		
+			\begin{table}[h]
+				\centering
+				\renewcommand{\tablename}{Usecase}
+				\begin{tabular}{p{35mm} p{90mm}}
+					\hline
+					\textbf{Tên usecase}		& \textit{Xuất file âm thanh} \\
+					\hline
+					\textbf{Người thực hiện}	& Người dùng \\
+					\textbf{Mô tả}				& Người dùng xuất âm thanh đã được lọc ra file \\
+					\textbf{Tiền điều kiện} 	& Không có file nào khác đang được xuất \\
+					\textbf{Hậu điều kiện}		& File được xuất ra bộ nhớ \\
+					\textbf{Luồng chạy}			& 	\begin{enumerate}[1.]
+														\item Ở giao diện chính, người dùng nhấn nút ``Export''
+														\item Cửa sổ lưu file hiện lên, người dùng nhập tên file cần lưu
+														\item Task lưu file được tạo ra và thực thi
+														\item Hiển thị thông báo trạng thái của task khi hoàn thành
+													\end{enumerate}	\\
+					\hline
+				\end{tabular}
+			\caption{Usecase xuất file âm thanh của hệ thống lọc nhiễu tĩnh}
+			\end{table}
+		
+			\begin{table}[h]
+				\centering
+				\renewcommand{\tablename}{Usecase}
+				\begin{tabular}{p{35mm} p{90mm}}
+					\hline
+					\textbf{Tên usecase}		& \textit{Lọc nhiễu} \\
+					\hline
+					\textbf{Người thực hiện}	& Người dùng \\
+					\textbf{Mô tả}				& Người dùng lọc nhiễu âm thanh cần lọc \\
+					\textbf{Tiền điều kiện} 	& Không có file nào đang được lọc \\
+					\textbf{Hậu điều kiện}		& Âm thanh được lọc và hiển thị ra màn hình \\
+					\textbf{Luồng chạy}			& 	\begin{enumerate}[1.]
+														\item Ở giao diện chính, người dùng nhấn nút ``Lọc nhiễu''
+														\item Task lọc nhiễu được tạo ra và thực thi
+														\item Hiển thị âm thanh đã được lọc nhiễu ra màn hình
+													\end{enumerate}	\\
+					\hline
+				\end{tabular}
+			\caption{Usecase lọc nhiễu của hệ thống lọc nhiễu tĩnh}
+			\label{design::static_usecase_3}
+			\end{table}
+		
+			\begin{table}[h]
+				\centering
+				\renewcommand{\tablename}{Usecase}
+				\begin{tabular}{p{35mm} p{90mm}}
+					\hline
+					\textbf{Tên usecase}		& \textit{Điều khiển hệ thống lọc nhiễu động} \\
+					\hline
+					\textbf{Người thực hiện}	& Người dùng \\
+					\textbf{Mô tả}				& Người dùng điều khiển hệ thống lọc nhiễu động lọc hay không lọc âm thanh \\
+					\textbf{Tiền điều kiện} 	& Hệ thống lọc nhiễu động đang hoạt động \\
+					\textbf{Hậu điều kiện}		& Không \\
+					\textbf{Luồng chạy}			& 	\begin{enumerate}[1.]
+														\item Ở giao diện chính, người dùng nhấp vào ``Microphone''
+														\item Ứng dụng gọi xuống hệ thống lọc nhiễu động và thay đổi biến điều khiển bộ lọc
+													\end{enumerate}	\\
+					\hline
+				\end{tabular}
+			\caption{Usecase điều khiển hệ thống lọc nhiễu động của hệ thống lọc nhiễu tĩnh}
+			\label{design::static_usecase_4}
+			\end{table}
+		
+		Được thiết kế theo cơ chế bất đồng bộ, hệ thống lọc nhiễu động được tích hợp vào ứng dụng chính của chúng tôi như một chức năng trong đó. Một trong các thành phần cơ bản nhất của một hệ thống bất đồng bộ là \textit{Luồng (thread)} và \textit{Hệ thống quản lý trạng thái}. Các luồng này được chúng tôi thiết kế đặc trưng cho từng loại tác vụ (task) và các tác vụ này đặc trưng cho từng loại nhiệm vụ tương ứng với các biến môi trường, các tiền điều kiện khác nhau tùy thuộc vào đối tượng được gắn với tác vụ đó. Một quy trình chạy của tác vụ được chúng tôi định nghĩa gồm ba bước:
+		
+			\begin{enumerate}[1.]
+				\item \enumentry{Acquire:} Trong bước này, tác vụ của chúng tôi sẽ khóa các tương tác của người dùng đối với ứng dụng lại đồng thời cũng thiết lập các môi trường cần thiết để tác vụ có thể được thực thi. Ở bước này, các biến môi trường được giả định là không thay đổi trong quá trình thực thi và sẽ chỉ được sao chép dữ liệu sang tác vụ khi quá trình chính bắt đầu thực hiện. Tác vụ sẽ được chuyển đổi trạng thái từ \textit{READY} sang \textit{ACQUIRE}.
+				\item \enumentry{Functional:} Sau khi đã thực hiện bước \textit{Acquire}, các thành phần tương tác với người dùng đều đã được khóa, các biến môi trường cũng đã được thiết lập cho việc truyền tải dữ liệu. Trạng thái lúc này của tác vụ được chuyển từ \textit{ACQUIRE} sang \textit{PROCESSING}. Tùy vào từng loại tác vụ, từng loại nhiệm vụ, bước này sẽ có thể được định nghĩa với các luồng thực thi khác nhau. Tất cả các kết quả, sao chép dữ liệu vào và ra khỏi tác vụ để vào biến môi trường đều được thực thi ở đây. Nếu một lỗi nào đó xuất hiện ở bước này, tác vụ sẽ lập tức chuyển đổi trạng thái sang \textit{TERMINATE} và thực thi mở khóa các phần tương tác đã bị khóa ở bước \textit{Acquire}.
+				\item \enumentry{Release:} Sau khi thực hiện bước \textit{Functional}, trạng thái tác vụ có thể là \textit{PROCESSING} hoặc \textit{TERMINATE} và bắt đầu tiến hành trả lại quyền tương tác đối với ứng dụng cho người dùng. Lúc này trạng thái tác vụ được chuyển sang \textit{EXIT} nếu trạng thái hiện tại đang là \textit{PROCESSING}. Các mã trạng thái cũng được trả về cho bộ quản lý, các tương tác cũng được mở lại và ứng dụng bắt đầu tương tác lại với người dùng.
+			\end{enumerate}
+		
+		Để hệ thống này có thể hoạt động hiệu quả cũng như cho phép người dùng quản lý được các tác vụ đang được thực thi bên dưới ứng dụng, việc thiết kế một bộ quản lý trạng thái là một điều cần thiết. Đối với mỗi tác vụ, các mã thời gian (timestamp) được lấy theo thời gian mà các tác vụ này được hệ thống tạo ra. Bằng cách sử dụng các mã này kết hợp với việc báo cáo trạng thái trong từng bước của mỗi tác vụ, chúng tôi thiết kế ra được bộ quản lý trạng thái có cấu tạo như \figref{design::status_watcher_arch}.
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=100mm]{\deimg{status_watcher_arch.png}}
+				\caption{Kiến trúc của bộ quản lý trạng thái}
+				\label{design::status_watcher_arch}
+			\end{figure}
+		
+		Cấu tạo của bộ quản lý trạng thái này khá đơn giản, các tác vụ được sắp xếp sao cho việc lấy tác vụ có mã thời gian lớn nhất (bằng cách so sánh các giá trị của mã này như trong \figref{design::status_watcher_arch}). Trạng thái của tác vụ này sau đó sẽ được báo cáo về cho giao diện và hiển thị lại cho người dùng. Việc sắp xếp các tác vụ được chúng tôi sử dụng max heap với lý do đây là một cách thuận tiện để có thể lấy phần tử lớn nhất chỉ trong thời gian $\bigO(1)$ và thuận tiện trong cách quản lý các tác vụ mới được thêm vào. Nhưng về bản chất ta có thể sử dụng nhiều các cấu trúc dữ liệu khác để có thể thỏa mãn được điều này như BTree, cây nhị phân, hoặc bằng cách sắp xếp mảng này theo thứ tự từ bé đến lớn.
+		
+		Với các tác vụ, luồng và bộ quản lý trạng thái, bây giờ tất cả các chức năng của ứng dụng chúng tôi đều có thể được thiết kế như biến thể của các thành phần trên. Để thể hiện rõ điều này, ta sẽ lấy một ví dụ về tác vụ lọc nhiễu của ứng dụng chúng tôi. Tác vụ lọc nhiễu của chúng tôi có thể bắt đầu được thực hiện sau khi dữ liệu về file âm thanh cần được lọc nhiễu đã được tải lên ứng dụng hoặc một đoạn ghi âm đã được người dùng sử dụng ứng dụng ghi âm vào, tác vụ lọc nhiễu sẽ được bắt đầu như sau:
+		
+			\begin{enumerate}[1.]
+				\item \enumentry{Trạng thái ban đầu:} Ở trạng thái ban đầu, tác vụ lọc nhiễu đã được khởi tạo, đăng kí với bộ quản lý trạng thái và đang ở trạng thái ban đầu \textit{INIT}, dữ liệu đã được tải lên và được hiển thị ở giao diện người dùng.
+				
+					\begin{figure}[h]
+						\centering
+						\includegraphics[width=100mm]{\deimg{ns_init.png}}
+						\caption{Trạng thái ban đầu của tác vụ lọc nhiễu (dữ liệu được tải lên thể hiện dưới dạng \spectrogram{} trong khung màu đỏ)}
+					\end{figure}
+					
+				\item \enumentry{Sự kiện lọc nhiễu được khởi tạo:} Sau khi đã khởi tạo tác vụ lọc nhiễu, một luồng ứng với tác vụ này được tạo ra (chúng tôi gọi luồng này là thread context) để bắt đầu việc thực thi cho tác vụ lọc nhiễu này, trạng thái của tác vụ lúc này được chuyển thành \textit{READY}. \figref{design::ns_event_chain} thể hiện việc kích hoạt sự kiện người dùng bấm nút lọc nhiễu cho đến khi thread context được tạo ra và bắt đầu thực thi.
+				
+					\begin{figure}[h]
+						\centering
+						\includegraphics[width=100mm]{\deimg{ns_event_chain.png}}
+						\caption{Chuỗi các hành động được tạo ra bởi sự kiện lọc nhiễu}
+					\label{design::ns_event_chain}
+					\end{figure}
+					
+				\item \enumentry{Thực thi tác vụ:} Tác vụ thực thi theo thứ tự \textit{Acquire}, \textit{Functional} và \textit{Release}. Trạng thái tác vụ chuyển đổi tương ứng theo từng bước thực hiện tác vụ, hình ảnh tác vụ đang ở trạng thái \textit{PROCESSING} được thể hiện như \figref{design::ns_processing}.
+				
+					\begin{figure}[h]
+						\centering
+						\includegraphics[width=100mm]{\deimg{ns_processing.png}}
+						\caption{Tác vụ đang trong quá trình xử lý, phần bị khóa (khung màu xanh) khóa các tương tác giữa ứng dụng với người dùng lại. Trạng thái (khung màu đỏ) hiển thị về cho người dùng  thể hiện trạng thái của tác vụ mới nhất (tác vụ lọc nhiễu đang thực thi)}
+						\label{design::ns_processing}
+					\end{figure}
+				
+				\item \enumentry{Kết thúc tác vụ:} Sau khi thực thi xong, các phần bị khóa ở bước \textit{Acquire} được cho phép tương tác tiếp tục với người dùng, kết quả lọc nhiễu được hiển thị, tác vụ lọc nhiễu lúc này được hủy đăng kí với bộ quản lý trạng thái và trạng thái được hiển thị lúc này là tác vụ có mã thời gian lớn nhất tiếp theo vẫn đang còn được thực thi.
+				
+					\begin{figure}[h]
+						\centering
+						\includegraphics[width=100mm]{\deimg{ns_finished.png}}
+						\caption{Tác vụ hoàn thành, kết quả lọc (khung màu xanh dương) được hiển thị ra cho người dùng. Trạng thái (khung màu đỏ) được cập nhật và tác vụ hủy đăng kí với bộ quản lý. Các vùng bị khóa (khung màu xanh lá) được phép tiếp tục tương tác với người dùng}
+						\label{design::ns_finished}
+					\end{figure}
+				
+			\end{enumerate}
+		
+	\section{Hệ thống lọc nhiễu động} \label{section::design::realtime}
+	
+		Hệ thống lọc nhiễu động chỉ được sử dụng vào một mục đích là di chuyển dữ liệu từ microphone thật (âm thanh có lẫn nhiễu) để lọc trong thời gian thực và trả lại về cho microphone ảo (âm thanh đã lọc). Do đó, usecase của hệ thống này cũng ít phức tạp hơn, chú trọng vào việc lọc nhiễu trực tiếp từ microphone thật để trả về cho microphone ảo và cũng vì vậy mà ít tương tác hơn với người dùng. Usecase chi tiết của hệ thống lọc nhiễu động bao gồm \labelref{Usecase}{design::dynamic_usecase_1}.
+		
+			\begin{table}[h]
+				\centering
+				\renewcommand{\tablename}{Usecase}
+				\begin{tabular}{p{35mm} p{90mm}}
+					\hline
+					\textbf{Tên usecase}		& \textit{Thay đổi bộ lọc} \\
+					\hline
+					\textbf{Người thực hiện}	& Người dùng (thông qua giao diện chính) \\
+					\textbf{Mô tả}				& Thông qua giao diện chính, người dùng thay đổi việc có sử dụng bộ lọc nhiễu hay không \\
+					\textbf{Tiền điều kiện} 	& Hệ thống lọc nhiễu động đang hoạt động \\
+					\textbf{Hậu điều kiện}		& Bộ lọc được thay đổi \\
+					\textbf{Luồng chạy}			& 	\begin{enumerate}[1.]
+														\item Ở giao diện chính, người dùng nhấp vào ``Microphone''
+														\item Ứng dụng gọi xuống hệ thống lọc nhiễu động và thay đổi biến điều khiển bộ lọc
+														\item Biến điều khiển thay đổi, bộ lọc trong worker của hệ thống lọc nhiễu động thay đổi
+													\end{enumerate}	\\
+					\hline
+				\end{tabular}
+				\caption{Usecase chuyển đổi bộ lọc của hệ thống lọc nhiễu động}
+				\label{design::dynamic_usecase_1}
+			\end{table}
+		
+		Khác với thiết kế của ứng dụng và bộ lọc nhiễu tĩnh, bộ lọc nhiễu động được thiết kế như một ứng dụng độc lập hoàn toàn với ứng dụng chính, sử dụng các cơ chế liên lạc thông qua hệ điều hành để liên lạc giữa hai ứng dụng này. \figref{design::dynamic_dataflow} thể hiện luồng dữ liệu chạy trong ứng dụng lọc nhiễu động. Dữ liệu về giọng nói được microphone thật của máy tính ghi nhận, với giả định rằng người dùng đang ở trong môi trường nhiều tiếng ồn nên giọng nói được ghi nhận ở đây sẽ là tập hợp của cả giọng nói lẫn với tiếng ồn cần phải loại bỏ. Sau đó các dữ liệu giọng nói này được chuyển từ kernel mode của hệ điều hành lên cho đường ống (pipeline) lọc nhiễu động của chúng tôi. Sau khi đã đi qua đường ống lọc nhiễu này, giọng nói ban đầu có lẫn tiếng ồn bây giờ đã trở thành giọng nói sạch và được đưa trở lại kernel mode cho hệ điều hành thông qua microphone ảo từ đó các ứng dụng khác (kể cả ứng dụng của chúng tôi) sẽ sử dụng microphone ảo này để giao tiếp thay cho microphone thật ban đầu.
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=120mm]{\deimg{realtime_dataflow.png}}
+				\caption{Luồng di chuyển của dữ liệu trong ứng dụng lọc nhiễu động}
+			\label{design::dynamic_dataflow}
+			\end{figure}
+		
+		Dễ thấy thông qua \figref{design::dynamic_dataflow}, hệ thống lọc nhiễu động này được chia ra làm ba phần: \textit{Đường ống lọc nhiễu động}, \textit{Win32 Service} và \textit{Microphone ảo}. Win32 Service là tên gọi cho một tập hợp các dịch vụ chạy ngầm trên nền tảng hệ điều hành Windows. Các dịch vụ này được phát triển từ khá sớm (từ thời của Windows NT) và khá tương tự như các dịch vụ được sử dụng trong các hệ điều hành khác như UNIX và OSX. Các dịch vụ này bản thân chúng vẫn là một ứng dụng hoàn chỉnh, tuy không có giao diện nhưng vẫn phải hỗ trợ các chức năng của một dịch vụ. Các dịch vụ này được tạo ra để phục vụ cho khá nhiều mục đích khác nhau như hỗ trợ các web server, chạy các cơ sở dữ liệu hay các phần mềm bảo mật liên quan tới người sử dụng. Nhưng điều quan trọng ở đây là các dịch vụ này có thể truy xuất vào các dữ liệu được hệ điều hành bảo vệ như hệ thống lọc nhiễu của chúng tôi đang thực hiện. Các dữ liệu khi đi từ user mode sang kernel mode thường yêu cầu người sử dụng phải cấp quyền administrator cho ứng dụng (điều này được thể hiện ở việc khi mở ứng dụng điều khiển bật tắt dịch vụ của chúng tôi người dùng vẫn phải cấp quyền administrator). Nhưng đối với dịch vụ, tài khoản được sử dụng để kích hoạt dịch vụ mặc định là LOCAL ACCOUNT, tài khoản này cho phép dịch vụ truy xuất vào vùng được hệ điều hành bảo vệ mà người dùng không cần thiết phải trực tiếp cấp quyền cho dịch vụ.
+		
+		Các dịch vụ chịu chung một sự quản lý của hệ điều hành thông qua một bộ quản lý gọi là \textbf{Service Control Manager (SCM)}. Bộ quản lý này có thể được xem là một built-in web server của hệ điều hành cho phép các ứng dụng khác truy xuất trạng thái, điều khiển và gửi các mã lệnh tới cho dịch vụ. Trong hệ thống của chúng tôi, các mã lệnh được chúng tôi sử dụng bao gồm:
+		
+			\begin{enumerate}[1.]
+				\item \enumentry{SERVICE\_CONTROL\_SWITCH\_NOFILTER (0xFF):} Tắt đi đường ống lọc nhiễu để dữ liệu trực tiếp đi từ microphone thật sang microphone ảo.
+				\item \enumentry{SERVICE\_CONTROL\_SWITCH\_PIPELINE (0xFE):} Bật lại đường ống lọc nhiễu trong dịch vụ.
+			\end{enumerate}
+			
+		Bên dưới dịch vụ, khi nhận được các mã này, biến điều khiển sẽ được bật và tắt tương ứng với mã lệnh nhận được từ đó điều khiển việc chuyển dữ liệu qua đường ống lọc nhiễu. Các mã được dịch vụ nhận được từ SCM là một số nguyên dương bốn bytes (trong Windows, thường được gọi là DWORD), phạm vi và các mã lệnh cố định được định nghĩa như trong \tableref{design::svc_control_code}.
+		
+			\begin{table}[h]
+				\centering
+				\begin{tabular}{l c}
+					\hline
+					\multicolumn{1}{c}{\textbf{MACRO}}		& \textbf{DWORD} \\
+					\hline
+					SERVICE\_CONTROL\_STOP					& 0x01 \\
+					SERVICE\_CONTROL\_PAUSE					& 0x02 \\
+					SERVICE\_CONTROL\_CONTINUE				& 0x03 \\
+					SERVICE\_CONTROL\_INTERROGATE			& 0x04 \\
+					SERVICE\_CONTROL\_PARAMCHANGE			& 0x06 \\
+					SERVICE\_CONTROL\_NETBINDADD			& 0x07 \\
+					SERVICE\_CONTROL\_NETBINDREMOVE			& 0x08 \\
+					SERVICE\_CONTROL\_NETBINDENABLE			& 0x09 \\
+					SERVICE\_CONTROL\_NETBINDDISABLE		& 0x0A \\
+					\hline
+					Định nghĩa tự do						& 0x80 - 0xFF \\
+					\hline
+				\end{tabular}
+				\caption{Các mã lệnh cố định và phạm vi định nghĩa bổ sung của mã điều khiển dịch vụ}
+				\label{design::svc_control_code}
+			\end{table}
+		
+		Microphone ở khía cạnh phần mềm có thể được xem như một hàng đợi xoay vòng với dữ liệu cố định (kích thước này phụ thuộc vào tần số lấy mẫu và kích thước dữ liệu ứng dụng yêu cầu). \figref{design::mic_arch} thể hiện cho cấu tạo của một microphone trong hệ điều hành Windows. Dữ liệu được microphone thật ghi nhận và sau đó ghi xuống hàng đợi dưới dạng các số nguyên kiểu ``long'' bốn bytes. Dữ liệu được viết liên tục từ đầu hàng đợi cho tới khi write head này đạt tới cuối của hàng đợi, sau đó lại vòng ngược lên đầu và một vòng ghi như vậy lại tiếp tục. Mặt khác, khi ứng dụng đọc dữ liệu được ghi xuống hàng đợi này cũng thông qua read head và cũng tương tự như write head, khi ứng dụng đọc và read head đạt tới cuối của hàng đợi, read head sẽ tự động chuyển lên đầu hàng đợi và tiếp tục đọc tiếp các dữ liệu tiếp theo. Ở đây sự ràng buộc giữa write head và read head giống như đầu và cuối của một hàng đợi, read head sẽ phải luôn nằm trước write head, do vậy điều này sẽ dẫn tới độ trễ xuất hiện trong bản thân sự chênh lệch giữa read head và write head này.
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=100mm]{\deimg{micarr_arch.png}}
+				\caption{Cấu tạo của microphone (phần mềm), microphone thật truyền dữ liệu vào hàng đợi (hình màu xanh dương) này thông qua write head (mũi tên màu xanh) và ứng dụng đọc dữ liệu được ghi vào thông qua read head (mũi tên cam)}
+				\label{design::mic_arch}
+			\end{figure}
+		
+		Nhưng việc đọc và ghi giữa microphone và ứng dụng không thực sự xảy ra trên cùng một vùng nhớ. Điều này bị ràng buộc bởi hệ điều hành, vùng nhớ được cấp phát bởi kernel mode sẽ không được phép truy xuất từ user mode và ngược lại. Sự ràng buộc này xảy ra khiến cho dữ liệu trước khi thực sự tới được vùng nhớ chung của microphone phải đi qua nhiều tầng lớp chuyển đổi và kiểm tra dữ liệu khiến cho việc ghi và đọc dữ liệu trở nên rất chậm. Với các công nghệ mới hơn, đặc biệt là với cơ chế truy xuất vùng nhớ trực tiếp (Direct Memory Access - DMA) về dữ liệu âm thanh \cite{wavert}, nút thắt ở việc truyền dữ liệu từ kernel mode sang user mode được giải quyết.
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=120mm]{\deimg{micarr_2mem_arch.png}}
+				\srccaption{Cấu tạo của microphone (phần mềm), thông qua cơ chế truy xuất vùng nhớ trực tiếp (DMA) cho phép giảm thiểu thời gian truyền tải dữ liệu âm thanh với độ trễ thấp}{\citesrc{wavert}}
+				\label{design::mic_2mem_arch}
+			\end{figure}
+		
+		Việc truy xuất trực tiếp làm cho phép việc truyền dữ liệu xảy ra trực tiếp giữa người sử dụng máy tính và phần cứng giúp giảm thiểu độ trễ trong quá trình truyền tải dữ liệu âm thanh. \figref{design::mic_2mem_arch} thể hiện sự truyền tải dữ liệu từ microphone sang cho ứng dụng ở tầng kernel mode thông qua cơ chế memory mapping giữa hai mode của hệ điều hành. Vùng nhớ ban đầu được cấp phát tại user mode dưới dạng một dãy các đoạn nhớ (được khởi tạo trong quá trình kích hoạt thiết bị), các vùng nhớ này sau đó thông qua cơ chế mapping của hệ điều hành để chuyển đổi địa chỉ về vùng nhớ của kernel mode và truy xuất như một vùng nhớ liên tục được cấp phát bình thường.
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=120mm]{\deimg{total_latency.png}}
+				\caption{Tổng độ trễ xảy ra trong hệ thống lọc nhiễu động, tổng độ trễ bao gồm độ trễ của microphone thật (vùng màu xám), độ trễ của đường ống lọc nhiễu (vùng màu xanh lá) và độ trễ của microphone ảo (vùng màu cam)}
+				\label{design::total_latency}
+			\end{figure}
+		
+		Với cách hoạt động như vậy, ta cần phải ước lượng độ trễ có thể giữa các thành phần trong hệ thống. \figref{design::total_latency} thể hiện toàn bộ các độ trễ có thể xảy ra từ khi dữ liệu được microphone thật ghi vào hàng đợi của nó cho tới khi ứng dụng đọc được dữ liệu sau khi đã được lọc. Tổng thời gian đi qua hệ thống lọc nhiễu động từ lúc dữ liệu được ghi nhận ở microphone thật cho tới khi ứng dụng đọc được dữ liệu đã được lọc nhiễu tương ứng bao gồm: \textit{độ trễ của microphone thật}, \textit{độ trễ của đường ống lọc nhiễu} và \textit{độ trễ của microphone ảo}. Vì độ trễ của đường ống lọc nhiễu chiếm phần lớn độ trễ của toàn bộ hệ thống nên trong phần kết quả, chúng tôi sẽ chỉ đo đạc các độ trễ của đường ống lọc nhiễu và xem nó là xấp xỉ cho toàn bộ hệ thống lọc nhiễu động này.
+		
+		Một phần quan trọng nhất trong hệ thống của chúng tôi chính là đường ống lọc nhiễu động. Đường ống của chúng tôi được chia làm ba phần:
+		
+			\begin{enumerate}[1.]
+				\item \enumentry{Input:} Dữ liệu theo miền thời gian được tiền xử lý và biến đổi về miền tần số thời gian thành đầu vào của mô hình.
+				\item \enumentry{Inference:} Lưu trữ trạng thái trước, thiết lập và thực thi mô hình chính.
+				\item \enumentry{Output:} Dữ liệu sau khi nhân với mask số thực được dự đoán bởi mô hình được biến đổi ngược về miền thời gian từ đó thực hiện tổng hợp lại và trả về kết quả.
+			\end{enumerate}
+		
+		Dữ liệu từ microphone thật trả về cho mô hình của ta dưới dạng \waveform{} trong miền thời gian. Để có thể thực thi được mô hình, ta cần dữ liệu đầu vào cần phải được biến đổi về \spectrogram{} ở miền tần số thời gian. Để thực hiện điều này, ta thực hiện kiến trúc của Input như trong \figref{design::input_arch}.
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=120mm]{\deimg{input_arch.png}}
+				\caption{Luồng di chuyển của dữ liệu trong phần Input}
+				\label{design::input_arch}
+			\end{figure}
+	
+		Mục tiêu của phần Input chính là giả lập lại biến đổi Fourier thời gian ngắn được đề cập ở \chapterref{chapter::signal_processing} trong công thức \formularef{stft::formula} với dữ liệu đầu vào $f(t)$ là một luồng dữ liệu đầu vào liên tục. Với kích thước cửa sổ cần xét là 512 mẫu (tương ứng 32ms với tần số lấy mẫu là 16000 mẫu/s) và khoảng cách giữa các cửa sổ này là 128 mẫu (tương ứng với 8ms). Ta thiết lập luồng dữ liệu dưới dạng các đoạn dữ liệu có kích thước đúng bằng khoảng cách giữa các cửa sổ (vì một cửa sổ có thể được chia thành 4 đoạn dữ liệu nhỏ hơn). Sau đó chúng tôi đặt 128 mẫu dữ liệu này vào chung hàng đợi FIFO có kích thước 512 mẫu và loại bỏ đi 128 mẫu ở đầu hàng. Mỗi lần lấy dữ liệu để đưa vào Input, ta sẽ đọc toàn bộ dữ liệu đang có mà không lấy chúng ra khỏi hàng đợi.
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=150mm]{\deimg{input_buffer.png}}
+				\caption{Hàng đợi đầu vào của Input}
+				\label{design::input_buffer}
+			\end{figure}
+		
+		Cứ mỗi lần dữ liệu được đưa vào như vậy, ta thực hiện tính toán biến đổi Fourier trên dữ liệu được đưa vào sau khi nhân với một hàm cửa sổ. Hàm cửa sổ được sử dụng ở phần này là cửa sổ Hann, như  đã trình bày trong \sectionref{section::signal_processing::stft}. Cửa sổ Hann rất hiệu quả trong việc tách các tần số gần nhau đối với dạng dữ liệu tổng hợp sóng của ta. Sau khi biến đổi Fourier rời rạc trên đoạn dữ liệu đã được cửa sổ (window) hóa này, ta thu được một dãy số phức đại diện cho pha và biên độ của sóng tại vị trí đó trong khoảng thời gian 32ms tương ứng. Cuối cùng để thỏa mãn được dữ liệu đầu vào cho mô hình lọc nhiễu, như đã đề cập ở \subsectionref{subsection::relatedworks::proposed_model}, mô hình cần sử dụng năm dãy tần số liên tục nhau để dự đoán ra ``mask'' số thực cho một dãy tần số nhất định mà chúng tôi gọi là ``\textbf{Main frame}''. Vì vậy ở đây, sau khi đã thực hiện biến đổi Fourier rời rạc cho dữ liệu được cửa sổ hóa, chúng tôi chứa các dãy tần số này lại vào một hàng đợi FIFO có kích thước năm dãy tần số (mỗi dãy tần số có kích thước 257 số phức). Và cứ như vậy, đầu vào của phần tiếp theo Inference sẽ là biên độ của năm dãy tần số được chứa trong hàng đợi này.
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=120mm]{\deimg{infer_arch.png}}
+				\caption{Luồng di chuyển của dữ liệu trong phần Inference}
+				\label{design::inference_arch}
+			\end{figure}
+		
+		Sau khi nhận được đầu vào của mô hình từ Input, phần tiếp theo Inference, mô hình của ta sẽ được thực thi ở đây. Cũng như đã đề cập trong \chapterref{chapter::relatedworks}, mô hình của ta có cấu tạo từ hai lớp LSTM chồng lên nhau để tạo thành bộ lọc nhiễu chính, vì vậy để lớp LSTM có thể hoạt động ổn định giống như khi kiểm thử mô hình lọc nhiễu trên các dữ liệu tĩnh, ta cần phải lưu trữ lại các trạng thái hoạt động của cả hai LSTM này. Sử dụng các trạng thái và dữ liệu đầu vào từ Input, chúng tôi tính toán được ``mask'' số thực để sử dụng cho Main frame, nhân chúng lại với nhau ta thu được dãy tần số đã được lọc nhiễu.
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=120mm]{\deimg{output_arch.png}}
+				\caption{Luồng di chuyển của dữ liệu trong phần Output}
+				\label{design::output_arch}
+			\end{figure}
+		
+		Tới phần Output, ta đã có được dãy tần số đã được lọc nhiễu, và bây giờ ta cần là biến đổi dãy tần số này về miền thời gian và trả về cho người dùng. Để làm điều này, trước hết sẽ biến đổi Fourier nghịch để thu được dữ liệu đã lọc bị cửa sổ hóa. Nhờ vào đặc điểm của cửa sổ và biến đổi Fourier thời gian ngắn đã đề cập ở \subsectionref{subsection::signal_processing::stft::ola}, ta sử dụng phương pháp Overlap Add để khử đi việc dữ liệu bị cửa sổ hóa của đầu ra hiện tại. \figref{design::output_ola} thể hiện cho cách chúng tôi thực hiện từ lúc nhận được dãy tần số đã được lọc và phương pháp Overlap Add lên dữ liệu bị cửa sổ hóa.
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=150mm]{\deimg{output_procedure.png}}
+				\caption{Sơ đồ hoạt động của phần Output}
+				\label{design::output_ola}
+			\end{figure}
+		
+		Do dữ liệu sau khi biến đổi luôn có kích thước là 512 mẫu. Dễ thấy, chỉ với 128 mẫu ở đầu của bước Overlap Add mới thỏa mãn được điều kiện của cửa sổ (tổng tất cả dữ liệu cửa sổ hóa mới trả về kết quả là giá trị bị nhân lên cho một hằng số) được nêu trong \sectionref{section::signal_processing::stft}. Kết quả trả về của chúng tôi, vì vậy cũng sẽ bị giới hạn bởi điều này và được cố định ở 128 mẫu đầu tiên trong Overlap Add.
+		
+		Như vậy, tổng thể hệ thống lọc nhiễu động của ta sẽ bao gồm ba phần chính: \textit{Vỏ bọc của ứng dụng (Win32 Service)}, \textit{Bộ lọc chính (đường ống lọc nhiễu động)} và \textit{Giao tiếp với ứng dụng (microphone ảo)}. Kết hợp các thành phần lại chúng tôi thu được một hệ thống lọc nhiễu hoàn chỉnh được nêu trong \figref{design::dynamic_dataflow}. \figref{design::dynamic_pipeline} là tổng thể về lưu đồ hoạt động của đường ống lọc nhiễu động của chúng tôi.
+		
+		Các công nghệ được sử dụng phần này bao gồm:
+		
+			\begin{enumerate}[1)]
+				\item \enumentry{Win32 Service:} Mẫu dịch vụ\footnote{Template: \url{https://docs.microsoft.com/en-us/windows/win32/services/the-complete-service-sample}} viết bằng C++. Tuy đã có sẵn mẫu nhưng các tài liệu liên quan\footnote{\url{https://docs.microsoft.com/en-us/dotnet/framework/windows-services/}} chỉ hướng dẫn và chú thích cho C\#. Đây là khó khăn khi tiếp cận nguồn tài liệu cho phần này của chúng tôi.
+				\item \enumentry{Đường ống lọc nhiễu:}
+					\begin{itemize}
+						\item Eigen\footnote{\url{https://eigen.tuxfamily.org/}} là thư viện dùng cho các phép toán trên vector với tốc độ chạy cao, chúng tôi sử dụng thư viện này để tính toán các kết quả trung gian trong đường ống.
+						\item FFTW\footnote{\url{https://www.fftw.org/}} là thư viện tính toán biến đổi Fourier rời rạc và là một trong những thư viện sử dụng phổ biến trong công nghiệp.
+						\item Miniaudio\footnote{\url{https://miniaud.io/}} là thư viện dùng để chúng tôi đọc âm thanh từ microphone.
+						\item Tensorflow Lite\footnote{\url{https://www.tensorflow.org/lite}} là thư viện dùng để chạy mô hình của chúng tôi ở ứng dụng.
+					\end{itemize}
+				\item \enumentry{Microphone ảo:}
+					\begin{itemize}
+						\item WaveRT\footnote{Doc: \url{https://docs.microsoft.com/en-us/windows-hardware/drivers/audio/wavert-port-driver}} \cite{wavert} là công nghệ\footnote{Template: \url{https://github.com/microsoft/Windows-driver-samples/tree/master/audio/simpleaudiosample}} đọc ghi dữ liệu dùng cho âm thanh mới nhất hiện tại của Microsoft, giúp độ trễ của chúng tôi về thời gian di chuyển giữa đường ống ra và vào microphone trở nên rất thấp.
+						\item Driver Implementation \cite{dev_driver_wdf, win_internals} là các khái niệm cơ bản về Driver cũng như bên trong hệ thống của Windows, từ đó hiểu được làm như thế nào để chuyển dữ liệu vào và ra khỏi kernel.
+					\end{itemize}
+			\end{enumerate}
+		
+		Tuy nhiên, đường ống lọc nhiễu này còn tồn tại một số hạn chế mà trong đó có thể kể đến là khả năng thích nghi với môi trường xung quanh của người dùng. Môi trường xung quanh người dùng liên tục thay đổi, một mô hình tốt là mô hình vừa đảm bảo được khả năng thời gian thực mà vẫn phải đảm bảo được chất lượng như lúc ban đầu. Lấy mô hình đề xuất làm một ví dụ. Với thiết kế được ống lọc nhiễu động hiện tại, mô hình được huấn luyện là cố định trong tất cả các phiên hoạt động của ứng dụng. Rõ ràng để có thể thích nghi được với môi trường biến đổi liên tục, mô hình của ta sẽ phải liên tục được huấn luyện lại trên một bộ dữ liệu đã được cập nhật. Điều này rất kém hiệu quả. Và cũng là một trong những điểm hạn chế của thiết kế này.
+		
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=150mm]{\deimg{pipeline_whole.png}}
+				\caption{Lưu đồ hoạt động của đường ống lọc nhiễu động}
+				\label{design::dynamic_pipeline}
+			\end{figure}

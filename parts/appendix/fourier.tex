@@ -1,0 +1,334 @@
+\newcommand{\fourierimg}[1]{parts/appendix/img/#1}
+\setupfont{13pt}
+
+\appendix
+
+\chapter{Biến đổi Fourier}
+
+\section{Phép biến đổi Fourier}
+	
+	 Trong thực tế, quá trình truyền âm trong không khí từ nguồn âm tới bộ phận nhận được (trong luận văn này, bộ phận thu nhận âm thanh từ nguồn phát là microphone của máy tính) luôn tiềm ẩn những sự gián đoạn làm ảnh hưởng tới thông tin mà âm thanh ban đầu truyền đi. Tới khi máy tính nhận được các thông tin từ microphone thì âm thanh nhận được đó chỉ là một tập hợp của âm thanh gốc và rất nhiều các âm thanh khác lẫn vào đó. Dễ thấy việc loại bỏ trực tiếp từ các tín hiệu thu được từ microphone là vấn đề rất khó vì một số âm thanh có sự tương đồng với âm thanh cần làm sạch. Vì thế, ta trình bày một công cụ có khả năng phân tích các tín hiệu bị trộn lẫn này lại với nhau, đó là \textbf{Phép biến đổi Fourier}. Phép biến đổi Fourier có hai dạng: \textit{Phép biến đổi Fourier liên tục} và \textit{Phép biến đổi Fourier rời rạc}. Trước hết chúng tôi sẽ đề cập tới phép biến đổi Fourier liên tục.
+
+	\subsection{Định nghĩa và ví dụ}
+	
+		Với một tín hiệu liên tục $f(t)$ theo thời gian $t$ (ở đây ta xét hàm theo thời gian vì nó liên quan mật thiết tới vấn đề mà chúng tôi cần giải quyết), \definition{biến đổi Fourier} với tốc độ góc $\omega$ (là tốc độ sóng dao động trong một chu kì) của $f(t)$ được định nghĩa như sau
+		
+			\begin{equation}
+				F(\omega) = \int_{-\infty}^{+\infty}\polarcomplex{f(t)}{-\omega t}dt.
+			\label{appendix::fourier::forward_formula}
+			\end{equation}
+		
+		Trước hết ta sẽ thể hiện một cách trực quan công thức biến đổi Fourier khi áp dụng lên dữ liệu trước khi đi sâu vào bản chất của nó. Công thức trên có thể được chia làm hai phần $\polarcomplex{f(t)}{-\omega t}$ và phần tích phân trên miền thời gian trong khoảng $(-\infty, +\infty)$. Công thức của Fourier $\polarcomplex{}{\phi} = \complex{\cos(\phi)}{\sin(\phi)}$ chính là biểu diễn cho một đường tròn có bán kính là 1, vậy nếu ta lấy $f(t)$ nhân với lại biểu thức này, việc đó ứng với việc uốn $f(t)$ từ hệ trục Cartesian $\cartesiancoord$ sang hệ trục phức hai chiều $\complexcoord$. Để hiểu rõ hơn công thức này, chúng tôi lấy một ví dụ về việc xử lý Fourier trên dữ liệu cho trước. Cho một hàm theo biến thời gian $f(t) = \sin(t) + \sin(2t) + \sin(3t)$, \figref{appendix::fourier::sample_data} là đồ thị của hàm này trong hệ tọa độ $\cartesiancoord$.
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=90mm]{\mathimg{fourier_data.png}}
+				\caption{Đồ thị hàm $f(t) = \sin(t) + \sin(2t) + \sin(3t)$}
+			\label{appendix::fourier::sample_data}
+			\end{figure}
+		
+		Bây giờ, ta sẽ thực hiện ``cuốn'' (wrap) hàm $f(t)$ bằng công thức $\polarcomplex{f(t)}{-\omega t}$ với $\omega = 4$. Chúng tôi thu được một đồ thị mới có hình dạng như \figref{appendix::fourier::ft_e_sample}. Sau khi đã thực hiện $\polarcomplex{f(t)}{-\omega t}$ chúng tôi lấy tích phân trên toàn bộ miền của $t$. Việc lấy tích phân này, dưới góc nhìn vật lý chính là đang đi tính khối tâm của đối tượng đang được xét. Cuối cùng, biến đổi Fourier tại $\omega$ trả về cho chúng tôi khối tâm hình học của $\polarcomplex{f(t)}{-\omega t}$.
+		
+			\begin{figure}[h]
+				\centering
+				\begin{subfigure}{0.5\textwidth}
+					\includegraphics[width=80mm]{\mathimg{fourier_w=2.09.png}}
+					\caption{$\polarcomplex{f(t)}{-\omega t}$ với $\omega = 2$}
+				\end{subfigure}%
+				\begin{subfigure}{0.5\textwidth}
+					\includegraphics[width=80mm]{\mathimg{fourier_w=4.19.png}}
+					\caption{$\polarcomplex{f(t)}{-\omega t}$ với $\omega = 4$}
+				\end{subfigure}
+				\caption{Đồ thị hàm $f(t)$ sau khi nhân với $\polarcomplex{}{-\omega t}$, điểm đỏ là khối tâm của vật thể này, các giá trị trả về lúc này đều là số phức vì vậy không gian của chúng tôi sử dụng không còn là $\cartesiancoord$ nữa mà là $\complexcoord$}
+				\label{appendix::fourier::ft_e_sample}
+			\end{figure}
+		
+		Sinh viên thực hiện thử cho nhiều giá trị khác của $\omega$ và nhận thấy, ở một số vị trí, trọng tâm của vật trả về bởi công thức của Fourier thay đổi rất nhiều tùy vào giá trị $\omega$ mà ta sử dụng, \figref{appendix::fourier::abs_sample} thể hiện giá trị biên độ (module) của giá trị phức được trả về của hàm dưới dấu tích phân ứng với các giá trị $\omega \in [-6, 6]$, biểu diễn của âm thanh dưới dạng này còn được gọi là \textbf{\spectrum{}}. 
+		
+		Có thể dễ dàng quan sát được một điều đặc biệt ở biến đổi Fourier, ở một số $\omega$ giá trị biên độ này rất lớn, và tương tự như vậy ở một số $\omega$ khác, giá trị biên độ trả về lại khá nhỏ. Các $\omega$ có biến đổi Fourier tại đó có giá trị biên độ lớn tương ứng với $\omega$ của các sóng cấu tạo nên $f(t)$ và $\omega$ của các sóng không có trong $f(t)$, giá trị biên độ thu được bởi biến đổi Fourier sẽ nhỏ hơn rất nhiều. Ta sẽ giải thích về hiện tượng đặc biệt này trong phần tiếp theo, đây cũng là điểm chính yếu khiến cho biến đổi Fourier trở nên rất quan trọng trong xử lý tín hiệu có dạng sóng.
+		
+			\begin{figure}[h]
+				\centering
+				\includegraphics[width=90mm]{\mathimg{spectrum_v2.png}}
+				\caption{Đồ thị biên độ của trọng tâm (\spectrum{}) trả về theo $\omega$}
+				\label{appendix::fourier::abs_sample}
+			\end{figure}
+		
+	
+	\subsection{Bản chất của biến đổi Fourier}
+		
+		Trước khi tiến hành phân tích bản chất của biến đổi Fourier, chúng tôi thu gọn phạm vi phân tích về lại một trường hợp đặc biệt của biến đổi Fourier là chuỗi Fourier. Chuỗi Fourier này được định nghĩa như sau
+		
+			\begin{equation}
+				f(t) = \sum_{k=-\omega}^{\omega} c_k \polarcomplex{}{k t},
+				\label{appendix::fourier::fourier_series_formula}
+			\end{equation}
+		
+		\noindent với $c_k$ là hệ số tương ứng với sóng thứ $k$, $\omega$ lúc này được giới hạn lại về miền số nguyên dương $\mathbb{Z}^+$. Bản chất của chuỗi Fourier này xuất phát từ định nghĩa của đa thức lượng giác (trigonometric polynomials). Đa thức lượng giác được định nghĩa trong \cite{approximate_trigonometric, mat_120B_notes} có dạng như sau
+		
+			\begin{equation}
+				f(t) = \frac{1}{2} a_0 + \sum_{k=1}^{\omega} (a_k \cos(kt) + b_k \sin(kt)),
+				\label{appendix::fourier::trigonometric_polynomials}
+			\end{equation}
+		
+		\noindent với các $a_k$, $b_k$ là các hệ số được tính toán để xấp xỉ lại $f(t)$. Theo \cite{approximate_trigonometric}, các hàm được xấp xỉ bằng đa thức lượng giác cần phải thỏa mãn tính tuần hoàn sau từng chu kì $T$
+		
+			\begin{equation}
+				f(t) = f(t + T).
+			\end{equation}
+			
+		Với tính chất này, chọn $T=2\pi$ ta kết luận được rằng \cite[\theorem{} 13.1]{approximate_trigonometric} với mọi $\epsilon \in \mathbb{R}$ sao cho $\epsilon > 0$, luôn tồn tại một đa thức lượng giác $p(t)$ sao cho
+		
+			\begin{equation}
+				\norm{f(t) - p(t)}_{\infty} \le \epsilon.
+			\end{equation}
+		
+		Kết luận này cũng dẫn tới sự hội tụ của đa thức lượng giác khi giá trị $\epsilon$ tiến về $0$, hàm xấp xỉ $p(t)$ hoàn toàn có thể được chuyển sang dạng của chuỗi Fourier được định nghĩa như công thức \formularef{appendix::fourier::fourier_series_formula} như sau
+		
+			\begin{align*}
+				p(t)	& = \frac{1}{2} a_0 + \sum_{k=1}^{\omega} (a_k \cos(kt) + b_k \sin(kt)) \\
+						& = \frac{1}{2} a_0 + \sum_{k=1}^{\omega} (a_k \frac{\polarcomplex{}{kt} + \polarcomplex{}{-kt}}{2} + b_k \frac{\polarcomplex{}{kt} - \polarcomplex{}{-kt}}{\imcomplex{2}}) \\
+						& = \frac{1}{2} (a_0 + b_0) + \sum_{k=1}^{\omega} \frac{a_k + b_k}{2} \polarcomplex{}{kt} + \sum_{k=1}^{\omega} \frac{a_k - b_k}{2} \polarcomplex{}{-kt},
+			\end{align*}
+		
+		\noindent với $c_0 = (a_0 + b_0)/2 = a_0/2$, $c_k = (a_k + b_k)/2$ và $c_{-k} = (a_k - b_k)/2$, từ đó thay vào công thức trên, ta thu được
+		
+			\begin{align*}
+				p(t)	& = \frac{1}{2} (a_0 + b_0) + \sum_{k=1}^{\omega} \frac{a_k + b_k}{2} \polarcomplex{}{kt} + \sum_{k=1}^{\omega} \frac{a_k - b_k}{2} \polarcomplex{}{-kt} \\
+						& = \sum_{k=-\omega}^{\omega} c_k \polarcomplex{}{kt}. \numberedeq
+				\label{appendix::fourier::infered_fourier_series}
+			\end{align*}
+		
+		Ta thu lại được công thức \formularef{appendix::fourier::infered_fourier_series} từ định nghĩa của đa thức lượng giác tương tự như công thức chuỗi Fourier được định nghĩa ở \formularef{appendix::fourier::fourier_series_formula}. Tức là ta đã chứng minh cho khả năng xấp xỉ hàm của chuỗi Fourier \cite[\theorem{} 13.1]{approximate_trigonometric}.
+		
+		Cố gắng xấp xỉ lại $f(t)$ từ công thức đa thức lượng giác \formularef{appendix::fourier::trigonometric_polynomials}, sự xấp xỉ này đang cố gắng tối thiểu hóa lại hàm khoảng cách giữa hai hàm được xây dựng
+		
+			\begin{equation}
+				d(f, p) = \int_{-\infty}^{+\infty} (f(t) - q(t))^2 dt,
+				\label{appendix::fourier::distance_func}
+			\end{equation}
+		
+		\noindent với giả định rằng chu kì $T$ của cả hai hàm này đều là $2\pi$, người ta \cite{approximate_trigonometric} đã thu hẹp cận của tích phân khoảng cách này về lại cận $[-\pi, \pi]$, do đó tích phân trên được đánh giá trong đoạn $[-\pi, \pi]$
+		
+			\begin{equation}
+				d(f, p) = \int_{-\pi}^{\pi} (f(t) - q(t))^2 dt.
+			\end{equation}
+		
+		Dưới các điều kiện về tính trực giao giữa các hàm cosine và sine với nhau
+		
+			\begin{equation}
+				\forall j, k \in \mathbb{Z}^+, j \neq k: \int_{-\pi}^{\pi} \sin(jt) \sin(kt) dx = 0,
+			\end{equation}
+		
+			\begin{equation}
+				\forall j, k \in \mathbb{Z}^+, j = k: \int_{-\pi}^{\pi} \sin(jt) \sin(kt) dx = 2\pi,
+			\end{equation}
+		
+			\begin{equation}
+				\forall j, k \in \mathbb{Z}^+, j \neq k: \int_{-\pi}^{\pi} \sin(jt) \sin(kt) dx = 0,
+			\end{equation}
+		
+			\begin{equation}
+				\forall j, k \in \mathbb{Z}^+, j = k: \int_{-\pi}^{\pi} \sin(jt) \sin(kt) dx = 2\pi,
+			\end{equation}
+		
+			\begin{equation}
+				\forall j, k \in \mathbb{Z}^+: \int_{-\pi}^{\pi} \cos(jt) \sin(kt) dx = 0,
+			\end{equation}
+		
+		\noindent ta có thể chứng minh \cite[\theorem{} 13.2]{approximate_trigonometric} để đa thức lượng giác ở công thức \formularef{appendix::fourier::trigonometric_polynomials} đạt cực tiểu hàm khoảng cách giữa hai hàm \formularef{appendix::fourier::distance_func} so với $f(t)$ khi và chỉ khi các hệ số $a_k$ và $b_k$ được tính như sau
+		
+			\begin{equation}
+				a_j = \frac{1}{\pi} \int_{-\pi}^{\pi} f(t) \cos(j t) dt,
+			\end{equation}
+		
+			\begin{equation}
+				b_j = \frac{1}{\pi} \int_{-\pi}^{\pi} f(t) \sin(j t) dt,
+			\end{equation}
+		
+		\noindent với $j \in \mathbb{Z}^+$. Rõ ràng với các giá trị $a_k$ và $b_k$ được định nghĩa như trên, ta đang tạo ra một hệ trục tọa độ mới với các giá trị $a_k$ và $b_k$ tương ứng với các phép chiếu của $f(t)$ lần lượt lên các trục tọa độ được cấu tạo bởi $\cos(j t)$ và $\sin(j t)$. Nhờ vào điều này, ở các giá trị của $\omega$ cấu tạo nên sóng $f(t)$ sẽ đạt cực đại tương ứng với các giá trị $\omega = j$ với giá trị đúng bằng hình chiếu của chúng lên $\cos(j t)$ tương ứng.
+		
+		\subsub{Ví dụ} Để thấy rõ được tác dụng của phép chiếu này trên $f(t)$, ta xét một trường hợp cụ thể khi $f(t) = r \cos(j t + \phi)$, khi đó thực hiện tính toán các hệ số $a_k$ và $b_k$, ta thu được
+		
+			\begin{align*}
+				f'(t)	& = \frac{1}{2} a_0 + \sum_{k=1}^{\omega} (a_k \cos(kt) + b_k \sin(kt)) \\
+						& = a_j \cos(jt) + b_j \sin(jt), \numberedeq
+				\label{appendix::fourier::ex_f'}
+			\end{align*}
+		
+		\noindent với $a_j$ và $b_j$ được tính như sau
+		
+			\begin{align*}
+				a_j	& = \frac{1}{\pi} \int_{-\pi}^{\pi} f(t) \cos(j t) dt \\
+					& = \frac{1}{\pi} \int_{-\pi}^{\pi} r \cos(j t + \phi) \cos(j t) dt \\
+					& = \frac{r}{\pi} \int_{-\pi}^{\pi} \cos(j t) \cos(j t) \cos(\phi) + \sin(j t) \cos(j t) \sin(\phi) dt \\
+					& = r \cos(\phi), \numberedeq
+			\end{align*}
+			
+			\begin{align*}
+				b_j	& = \frac{1}{\pi} \int_{-\pi}^{\pi} f(t) \sin(j t) dt \\
+					& = \frac{1}{\pi} \int_{-\pi}^{\pi} r \cos(j t + \phi) \sin(j t) dt \\
+					& = \frac{r}{\pi} \int_{-\pi}^{\pi} \cos(j t) \sin(j t) \cos(\phi) + \sin(j t) \sin(j t) \sin(\phi) dt \\
+					& = r \sin(\phi). \numberedeq
+			\end{align*}
+	
+		Từ đó, \formularef{appendix::fourier::ex_f'} trở thành
+		
+			\begin{align*}
+				f'(t)	& = a_j \cos(jt) + b_j \sin(jt) \\
+						& = r \cos(\phi) \cos(jt) + r \sin(\phi) \sin(jt) \\
+						& = r \cos(jt + \phi). \\
+						& = f(t). \numberedeq
+			\end{align*}
+		
+		Công thức $f'(t)$ thu lại được đúng bằng với giá trị của $f(t)$ ban đầu và giá trị được ta ghi nhận được ở \figref{appendix::fourier::abs_sample} bởi công thức Fourier chính là chuẩn Euclid của vector do $f(t)$ chiếu vào hệ trục này. Ta khai triển tiếp tục
+		
+			\begin{equation}
+				a_j	= r \cos(\phi) = r \bigg( \frac{\polarcomplex{}{\phi} + \polarcomplex{}{- \phi}}{2} \bigg),
+			\end{equation}
+		
+			\begin{equation}
+				b_j = r \sin(\phi) = r \bigg( \frac{\polarcomplex{}{\phi} - \polarcomplex{}{- \phi}}{2i} \bigg),
+			\end{equation}
+		
+		\noindent và thay các giá trị $a_j$ và $b_j$ mới tìm được này vào công thức $c_j$ và $c_{-j}$ để thu được
+		
+			\begin{align*}
+				c_j	& = a_j + b_j \\
+					& = r \bigg( \frac{\polarcomplex{}{\phi} + \polarcomplex{}{- \phi}}{2} - \frac{\polarcomplex{}{\phi} - \polarcomplex{}{- \phi}}{2} \bigg) \\
+					& = r \polarcomplex{}{-\phi}, \numberedeq
+			\end{align*}
+		
+			\begin{align*}
+				c_{-j}	& = a_j + b_j \\
+						& = r \bigg( \frac{\polarcomplex{}{\phi} + \polarcomplex{}{- \phi}}{2} + \frac{\polarcomplex{}{\phi} - \polarcomplex{}{- \phi}}{2} \bigg) \\
+						& = r \polarcomplex{}{\phi}. \numberedeq
+			\end{align*}
+		
+		Thông qua hai công thức của $c_j$ và $c_{-j}$ này, ta nhận thấy biên độ của hai tần số đối xứng nhau $j$ và $-j$ sẽ có giá trị ngang nhau nhưng pha của $j$ sẽ bị ngược với pha của tần số ban đầu trong $f(t)$.
+		
+		
+	\subsection{Phép biến đổi Fourier ngược}
+	
+		Biến đổi Fourier ngoài việc cung cấp khả năng quan sát các thành phần sóng cấu tạo nên âm thanh ở miền tần số, còn cho phép chỉnh sửa và chuyển đổi ngược từ miền tần số về lại miền thời gian ban đầu. Như phần trước chúng tôi đã giới thiệu về biến đổi Fourier (thuận) liên tục, trong phần này ta sẽ tìm hiểu về phép biến đổi Fourier nghịch liên tục chuyển đổi dữ liệu từ miền tần số về miền thời gian.
+		
+		%cũng bởi lý do xấp xỉ độ ảnh hưởng (biên độ) của một sóng cosine lên dữ liệu được trả về không gian phức $\mathbb{C}$ mà dữ liệu được biến đổi Fourier thành còn có tên gọi là miền tần số, và miền dữ liệu gốc ban đầu được gọi là miền thời gian. Biến đổi Fourier chuyển đổi qua lại giữa hai miền này có tên gọi là biến đổi Fourier thuận và biến đổi Fourier nghịch. 
+		
+		\definition{Phép biến đổi Fourier ngược} của $F(\omega)$ được định nghĩa như sau
+		
+			\begin{equation}
+				f(t) = \int_{-\infty}^{\infty} \polarcomplex{F(\omega)}{\omega t}d\omega.
+			\end{equation}
+			
+		Công thức trên của biến đổi Fourier nghịch đơn thuần chỉ là sự tổng hợp của rất nhiều sóng với các bước sóng khác nhau. Vì trong luận văn này, chúng tôi đang xét tới âm thanh là một tập hợp của rất nhiều sóng khác nhau, do đó chúng tôi đặt giả thiết về $f(t)$ trong luận văn này để chứng minh các tính chất của $F(\omega)$ như sau
+		
+			\begin{equation}
+				f(t) = \sum_{j} r_j\cos(\omega_j t + \phi_j).
+			\end{equation}
+			
+		Đây là một tổng hữu hạn các sóng có bước sóng $\omega_j$, biên độ $r_j$ và pha ban đầu $\phi_j$. Chúng tôi chuyển đổi công thức trên sang dạng của công thức biến đổi Fourier nghịch
+		
+			\begin{align*}
+				f(t) 	& =  \sum_{j} r_j\cos(\omega_j t + \phi_j) \\
+						& =  \Re\bigg(\sum_{j} r_j\polarcomplex{}{(\omega_j t + \phi_j)}\bigg) \\
+						& =  \Re\bigg(\sum_{j} r_j\polarcomplex{}{\phi_j}\polarcomplex{}{\omega_j t}\bigg). \numberedeq
+				\label{appendix::ift::wave_formula}
+			\end{align*}
+		
+		Bằng cách tách ra như vậy, với mỗi sóng thứ $j$, chúng tôi thu được một biểu thức $r_j\polarcomplex{}{\phi_j}$ đại diện cho pha ban đầu và biên độ của sóng. Sự tương đồng giữa hai công thức biến đổi Fourier nghịch và công thức \formularef{appendix::ift::wave_formula} xuất hiện khi chúng tôi thay vì giả định $f(t)$ là tổng bao gồm một số các sóng rời rạc thì $f(t)$ lúc này sẽ được biểu diễn bằng tích phân của tất cả các bước sóng có trong $(-\infty, +\infty)$. Vậy nên, ta có
+		
+			\begin{align*}
+				f(t) 	& =  \Re\bigg(\int_{-\infty}^{\infty} r_j\polarcomplex{}{\phi_j}\polarcomplex{}{\omega t}d\omega\bigg) \\
+				& =  \Re\bigg(\int_{-\infty}^{\infty} F(\omega)\polarcomplex{}{\omega t}d\omega\bigg), \numberedeq
+			\end{align*}
+		
+		\noindent và với việc chứng minh $F(\omega_j) = r_j\polarcomplex{}{\phi_j}$ thì ta thu lại được công thức biến đổi Fourier nghịch như đã nêu ở ban đầu. Bằng cách chuyển đổi qua lại giữa hai miền, tần số và thời gian, các bước sóng tổng hợp có thể được phân tách thành rất nhiều sóng đơn có bước sóng khác nhau cũng như từ một số sóng đơn cho trước. Sự phân tích này rất hữu ích trong việc loại bỏ các bước sóng nhiễu ra khỏi âm thanh gốc ban đầu.
+		
+		
+	\section{Biến đổi Fourier rời rạc}
+		
+		Trong phần này, ta sẽ bàn về cách chuyển đổi tích phân Fourier về dạng Fourier rời rạc được đề cập trong \chapterref{chapter::signal_processing}. Xuất phát từ định nghĩa của biến đổi Fourier liên tục
+	
+		%\subsection{Từ liên tục tới rời rạc}
+			
+				\begin{equation*}
+					X(\omega) = \int_{-\infty}^{+\infty} \polarcomplex{x(t)}{-\omega t} dt.
+				\end{equation*}
+			
+			%\noindent chúng tôi có thể chuyển đổi công thức $X(\omega)$ về biến tần số $f$ với $\omega = 2\pi f$ như sau
+			
+			%	\begin{equation}
+			%		X(f) = \int_{-\infty}^{\infty} \polarcomplex{x(t)}{-2\pi f t} dt,
+			%	\label{dct::var_freq_formula}
+			%	\end{equation}
+			
+			%\noindent $x(t)$ lúc này có thể được xem là một chuỗi $N$ phần tử chứa bên trong một mảng số phức (chúng tôi đang xét trong trường hợp biến đổi Fourier tổng quát nên $x(t)$ có thể thuộc $\mathbb{C}^N$) với phần tử thứ $k$ tại thời điểm $t$ tương ứng sẽ được kí hiệu bằng $x_k$, giá trị của $x(t)$ sẽ được lặp lại sau mỗi chu kì $T$ của mảng này nhờ vậy công thức biến đổi Fourier liên tục có thể được rời rạc hóa như sau
+				
+			%	\begin{align*}
+			%		X(f) 	& = \sum_{t=-\infty}^{\infty} \polarcomplex{x(t)}{-2\pi f t} \Delta t \\
+			%				& = \lim_{n \rightarrow \infty} n \sum_{k=0}^{N - 1} \polarcomplex{x_k}{-2\pi f k \Delta t} \Delta t. \numberedeq
+			%	\end{align*}
+			
+			%Vì $\lim_{n \rightarrow \infty}$ có thể được bỏ qua vì kết quả cuối cùng không phụ thuộc vào giá trị của giới hạn và chỉ phụ thuộc vào phần tổng trên $x(t)$ nên chúng tôi có thể bỏ qua phần giới hạn này.
+			
+				\begin{figure}[h]
+					\begin{subfigure}{\textwidth}
+						\centering
+						\includegraphics[width=100mm]{\mathimg{f_s.PNG}}
+						\caption{Đồ thị theo thời gian của hàm $f_s$}
+						\label{appendix::appendix::fourier::fs::time_func}
+					\end{subfigure}
+					
+					\begin{subfigure}{\textwidth}
+						\centering
+						\includegraphics[width=100mm]{\mathimg{Ff_s.PNG}}
+						\caption{Đồ thị theo tần số của hàm $F_s$}
+						\label{appendix::appendix::fourier::fs::omega_func}
+					\end{subfigure}
+					\srccaption{Đồ thị theo thời gian của $f_s$ và đồ thị theo tần số của $F_s$}{\citesrc{fft_brigham}}
+				\end{figure}
+			
+			Brigham \cite{fft_brigham} rời rạc hóa $f(t)$ bằng cách nhân giữa $f(t)$ với $f_s(t)$ có đồ thị theo thời gian như \figref{appendix::appendix::fourier::fs::time_func}. Biến đổi Fourier của tích của hai hàm theo thời gian có thể được quy đổi lại thành tích chập của hai biến đổi Fourier giữa chúng, điều này có thể được chứng minh như sau
+			
+				\begin{align*}
+					\mathcal{F}\{f(t) f_s(t)\}(\omega)	& = \int_{-\infty}^{+\infty} f(t) f_s(t) \polarcomplex{}{- \omega t} dt \\
+							& = \int_{-\infty}^{+\infty} \bigg( \int_{-\infty}^{+\infty} F(\omega') \polarcomplex{}{\omega' t} d\omega' \bigg) f_s(t) \polarcomplex{}{- \omega t} dt \\
+							& = \int_{-\infty}^{+\infty} \bigg( \int_{-\infty}^{+\infty} f_s(t) \polarcomplex{}{- (\omega - \omega') t} dt \bigg)  F(\omega') d\omega' \\
+							& = \int_{-\infty}^{+\infty} F_s(\omega - \omega') F(\omega') d\omega' \\
+							& = (F_s \ast F)(\omega). \numberedeq
+				\end{align*}
+			
+			Thông qua công thức trên, người ta \cite{fft_brigham} đã chứng minh được rằng \spectrum{} được tạo ra bởi tích chập giữa $F$ và $F_s$ sẽ có tính tuần hoàn với chu kì là $1/\Delta t$ với $Delta t$ là khoảng thời gian lấy mẫu. Từ đó, ta suy ra được công thức rời rạc của biến đổi Fourier liên tục như sau
+			
+				\begin{equation}
+					X(f) = \sum_{k=0}^{N - 1} \polarcomplex{x_k}{-2\pi f k \Delta t} \Delta t.
+				\label{appendix::appendix::fourier::dct::var_freq_formula_discrete}
+				\end{equation}
+			
+			Ta lại tiếp tục đổi biến số của công thức $X(f)$ một lần nữa, lần này biến $f$ được biến đổi dựa vào định lý lấy mẫu của Nyquist (Nyquist-Shannon sampling theorem) \cite{mdft}. Theo định lý Nyquist, tần số được truyền đi sẽ không bao giờ vượt quá được một nửa tần số truyền đi. Do đó, tần số sóng tồn tại bên trong $x(t)$ sau khi đã chịu ảnh hưởng bởi quá trình rời rạc hóa sẽ không bao giờ vượt quá được một nửa tần số lấy mẫu của sóng này, vậy nên $-f_0 / 2 \le f \le f_0 / 2$ với $f_0$ là tần số truyền tải hay tần số lấy mẫu theo định lý của Nyquist. Ta bắt đầu tiến hành rời rạc hóa $f$ trong khoảng $[-f_0 / 2, f_0 / 2]$, bằng cách chia khoảng nhỏ này thành $N$ đoạn có kích thước $\Delta f$, $N$ có thể xem là số lượng mẫu được lấy từ $x(t)$, do vậy ta có $f = j\Delta f$ với $j \in \mathbb{Z}^+$. Ta lại có sự liên hệ giữa $\Delta t$, $f_0$ và $\Delta f$ như sau
+			
+				\begin{equation}
+					\begin{cases}
+						f_0 = \frac{1}{\Delta t}, \\
+						\Delta t = \frac{T}{N}, \\
+						\Delta f = \frac{f_0}{N} = \frac{1}{T}.
+					\end{cases}
+				\label{appendix::appendix::fourier::dct::relation_formulas}
+				\end{equation}
+			
+			Thay các công thức \formularef{appendix::appendix::fourier::dct::relation_formulas} vào công thức \formularef{appendix::appendix::fourier::dct::var_freq_formula_discrete} chúng tôi thu được
+			
+				\begin{align*}
+					X(f)	& = \sum_{k=0}^{N - 1} \polarcomplex{x_k}{-2\pi f k \Delta t} \Delta t \\
+							& = \sum_{k=0}^{N - 1} \polarcomplex{x_k}{-2\pi j k \Delta f \Delta t} \Delta t \\
+							& = \sum_{k=0}^{N - 1} \polarcomplex{x_k}{-2\pi j k \frac{1}{T} \frac{T}{N}} \frac{T}{N} \\
+							& = \sum_{k=0}^{N - 1} \polarcomplex{x_k}{-2\pi \frac{j k}{N}} \frac{T}{N}. \numberedeq
+				\end{align*}
+			
+			Và vì $T/N$ là hằng số với mọi $j$, $k$ nên ta có thể bỏ nó ra khỏi công thức $X(f)$ (lúc này đã chuyển thành $X(j)$) để tạo thành công thức chính của biến đổi Fourier rời rạc
+			
+				\begin{equation}
+					X(j) = \sum_{k=0}^{N - 1} \polarcomplex{x_k}{-2\pi \frac{j k}{N}} = \sum_{k=0}^{N - 1} x_k W^{jk}.
+				\label{dct::dct_formula}
+				\end{equation}.
+		
