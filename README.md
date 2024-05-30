@@ -1,4 +1,6 @@
 # Thesis: Deep Noise Reduction
+Description:
+This thesis explores the fundamental nature of sound and applies machine learning techniques to audio processing to eliminate noise interference. Noise is defined broadly, depending on user requirements. The output audio, after being processed through a series of AI models, must closely resemble the true sound in a noise-free environment. Furthermore, these AI models must be capable of handling various types of noise, such as mechanical sounds and electrical interference during recording, to maximize the removal of these disturbances from the input data.
 
 This thesis is written in Vietnamese.
 
